@@ -1,1 +1,5 @@
+Kategorie	        Kosten	                Beispiele
+Standard          25% des Kaufpreises	    z.B. Dolche, Langschwert, Bogen, Axt
+Hochwertig        50% des Kaufpreises	    z.B. Mithril-Waffen, Silberwaffen, Elben-Waffen
+Magisch/Exotisch	Verhandlungssache	      Alle magischen und exotischen Gegenstände. Meist werden spezielle Handwerker/Schmiede/Anforderungen/Zutaten benötigt.
 
