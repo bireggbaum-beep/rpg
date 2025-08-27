@@ -1,12 +1,12 @@
-Attributs-Steigerung	Kosten (Goldmünzen)
-von -1 auf 0		400
-von 0 auf 1		600
-von 1 auf 2		800
-von 2 auf 3		1.000
-von 3 auf 4		2.000
-von 4 auf 5		4.000
-von 5 auf 6		8.000
-von 6 auf 7		12.000
-von 7 auf 8		18.000
-von 8 auf 9		25.000
-von 9 auf 10		35.000
+Attributs-Steigerung  Kosten (Goldmünzen)
+von -1 auf 0          400
+von 0 auf 1           600
+von 1 auf 2           800
+von 2 auf 3           1.000
+von 3 auf 4           2.000
+von 4 auf 5           4.000
+von 5 auf 6           8.000
+von 6 auf 7           12.000
+von 7 auf 8           18.000
+von 8 auf 9           25.000
+von 9 auf 10          35.000
