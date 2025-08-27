@@ -46,7 +46,7 @@
 | Betäubungsgift      | 50 GM  | Zähigkeit ZW 10 oder bewusstlos |
 | Gift      | 50 GM  | Zähigkeit ZW 10 oder vergiftet. Wirkung abhängig vom spezifischen Gift.  |
 | **Munition**                                      |        |                                       |
-| Pfeile (20)         | 5 GM   |                               |
+| Pfeile (20)         | 5 GM   | Munition für Bögen                               |
 | Bolzen (20)         | 6 GM   |                               |
 | Wurfmesser (5)      | 15 GM  |                               |
 | Wurfsterne (10)     | 30 GM  |                               |
