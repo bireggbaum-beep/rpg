@@ -23,7 +23,7 @@
 | Zelt (2 Personen)   | 25 GM  | Wetterschutz                        |
 | Decke               | 5 GM   | Einfacher Schutz                    |
 | Feuerstein & Stahl  | 3 GM   | Zum Feuermachen                    |
-| Zunderzweige        | 10 GM   | 10 Stück. Zum Feuermachen. Benötigt keine Probe.               |
+| Zunderzweige (10)   | 10 GM   | Zum Feuermachen. Benötigt keine Probe.               |
 | **Werkzeuge**                                     |        |                                       |
 | Diebeswerkzeug      | 35 GM  | Für Schlösser                      |
 | Brecheisen          | 10 GM  | +2 auf Aufbrechen                  |
