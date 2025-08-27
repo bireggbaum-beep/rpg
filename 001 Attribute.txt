@@ -1,3 +1,7 @@
+GRUNDPRINZIP EINER PROBE
+========================
+W20 + Attribut > oder = Zielwert (ZW)
+
 KURZ      ATTRIBUT
 STR       Stärke
 GES       Geschicklichkeit
@@ -5,3 +9,44 @@ KON       Konstitution
 INT       Intelligenz
 WIS       Weisheit
 CHA       Charisma
+
+ABGELEITETE WERTE
+========================
+INI: Bonus auf den W20 Initiative-Wurf  (GES+WIS)/2
+BEW: 4+INI/2
+LP_Krieger: 14 + 2x(KON + Stufe)
+LP_Waldläufer & LP_Kleriker: 12 + KON + 2x Stufe
+LP_Magier: 10 + KON + Stufe
+
+ABWEHR-WERTE
+========================
+Nahkampf-Abwehr Parade (PA): 9 + STR + Boni (zb. Paradebonus einer Waffe, Paradebonus des Schilds)
+Fernkampf-Abwehr Ausweichen (ASW): 9 + GES + (WIS/2) + Boni (ggf. Tränke, Zauber oder anderes)
+Schadensreduktion (SR): Reduziert den verursachten Schaden. Getragene Rüstungen, Natürliche Rüstung (zb. Schuppenhaut)
+
+ANGRIFFSWERTE
+========================
+Nahkampf-Angriff (NK): W20 + STR + Boni (ggf. aus Tränken, Zauber. Entspricht dem To-Hit-Wert)
+Fernampf-Angriff (FK): W20 + GES + Boni (ggf. aus Tränken, Zauber. Entspricht dem To-Hit-Wert)
+Verteidigung gegen Magische Beeinflussung: W20 + INT ≥ Zielwert (Die Stufe des wirkenden Magiers wird zum Rettungswurf-Zielwert addiert.)
+
+TREFFER
+========================
+ Angriffswert > oder = PA oder ASW
+
+SCHADENSBERECHNUNG
+========================
+Verursachter Schaden Nahkampf = Basisschaden der Waffe (dies ist ein fixer Wert, kein Würfelwert) + NK - PA - SR
+Verusachter Schaden Fernkampf = Basisschaden der Waffe + FK - ASW - SR
+
+RETTUNGSWÜRFE
+=======================
+Es ist der Bonus auf den W20-Wurf gegen den entsprechenden Zielwert (z.B. Starkem Gift Trotzen Zielwert (ZW) 12
+Rettungswurf Zähigkeit (RZ): W20 + (KON + STR) / 2
+Rettungswurf Reflexe (RR): W20 + (GES + WIS) / 2
+Rettungswurf Willenskraft (RW): W20 + (WIS + INT) / 2
+
+
+
+
+
