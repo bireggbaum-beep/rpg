@@ -2,11 +2,11 @@ Beruf                  Attributsmodifkator              Erlernte Fähigkeiten
 Söldner                STR +2, KON +1, INT -1
 Jäger                  DEX +2, WIS +1, CHA -1
 Schmied                STR +2, KON +1, DEX -1
-Stadtwache             STR +1, KON +1, WIS +1, INT -1
+Stadtwache             STR +1, KON +1, CHA -1
 Seefahrer              STR +1, KON +2, INT -1
 Geistlicher            WIS +2, CHA +1, STR -1
-Bibliothekar           INT +3, WIS +1, STR -1, KON -1
+Bibliothekar           INT +3, STR -2, KON -1
 Barde                  CHA +2, DEX +1, STR -1
 Händler                CHA +2, INT +1, STR -1
-Dorfheiler             INT +1, WIS +1
+Dorfheiler             INT +1, WIS +2, STR-1
 Hexenjäger             WIS +2, STR +1, INT -1
