@@ -1,17 +1,19 @@
-Preise für Edelsteine
-=====================
-Name	Preis Min	Preis Max	Preis Standard	Beschreibung
-Obsidian-Splitter	10 GM	25 GM	15 GM	Relativ wertloser Edelsteinsplitter
-Tigerauge	25 GM	50 GM	35 GM	Reicht für Grundausrüstung
-Malachit	50 GM	100 GM	75 GM	Genug für eine gute Waffe
-Lapislazuli	100 GM	250 GM	175 GM	Wert eines guten Kettenhemdes
-Granat	250 GM	500 GM	375 GM	Finanziert gehobene Ausrüstung
-Aquamarin	500 GM	1000 GM	750 GM	Wert einer Plattenrüs-tung
-Amethyst	1000 GM	2000 GM	1500 GM	Genug für eine Attributssteigerung
-Rubin	2000 GM	5000 GM	3500 GM	Kann meisterhafte Ausrüstung finanzieren
-Smaragd	5000 GM	10000 GM	7500 GM	Ein kleines Vermögen
-Schwarzer Diamant	10000 GM	25000 GM	17500 GM	Ein legendärer Schatz
-Drachenauge	25000 GM	50000 GM	37500 GM	Ein Schatz von königlichem Ausmaß
+# Preise für Edelsteine
+
+| Name             | Preis Min | Preis Max | Preis Standard | Beschreibung                            |
+|------------------|-----------|-----------|----------------|---------------------------------------|
+| Obsidian-Splitter| 10 GM     | 25 GM     | 15 GM          | Relativ wertloser Edelsteinsplitter   |
+| Tigerauge        | 25 GM     | 50 GM     | 35 GM          | Reicht für Grundausrüstung             |
+| Malachit         | 50 GM     | 100 GM    | 75 GM          | Genug für eine gute Waffe              |
+| Lapislazuli      | 100 GM    | 250 GM    | 175 GM         | Wert eines guten Kettenhemdes          |
+| Granat           | 250 GM    | 500 GM    | 375 GM         | Finanziert gehobene Ausrüstung         |
+| Aquamarin        | 500 GM    | 1000 GM   | 750 GM         | Wert einer Plattenrüstung               |
+| Amethyst         | 1000 GM   | 2000 GM   | 1500 GM        | Genug für eine Attributssteigerung     |
+| Rubin            | 2000 GM   | 5000 GM   | 3500 GM        | Kann meisterhafte Ausrüstung finanzieren|
+| Smaragd          | 5000 GM   | 10000 GM  | 7500 GM        | Ein kleines Vermögen                    |
+| Schwarzer Diamant| 10000 GM  | 25000 GM  | 17500 GM       | Ein legendärer Schatz                   |
+| Drachenauge      | 25000 GM  | 50000 GM  | 37500 GM       | Ein Schatz von königlichem Ausmaß      |
+
 
 # Waffenliste
 
