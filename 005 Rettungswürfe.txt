@@ -1,0 +1,4 @@
+KURZ    Rettungswurf      Berechnung
+RZ      Zähigkeit         (KON + STR) / 2
+RR      Reflexe           (GES + WIS) / 2
+RW      Willenskraft      (WIS + INT) / 2
