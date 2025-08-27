@@ -1,3 +1,5 @@
+Preise für Edelsteine
+=====================
 Name	Preis Min	Preis Max	Preis Standard	Beschreibung
 Obsidian-Splitter	10 GM	25 GM	15 GM	Relativ wertloser Edelsteinsplitter
 Tigerauge	25 GM	50 GM	35 GM	Reicht für Grundausrüstung
@@ -10,3 +12,12 @@ Rubin	2000 GM	5000 GM	3500 GM	Kann meisterhafte Ausrüstung finanzieren
 Smaragd	5000 GM	10000 GM	7500 GM	Ein kleines Vermögen
 Schwarzer Diamant	10000 GM	25000 GM	17500 GM	Ein legendärer Schatz
 Drachenauge	25000 GM	50000 GM	37500 GM	Ein Schatz von königlichem Ausmaß
+
+Preise für Nahkampfwaffen
+=========================
+| Waffe | Schaden | Attribut | Preis | Eigenschaften |
+|-------|---------|----------|-------|---------------|
+| Dolch | 2       | GES      | 15 GM | Heimlich, Hinterhalt, Schnell, Stichwaffe |
+| Kurzschwert | 4  | STR      | 40 GM | Stichwaffe |
+
+
