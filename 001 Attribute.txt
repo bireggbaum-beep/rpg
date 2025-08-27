@@ -61,6 +61,12 @@ Bei jedem Stufenanstieg genau 1 Attribut um +1 erhöhen (beliebig nach Wahl).
 Optional gegen viel Gold: ein weiteres Attribut um +1 erhöhen.
 Stabile Progression über EP. Kosten für goldbasierten Anstieg steigen exponentiell und werden bald unerschwinglich (hauptsächlich um, eine Incentive für Schätze zu schaffen und underperforming Attribute zu steigern, gegen Frustration)
 
+GEGNER
+=====================
+Gegner sind auch in Stufen eingeteilt und haben einen Herausforderungsgrad (HG)
+Vereinfachten Stat-Block (z.B. Angriffsboni sind direkt bei der Waffe angegeben)
+Keine detaillierten Attribute bei normalen Gegnern.
+Rettungwurfboni/Mali sind angegeben.
 
 
 
