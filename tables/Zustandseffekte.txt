@@ -1,0 +1,10 @@
+Zustand        Effekt
+Blutend        1 Schaden pro Runde für 2W6 Runden
+Am Boden       Abwehrwerte (PA, ASW): -2. Aufstehen kostet 1 Bewegungsaktion
+Betäubt        Keine Aktionen. Abwehrwehrte (PA, ASW): - 4
+Festgesetzt    Keine Bewegung. Abwehrwehrte (PA, ASW): - 2
+Brennend       1 LP Feuerschaden pro Runde für 1W6 Runden oder bis Feuer gelöscht.
+Vereist        Halbe Bewegungsrate für 1W6 Runden. Rettungswurf Zähigkeit in jeder Runde oder 1 Eisschaden pro Runde
+Verlangsamt    Halbe Bewegungsrate für 1W6 Runden.
+Krank          Alle Attribute -1 bis Krankheit geheilt
+Blind          Alle Angriffs- und Verteidigungswürfe -3. (Gilt nicht für Zauber, die keine Sicht benötigen)
