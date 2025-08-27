@@ -97,3 +97,20 @@
 | Wurfaxt              | 3        | STR      | 20 GM  | Reichweite 1xLang                             |
 | Wurfdolch (3 Stk)    | 2        | GES      | 25 GM  | Lautlos, Reichweite 1xLang                     |
 
+# Magiestäbe
+
+| Name             | INT-Bonus | Mana-Bonus | Min-Stufe | Preis  | Beschreibung                              |
+|------------------|-----------|------------|-----------|--------|------------------------------------------|
+| Lehrlingsstab    | 0         | 0          | 1         | 30 GM  | Einfacher Stab aus Eichen- oder Eschenholz|
+| Stab des Akolythen| +1        | 0          | 1         | 80 GM  | Für präzise Schüler der Genauigkeit       |
+| Stab der Quelle  | 0         | +10        | 1         | 100 GM | Aus Weidenholz für größeren Manafluss     |
+| Runenverzierter Stab | +1     | +5         | 3         | 400 GM | Der klassische Allrounder                  |
+| Herzholz-Stab    | 0         | +15        | 3         | 500 GM | Aus altem Baumkern für Mana-Speicherung   |
+| Stab des Gelehrten| +2        | 0          | 3         | 600 GM | Schwerer Stab aus Eibenholz                |
+| Kristall-Fokusstab| +2        | +10        | 5         | 1200 GM| Standard für erfahrene Magier              |
+| Stab der Ley-Linie| +1        | +20        | 5         | 1500 GM| Schöpft aus magischen Adern der Welt      |
+| Stab des Weisen  | +3         | +5         | 5         | 1800 GM| Schärft den Geist und lenkt Zauber präziser|
+| Stab des Erzmagiers| +3        | +15        | 7         | 3500 GM| Meisterwerk der Handwerkskunst             |
+| Wurzel des Nordens| +2        | +30        | 7         | 4000 GM| Versteinerte Ur-Baum-Wurzel                |
+| Stab des Firmaments| +4        | +10        | 7         | 5000 GM| Aus Meteoritengestein gefertigt            |
+
