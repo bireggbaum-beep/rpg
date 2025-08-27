@@ -12,7 +12,7 @@
 | Entdecken       | Geheimnisse, Fallen und versteckte Dinge finden      | Intelligenz (INT)             |
 | Raufen          | Nahkampfangriffe ohne Waffen                         | Stärke (STR)                 |
 | Wissen (Magie)  | Kenntnis magischer Regeln und Traditionen             | Intelligenz (INT)             |
-| Heilen          | Erste Hilfe und Behandlung von Verletzungen            | Weisheit (WIS) / Intelligenz (INT) |
+| Heilkunde         | Erste Hilfe und Behandlung von Verletzungen            | Weisheit (WIS) / Intelligenz (INT) |
 | Schwimmen       | Sich im Wasser sicher bewegen                         | Stärke (STR)                 |
 | Verstecken      | Sich verstecken oder unsichtbar bleiben                | Geschicklichkeit (GES)        |
 | Verhandeln      | Preise feilschen, Geschäfte abschließen                 | Charisma (CHA)                |
