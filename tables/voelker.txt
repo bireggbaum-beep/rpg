@@ -1,7 +1,7 @@
 Volk                  Attributsmodifikatoren                            Volkseigenschaften
 Menschen              STR+1, GES+1, KON+1, INT+1, WIS+1, CHA+1          Glück: 1x pro Spielsitzung einen beliebigen Würfelwurf wiederholen.
-Zwerge                STR+1, KON+2, WIS+1                               Dunkelsicht: 18m in völliger Dunkelheit als wäre es Dämmerlicht; Resistenz gegen Gift: Vorteil bei Rettungswürfen gegen Gift.
+Zwerge                STR+1, KON+2, CHA-1                               Dunkelsicht: 18m in völliger Dunkelheit als wäre es Dämmerlicht; Resistenz gegen Gift: Vorteil bei Rettungswürfen gegen Gift.
 Elben                 GES+2, KON+1, INT+1, CHA+1                        Scharfe Sinne: +2 auf Bemerkenproben; Immunität gegen Schlafeffekte;  
 Halblinge             GES+1, WIS+1, CHA+2                               Resistenz gegen Furcht: Vorteil bei Rettungswürfen gegen Gift; Glück: 1x pro Spielsitzung einen beliebigen Würfelwurf wiederholen.
-Drakonier             STR+3, KON+2, INT+1                               Schuppenhaut: zählt als leichte Rüstung (Schadensreduktion +1); Drachenerbe: 1x pro Tag Feuerodem mit 1W6 Feuerschaden in einem 5-Meter-Kegel/3m. Zielwert RR: 11 für halben Schaden.
-Khajit                GES+3, KON+1, CHA+2                               Scharfe Sinne: +2 auf Bemerkenproben; Überlegenes Abfangen: keine Fallschaden bei Stürzen bis 8m Höhe; Klettern +2, Balancieren +2
+Drakonier             STR+3, KON+2, GES-1                               Schuppenhaut: zählt als leichte Rüstung (Schadensreduktion +1); Drachenerbe: 1x pro Tag Feuerodem mit 1W6 Feuerschaden in einem 5-Meter-Kegel/3m. Zielwert RR: 11 für halben Schaden.
+Khajit                GES+3, CHA+2, WIS-1                               Scharfe Sinne: +2 auf Bemerkenproben; Überlegenes Abfangen: keine Fallschaden bei Stürzen bis 8m Höhe; Klettern +2, Balancieren +2
