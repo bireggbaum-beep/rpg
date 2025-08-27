@@ -68,7 +68,11 @@ Vereinfachten Stat-Block (z.B. Angriffsboni sind direkt bei der Waffe angegeben)
 Keine detaillierten Attribute bei normalen Gegnern.
 Rettungwurfboni/Mali sind angegeben.
 
+VÖLKER
 
+BERUFE
+
+KLASSEN
 
 
 
