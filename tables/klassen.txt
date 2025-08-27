@@ -1,5 +1,12 @@
 Klasse        Attributsmodifikatoren 
-Krieger       STR+1, KON+1, INT-1, WIS-1          
-Waldläufer    GES+1, WIS+1, INT-1, CHA-1
-Kleriker      WIS+1, CHA+1, STR-1, GES-1
-Magier        INT+1, WIS+1, STR-1, KON-1
+Krieger       STR+1, KON+1, INT-1, WIS-1      Stufe 1: Kampf-Fokus; Stufe 3:
+Waldläufer    GES+1, WIS+1, INT-1, CHA-1      Stufe 1: Zielen; Stufe 3: Taktischer Rückzug (Reaktion); 
+Kleriker      WIS+1, CHA+1, STR-1, GES-1      Stufe 1: Untote vertreiben; Stufe 3: Ge
+Magier        INT+1, WIS+1, STR-1, KON-1      
+
+
+Beschreibung der Klassenfähigkeiten
+===================================
+Kampf-Fokus: 1x pro Begegnung kannst Du als freie Aktion Deine Konzentration schärfen. Bei Deinem nächsten Nahkampfangriffswurf würfelst Du mit Vorteil.
+Zielen: Wenn du in deinem Zug deine Aktion nutzt, um mit einer Fernkampfwaffe zu zielen, erhältst du einen Bonus von +1 auf deinen Angriffswurf mit dieser Waffe in deinem nächsten Zug. Dieser Bonus ist kumulativ. Du kannst über mehrere Runden zielen, um einen maximalen Bonus von +3 nach 3 Runden des Zielens zu erreichen. Wenn du dich schneller als 1 Feld bewegst oder eine andere Aktion außer Zielen ausführst, geht der angesammelte Bonus verloren.
+Taktischer Rückzug (Reaktion): Wenn du von einem Gegner im Nahkampf angegriffen wirst (unabhängig davon, ob der Angriff trifft oder nicht), kannst du deine Reaktion nutzen, um dich sofort bis zu deiner halben Bewegungsrate vom Angreifer wegzubewegen. Diese Bewegung provoziert keine Gelegenheitsangriffe.
