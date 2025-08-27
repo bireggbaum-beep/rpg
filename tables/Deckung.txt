@@ -1,0 +1,4 @@
+Deckungstyp          Effekt                            Beispiele
+Leichte Deckung      +1 ASW auf Fernkampfangriffe      Gebüsch, Hecke
+Schwere Deckung      +3 ASW auf Fernkampfangriffe      Holzverschlag, halbhohe Mauer, halbhoher Fels
+Volle Deckung        Fernkampfangriffe keine Wirkung   Im Gebäude, vollständig hinter Mauer, ausser Sichtlinie
