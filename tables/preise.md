@@ -28,7 +28,7 @@
 | Diebeswerkzeug      | 35 GM  | Für Schlösser                      |
 | Brecheisen          | 10 GM  | +2 auf Aufbrechen                  |
 | Schaufel            | 8 GM   | Zum Graben                        |
-| 10-Fuß-Stange       | 5 GM   | Fallen auslösen, Gegenstände erreichen |
+| Stange (2 Meter)       | 5 GM   | Fallen auslösen, Gegenstände erreichen |
 | Spiegel (klein)     | 20 GM  | Um Ecken schauen                 |
 | **Verpflegung**                                   |        |                                       |
 | Rationen (7 Tage)   | 10 GM  | Trockenfleisch und Brot            |
