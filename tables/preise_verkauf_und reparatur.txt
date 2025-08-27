@@ -6,5 +6,16 @@ Verkauf von Edelsteinen
 10-16     Normale Qualität. Händler zahlt Normalpreis.
 17-20     Aussergewöhnlich! Händler zahl Maximalpreis.
 
-Reparaturkosten
-===============
+Reparaturkosten Ausrüstung
+==========================
+Kategorie         Kosten                  Beispiele
+Standard          25% des Kaufpreises     z.B. Dolche, Langschwert, Bogen, Axt
+Hochwertig        50% des Kaufpreises     z.B. Mithril-Waffen, Silberwaffen, Elben-Waffen
+Magisch/Exotisch  Verhandlungssache       Alle magischen und exotischen Gegenstände. Meist werden spezielle Handwerker/Schmiede/Anforderungen/Zutaten benötigt.
+
+Verkauf von Ausrüstung
+======================
+Kategorie         Kosten                  Beispiele
+Standard          50% des Kaufpreises     z.B. Dolche, Langschwert, Bogen, Axt
+Hochwertig        75%% des Kaufpreises    z.B. Mithril-Waffen, Silberwaffen, Elben-Waffen
+Magisch/Exotisch  Verhandlungssache       Alle magischen und exotischen Gegenstände. Selten bis sehr selten verfügbar bei normalen Händlern.
