@@ -47,6 +47,22 @@ Rettungswurf Reflexe (RR): W20 + (GES + WIS) / 2
 Rettungswurf Willenskraft (RW): W20 + (WIS + INT) / 2
 
 
+ATTRIBUTSWERTE VON START-CHARAKTEREN (Stufe 1)
+=======================
+1. Blank Charakter: Alle Attribute auf 0
+2. Volk wählen => Beruf wählen => Klasse wählen
+3. Attributsmodifikatoren hinzufügen
+4. Deckelung/Capping anwenden: Minimalwert eines Attributs am Ende der Charaktererstellung: -1; Maximalwert am ende der Charakterestellung: +3
+
+STUFENANSTIEG
+=============
+Bei Erreichen der erforderlichen Erfahrungspunkte (EP), erfolgt der Stufenanstieg.
+Bei jedem Stufenanstieg genau 1 Attribut um +1 erhöhen (beliebig nach Wahl).
+Optional gegen viel Gold: ein weiteres Attribut um +1 erhöhen.
+Stabile Progression über EP. Kosten für goldbasierten Anstieg steigen exponentiell und werden bald unerschwinglich (hauptsächlich um, eine Incentive für Schätze zu schaffen und underperforming Attribute zu steigern, gegen Frustration)
+
+
+
 
 
 
