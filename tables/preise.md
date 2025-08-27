@@ -34,11 +34,11 @@
 | Gute Mahlzeit       | 2 GM   | In Taverne                      |
 | Feinschmecker-Mahlzeit | 5 GM | Gehobene Küche                |
 | **Heiltränke und Alchemie**                       |        |                                       |
-| Heiltrank (klein)   | 25 GM  | Heilt 2 (1W4) LP                   |
-| Heiltrank (mittel)  | 60 GM  | Heilt 5 (1W6+2) LP                  |
-| Heiltrank (groß)    | 150 GM | Heilt 8 (1W8+4) LP                 |
+| Heiltrank (klein)   | 25 GM  | Heilt 3 (1W4+1) LP                   |
+| Heiltrank (mittel)  | 60 GM  | Heilt 6 (1W6+2) LP                  |
+| Heiltrank (groß)    | 150 GM | Heilt 9 (1W8+4) LP                 |
 | Gegengift           | 45 GM  | Neutralisiert Gift             |
-| Heilkräuter         | 10 GM  | Heilt 1W4 LP (10 Min)          |
+| Heilkräuter         | 10 GM  | Heilt 2 (1W4) LP (in 10 Min)          |
 | Alchemistenfeuer    | 35 GM  | 1W6 Feuer für 2 Runden         |
 | Säureflasche        | 40 GM  | 1W6 Säure                     |
 | Rauchbombe          | 20 GM  | Schwere Deckung für 3 Runden  |
