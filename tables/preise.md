@@ -47,7 +47,7 @@
 | Gift      | 50 GM  | Zähigkeit ZW 10 oder vergiftet. Wirkung abhängig vom spezifischen Gift.  |
 | **Munition**                                      |        |                                       |
 | Pfeile (20)         | 5 GM   | Munition für Bögen                               |
-| Bolzen (20)         | 6 GM   |                               |
+| Bolzen (20)         | 6 GM   | Munition für Armbrüste        |
 | Wurfmesser (5)      | 15 GM  |                               |
 | Wurfsterne (10)     | 30 GM  |                               |
 
@@ -96,7 +96,7 @@
 | Armbrust             | 10       | GES      | 350 GM | Munition (Bolzen), Langsam, Panzerbrechend, Stärke (3), Stufe (3+) |
 | Schwere Armbrust     | 12       | GES      | 600 GM | Munition (Bolzen), Langsam, Panzerbrechend, Stärke (6), Stufe (5+) |
 | Wurfstern (10 Stk)   | 2 pro Ziel| GES      | 30 GM  | Max 3 Ziele, Lautlos                           |
-| Wurfaxt              | 3        | STR      | 20 GM  | Reichweite 1xLang                             |
+| Wurfaxt              | 3        | STR      | 25 GM  | Reichweite 1xLang                             |
 | Wurfdolch (3 Stk)    | 2        | GES      | 25 GM  | Lautlos, Reichweite 1xLang                     |
 
 # Magiestäbe
