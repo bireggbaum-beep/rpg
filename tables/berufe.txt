@@ -1,12 +1,31 @@
 Beruf                  Attributsmodifkator              Erlernte Fähigkeiten
-Söldner                STR +2, KON +1, INT -1
-Jäger                  DEX +2, WIS +1, CHA -1
-Schmied                STR +2, KON +1, DEX -1
-Stadtwache             STR +1, KON +1, CHA -1
-Seefahrer              STR +1, KON +2, INT -1
-Geistlicher            WIS +2, CHA +1, STR -1
-Bibliothekar           INT +3, STR -2, KON -1
-Barde                  CHA +2, DEX +1, STR -1
-Händler                CHA +2, INT +1, STR -1
-Dorfheiler             INT +1, WIS +2, STR-1
-Hexenjäger             WIS +2, STR +1, INT -1
+Söldner                STR +2, KON +1, INT -1           Umgang mit improvisierten Waffen
+Jäger                  DEX +2, WIS +1, CHA -1           Spuren lesen (+1)
+Schmied                STR +2, KON +1, DEX -1           Wartung
+Stadtwache             STR +1, KON +1, CHA -1           Beschützerinstinkt
+Seefahrer              STR +1, KON +2, INT -1           Resistenz gegen Gifte und Krankheiten
+Geistlicher            WIS +2, CHA +1, STR -1           Untote vertreiben, Geistheilung
+Bibliothekar           INT +3, STR -2, KON -1           Gegenstand identifizieren, Monsterkunde
+Barde                  CHA +2, DEX +1, STR -1           Lied des Mutes
+Händler                CHA +2, INT +1, STR -1           Auge des Wucherers
+Dorfheiler             INT +1, WIS +2, STR-1            Leichte Wunden versorgen, Krankheit lindern
+Hexenjäger             WIS +2, STR +1, INT -1           Glaubensstärke, Hexenbann
+
+
+Beschreibung der Fähigkeiten:
+=============================================
+Lied des Mutes: 1x pro Kampf kann der Barde eine Aktion nutzen, um allen Verbündeten in Hörweite einen temporären Bonus auf alle Rettungswürfe für 10 Minuten zu geben.
+Auge des Wucherers": Der Charakter kann den Wert von Schätzen (Edelsteine, Kunstgegenstände) sofort und präzise einschätzen. Er findet zudem bei Schatztruhen oder besiegten Gegnern 10% mehr Gold.
+Glaubensstärke: Du hast Vorteil bei allen Rettungswürfen gegen Flüche, Verhexungen und geistige Beeinflussung.
+Hexenbann: 1x pro Tag kannst Du einen Zauber bannen, der auf Dich oder Deine Gruppe gewirkt wird. Lege dazu eine WIS-Probe Gegen ZW10 + Grad des Zaubers ab. Bei erfolg wird der Zauber komplett neutralisisert.
+Leichte Wunden versorgen: Du kannst 3x pro Tag für 2 Aktionen 1W4+WIS Lebenspunkte bei einer Kreatur heilen. Dazu benötigst Du Kräuter.
+Krankheit heilen: Du kannst während einer langen Rast versuchen Krankheiten zu heilen. Dazu legst Du eine WIS-Probe gegen den SG der Krankheit ab. Bei Erfolg ist die Krankheit nach der langen Rast verschwunden. 
+Verwundete pflegen: Wenn die Gruppe eine lange Rast einlegt, kannst du deine medizinischen Kenntnisse nutzen, um die natürliche Heilung zu beschleunigen. Wähle bis zu einer Anzahl von Verbündeten in Höhe deiner Stufe aus. Jeder dieser Verbündeten heilt zusätzlich 1W4+WIS Lebenspunkte am Ende der langen Rast."
+Untote vertreiben: 1x pro Tag kannst du als Aktion versuchen, alle untoten Kreaturen in Sichtweite zu vertreiben. Diese müssen einen Willenskraft-Rettungswurf (ZW 12) bestehen oder fliehen für 1W6 Runden.
+Geistheilung: Du kannst 3x pro Tag versuchen, 1W4+WIS Lebenspunkte zu heilen. Dazu musst Du einen Willenskraft-Rettungswurf (ZW 11) ablegen. Hierfür musst Du Dich in ein kurzes Gebet zur Gottheit vertiefen, daher benötigst Du 2 Aktionen.
+Gegenstand identifizieren: Du kannst einmal pro Tag Dein gelerntes Wissen einsetzen, um einen Gegenstand zu identifizieren. Würfle dazu einen INT-Probe gegen den SG des nicht-identifizierten Gegenstandes. Bei Erfolg wird Art, Nutzen und evtl. auch Fluch oder Einschränkung über den Gegenstand / das Artefakt / Schriftrolle erfahren.
+Monsterkunde: 1x pro Begegnung kannst du als Aktion eine INT-Probe (SG 8 + HG der Kreatur) ablegen. Bei Erfolg erfährst du eine relevante Schwäche oder Resistenz der Kreatur.
+Spuren lesen: Du erhälst einen Bonus beim Spurenlesen auf +2. 
+Wartung: Du erhälst einen Bonus von +1 beim Würfelwurf, wenn Deine Rüstung beschädigt wird.
+Umgang mit improviserten Waffen: Du erhälst +1 auf den Angriffswurf mit improvisierten Waffen
+Beschützerinstinkt: Wenn ein Gegner einen Angriff gegen einen deiner Verbündeten ausführt, der direkt neben dir steht, kannst du deine Reaktion nutzen, um dem Gegner einen Nachteil (-2) auf diesen einen Angriffswurf aufzuerlegen. Du kannst diese Fähigkeit einmal pro Kampf einsetzen."
