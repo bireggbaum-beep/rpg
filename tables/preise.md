@@ -39,13 +39,13 @@
 | Heiltrank (klein)   | 25 GM  | Heilt 3 (1W4+1) LP                   |
 | Heiltrank (mittel)  | 60 GM  | Heilt 6 (1W6+2) LP                  |
 | Heiltrank (groß)    | 150 GM | Heilt 9 (1W8+4) LP                 |
+| Gift      | 50 GM  | Zähigkeit ZW 10 oder vergiftet. Wirkung abhängig vom spezifischen Gift.  |
 | Gegengift           | 45 GM  | Neutralisiert Gift             |
 | **Alchemie** 
 | Alchemistenfeuer    | 35 GM  | Wurfgeschoss. 1W6 Feuerschaden. Entzündet brennbares Material.        |
 | Säureflasche        | 40 GM  | Kann geworfen werden. 1W6 Säureschaden. Löst Holz, Metall, Leder in 10 min auf.                    |
 | Rauchbombe          | 20 GM  | Schwere Deckung (ASW+3) für 3 Runden in einem Bereich 3x3x3 Meter.  |
 | Betäubungsgift      | 50 GM  | Zähigkeit ZW 10 oder bewusstlos |
-| Gift      | 50 GM  | Zähigkeit ZW 10 oder vergiftet. Wirkung abhängig vom spezifischen Gift.  |
 | **Munition**                                      |        |                                       |
 | Pfeile (20)         | 5 GM   | Munition für Bögen                               |
 | Bolzen (20)         | 6 GM   | Munition für Armbrüste        |
