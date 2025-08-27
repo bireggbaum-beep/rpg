@@ -1,0 +1,10 @@
+Verkauf von Edelsteinen
+=======================
+1W20      Verkaufspreis
+1-5       Wertloser Plunder / Fälschung. Händler zahlt nichts.
+6-9       Einschlüsse, Risse. Händler zahlt Minimalpreis.
+10-16     Normale Qualität. Händler zahlt Normalpreis.
+17-20     Aussergewöhnlich! Händler zahl Maximalpreis.
+
+Reparaturkosten
+===============
