@@ -1,0 +1,26 @@
+Name
+Volk
+Beruf
+Stufe
+Klasse
+LP
+INI
+BEW
+**Attribute**
+STR
+GES
+KON
+INT
+WIS
+CHA
+**Abwehr**
+PA
+ASW
+**Rettungswürfe**
+RZ
+RR
+RW
+*Fähigkeiten*
+**Eigenschaften: Volk**
+**Eigenschaften: Beruf**
+**Eigenschaften: Klasse**
