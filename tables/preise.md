@@ -1,3 +1,56 @@
+# Gegenstände und Preise
+
+| Gegenstand           | Preis  | Beschreibung                            |
+|---------------------|--------|---------------------------------------|
+| **Behälter und Transport**                        |        |                                       |
+| Rucksack            | 8 GM   | Trägt 30kg                            |
+| Gürteltasche        | 3 GM   | Trägt 3kg, schneller Zugriff          |
+| Wasserschlauch      | 2 GM   | 2 Liter Fassungsvermögen              |
+| Köcher              | 5 GM   | Für 30 Pfeile/Bolzen                  |
+| **Lichtquellen**                                |        |                                       |
+| Fackel (5 Stk)      | 2 GM   | Brennt je 1 Stunde                    |
+| Laterne             | 12 GM  | Braucht Öl, besseres Licht            |
+| Öl (1 Liter)        | 3 GM   | Brennt 6 Stunden                      |
+| Kerze (10 Stk)      | 1 GM   | Brennt je 1 Stunde                    |
+| **Kletterausrüstung**                            |        |                                       |
+| Seil (15m)          | 10 GM  | Trägt 150kg                          |
+| Seidenseil (15m)    | 50 GM  | Leichter und stärker                  |
+| Enterhaken          | 15 GM  | Zum Klettern                        |
+| Eisenhaken (10 Stk) | 5 GM   | Zum Sichern                         |
+| Hammer              | 8 GM   | Zum Einschlagen                     |
+| **Lagerausrüstung**                              |        |                                       |
+| Schlafsack          | 15 GM  | Schutz gegen Kälte                   |
+| Zelt (2 Personen)   | 25 GM  | Wetterschutz                        |
+| Decke               | 5 GM   | Einfacher Schutz                    |
+| Feuerstein & Stahl  | 3 GM   | Zum Feuermachen                    |
+| **Werkzeuge**                                     |        |                                       |
+| Diebeswerkzeug      | 35 GM  | Für Schlösser                      |
+| Brecheisen          | 10 GM  | +2 auf Aufbrechen                  |
+| Schaufel            | 8 GM   | Zum Graben                        |
+| 10-Fuß-Stange       | 5 GM   | Fallen auslösen, Gegenstände erreichen |
+| Spiegel (klein)     | 20 GM  | Um Ecken schauen                 |
+| **Verpflegung**                                   |        |                                       |
+| Rationen (7 Tage)   | 10 GM  | Trockenfleisch und Brot            |
+| Gute Mahlzeit       | 2 GM   | In Taverne                      |
+| Feinschmecker-Mahlzeit | 5 GM | Gehobene Küche                |
+| **Heiltränke und Alchemie**                       |        |                                       |
+| Heiltrank (klein)   | 25 GM  | Heilt 1W4+1 LP                   |
+| Heiltrank (mittel)  | 60 GM  | Heilt 2W4+2 LP                  |
+| Heiltrank (groß)    | 150 GM | Heilt 3W4+3 LP                 |
+| Gegengift           | 45 GM  | Neutralisiert Gift             |
+| Heilkräuter         | 10 GM  | Heilt 1W4 LP (10 Min)          |
+| Alchemistenfeuer    | 35 GM  | 1W6 Feuer für 2 Runden         |
+| Säureflasche        | 40 GM  | 1W6 Säure                     |
+| Rauchbombe          | 20 GM  | Schwere Deckung für 3 Runden  |
+| Betäubungsgift      | 50 GM  | Zähigkeit ZW 10 oder bewusstlos |
+| **Munition**                                      |        |                                       |
+| Pfeile (20)         | 5 GM   |                               |
+| Bolzen (20)         | 6 GM   |                               |
+| Wurfmesser (5)      | 15 GM  |                               |
+| Wurfsterne (10)     | 30 GM  |                               |
+
+
+
 # Preise für Edelsteine
 
 | Name             | Preis Min | Preis Max | Preis Standard | Beschreibung                            |
