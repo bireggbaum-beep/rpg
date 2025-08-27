@@ -1,7 +1,7 @@
 Schwierigkeit       Zielwert       Beispiele
 Trivial             6              Offene Tür öffnen
-Einfach	8	Klettern bei gutem Wetter
-Moderat	11	Schloss knacken
-Schwer	14	Fallen entschärfen
-Sehr schwer	17	Meisterschloss knacken
-Heroisch	20	Unmögliches vollbringen
+Einfach             8              Klettern bei gutem Wetter
+Moderat             11             Schloss knacken
+Schwer              14             Fallen entschärfen
+Sehr schwer         17             Meisterschloss knacken
+Heroisch            20             Unmögliches vollbringen
