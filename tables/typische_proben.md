@@ -11,7 +11,6 @@
 | Überreden       | Andere überzeugen und beeinflussen                   | Charisma (CHA)                |
 | Entdecken       | Geheimnisse, Fallen und versteckte Dinge finden      | Intelligenz (INT)             |
 | Raufen          | Nahkampfangriffe ohne Waffen                         | Stärke (STR)                 |
-| Wissen (Magie)  | Kenntnis magischer Regeln und Traditionen             | Intelligenz (INT)             |
 | Heilkunde         | Erste Hilfe und Behandlung von Verletzungen            | Weisheit (WIS) / Intelligenz (INT) |
 | Schwimmen       | Sich im Wasser sicher bewegen                         | Stärke (STR)                 |
 | Verstecken      | Sich verstecken oder unsichtbar bleiben                | Geschicklichkeit (GES)        |
@@ -21,4 +20,4 @@
 | Jagen           | Tiere erkennen, erlegen und verwerten                   | Weisheit (WIS) / Geschicklichkeit (GES) |
 | Handwerk        | Reparaturen, Bauen, Kunstfertigkeiten                   | Intelligenz (INT) / Geschicklichkeit (GES) |
 | Aufmerksamkeit  | Lauten, sich nähernde Gegner oder Gefahren bemerken      | Weisheit (WIS)                |
-| Wissen (Geschichte) | Wissen über vergangene Ereignisse, Orte und Personen   | Intelligenz (INT)             |
+| Wissen (Fachgebiet) | Wissen über Fachgebiet   | Intelligenz (INT)             |
