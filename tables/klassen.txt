@@ -1,0 +1,5 @@
+Klasse        Attributsmodifikatoren 
+Krieger       STR+1, KON+1, INT-1, WIS-1          
+Waldläufer    GES+1, WIS+1, INT-1, CHA-1
+Kleriker      WIS+1, CHA+1, STR-1, GES-1
+Magier        INT+1, WIS+1, STR-1, KON-1
