@@ -33,12 +33,13 @@
 | Rationen (7 Tage)   | 10 GM  | Trockenfleisch und Brot            |
 | Gute Mahlzeit       | 2 GM   | In Taverne                      |
 | Feinschmecker-Mahlzeit | 5 GM | Gehobene Küche                |
-| **Heiltränke und Alchemie**                       |        |                                       |
+| **Tränke**                       |        |                                       |
+| Heilkräuter         | 10 GM  | Heilt 2 (1W4) LP (in 10 Min)          |
 | Heiltrank (klein)   | 25 GM  | Heilt 3 (1W4+1) LP                   |
 | Heiltrank (mittel)  | 60 GM  | Heilt 6 (1W6+2) LP                  |
 | Heiltrank (groß)    | 150 GM | Heilt 9 (1W8+4) LP                 |
 | Gegengift           | 45 GM  | Neutralisiert Gift             |
-| Heilkräuter         | 10 GM  | Heilt 2 (1W4) LP (in 10 Min)          |
+| **Alchemie** 
 | Alchemistenfeuer    | 35 GM  | 1W6 Feuer für 2 Runden         |
 | Säureflasche        | 40 GM  | 1W6 Säure                     |
 | Rauchbombe          | 20 GM  | Schwere Deckung für 3 Runden  |
