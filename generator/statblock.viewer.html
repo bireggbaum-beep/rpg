@@ -20,6 +20,19 @@
   .sidebar li:hover{background:var(--chip);}
   .sidebar li.active{background:var(--pf-red);color:#fff;font-weight:700;}
 
+  /* Stile für die Suchfelder */
+  .search-container { margin-bottom: 12px; display: flex; flex-direction: column; gap: 6px; }
+  .search-container input, .search-container select { /* NEU: select hinzugefügt */
+    width: 100%;
+    padding: 6px 8px;
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    font-family: "Roboto Condensed", Arial, system-ui;
+    font-size: 12px;
+    box-sizing: border-box;
+    background-color: #fff; /* Sorgt für konsistenten Hintergrund */
+  }
+
   .main-content{grid-column:2;grid-row:2;padding:14px 0;overflow-y:auto;}
   
   #out{background:#fff;border:1px solid var(--rule);max-width:820px;}
@@ -63,6 +76,14 @@
   </header>
 
   <aside class="sidebar">
+    <!-- Suchfelder aktualisiert -->
+    <div class="search-container">
+      <input type="text" id="search-name" placeholder="Nach Name suchen...">
+      <input type="text" id="search-type" placeholder="Nach Typ/Trait suchen...">
+      <select id="search-hg">
+        <option value="">Alle HG</option>
+      </select>
+    </div>
     <h2>Gegner</h2>
     <ul id="creature-list"></ul>
   </aside>
@@ -95,29 +116,80 @@ function handleFileLoad(event) {
       const data = JSON.parse(e.target.result);
       if (!Array.isArray(data)) throw new Error("Die JSON-Datei muss ein Array von Gegner-Objekten enthalten.");
       creatureData = data;
-      populateSidebar(creatureData);
+      // NEU: Ruft die neuen Setup-Funktionen auf
+      populateHgFilter();
+      filterAndPopulateSidebar();
       $('#out').innerHTML = `<div id="placeholder"><p>Daten geladen. Bitte wählen Sie einen Gegner aus der Liste links.</p></div>`;
     } catch (err) {
       alert(`Fehler beim Lesen der Datei: ${err.message}`);
       creatureData = [];
-      populateSidebar([]);
+      filterAndPopulateSidebar();
       $('#out').innerHTML = `<div id="placeholder"><p class="error">Fehler: ${err.message}</p></div>`;
     }
   };
   reader.readAsText(file);
 }
 
+// NEU: Funktion zum Befüllen des HG-Dropdowns
+function populateHgFilter() {
+  const hgSelect = $('#search-hg');
+  // Sammle alle einzigartigen HG-Werte aus den Daten
+  const hgValues = [...new Set(creatureData.map(c => c.hg).filter(hg => hg != null))];
+  // Sortiere die HG-Werte numerisch
+  hgValues.sort((a, b) => a - b);
+  
+  // Setze das Dropdown zurück (behalte die "Alle HG" Option)
+  hgSelect.innerHTML = '<option value="">Alle HG</option>';
+  
+  hgValues.forEach(hg => {
+    const option = document.createElement('option');
+    option.value = hg;
+    option.textContent = `HG ${hg}`;
+    hgSelect.appendChild(option);
+  });
+}
+
+// Funktion zum Filtern und Anzeigen der Sidebar-Liste (stark überarbeitet)
+function filterAndPopulateSidebar() {
+  const nameFilter = ($('#search-name').value || '').toLowerCase();
+  const typeFilter = ($('#search-type').value || '').toLowerCase();
+  const hgFilter = $('#search-hg').value;
+
+  const filteredCreatures = creatureData.filter(creature => {
+    // Namens-Filter
+    const nameMatch = (creature.name || '').toLowerCase().includes(nameFilter);
+
+    // Typ/Trait-Filter (durchsucht beides)
+    const typeString = (creature.typ || '').toLowerCase();
+    const traitsString = (creature.traits || []).join(' ').toLowerCase();
+    const typeMatch = typeString.includes(typeFilter) || traitsString.includes(typeFilter);
+
+    // HG-Filter
+    const hgMatch = !hgFilter || String(creature.hg) === hgFilter;
+
+    // Alle Bedingungen müssen erfüllt sein
+    return nameMatch && typeMatch && hgMatch;
+  });
+
+  populateSidebar(filteredCreatures);
+}
+
 function populateSidebar(creatures) {
   const list = $('#creature-list');
   list.innerHTML = '';
-  creatures.forEach((creature, index) => {
+  creatures.forEach(creature => {
+    const originalIndex = creatureData.findIndex(c => c === creature);
+    
     const li = document.createElement('li');
-    li.textContent = creature.name || `Unbenannter Gegner ${index + 1}`;
-    li.dataset.index = index;
+    li.textContent = creature.name || `Unbenannter Gegner ${originalIndex + 1}`;
+    li.dataset.index = originalIndex;
+    
     li.addEventListener('click', () => {
+      const clickedCreature = creatureData[originalIndex];
+      // Entferne 'active' von allen Elementen in der *gesamten* Sidebar, nicht nur den sichtbaren
       document.querySelectorAll('#creature-list li').forEach(item => item.classList.remove('active'));
       li.classList.add('active');
-      renderStatblock(creature);
+      renderStatblock(clickedCreature);
     });
     list.appendChild(li);
   });
@@ -163,19 +235,17 @@ function renderStatblock(d) {
   `;
 }
 
-// --- Hilfsfunktionen ---
+// --- Hilfsfunktionen (unverändert) ---
 function txt(x){return (x===null||x===undefined||x==="")?"–":String(x)}
 function plusify(v, isSaveDC = false){if(v===undefined||v===null) return "–";if(String(v).toLowerCase()==="immun") return "immun";const n=Number(v); return isNaN(n)?String(v):((n>=0 && !isSaveDC?'+':'')+n);}
 function parseRes(bes){const res={imm:[],res:[],weak:[],other:[]};(bes||[]).forEach(s=>{const t=String(s||'').trim();if(/^immun/i.test(t)){let val=t.replace(/^immun(?:ität|itäten)?(?:\s*:\s*|\s+gegen\s*)?/i,'').trim();if(val) res.imm.push(`Immun ${/^gegen\s/i.test(val)?val:('gegen '+val)}`);} else if(/^resistenz/i.test(t)){let val=t.replace(/^resistenzen?|resistenz/i,'').replace(/^(?:\s*:\s*|\s+gegen\s*)?/,'').trim();if(val) res.res.push(`Resistent ${/^gegen\s/i.test(val)?val:('gegen '+val)}`);} else if(/^anfälligkeit/i.test(t)){let val=t.replace(/^anfälligkeiten?|anfälligkeit/i,'').replace(/^(?:\s*:\s*|\s+gegen\s*)?/,'').trim();if(val) res.weak.push(`Anfällig ${/^gegen\s/i.test(val)?val:('gegen '+val)}`);} else {res.other.push(t);}});return res;}
 function fmtBew(b){if(!b) return "–";const m=b.match(/^(\d+)(?:\s*\((.+)\))?$/);if(!m) return b;const modes = m[2]? m[2].replace(/,\s*/g,'; ').replace(/vs/gi,'gegen') : '';return modes? `${m[1]}; ${modes}` : m[1];}
 function naturalAttackLine(a){const name = (a.name||'Angriff').replace('ß','ss');const bits=[];if(a.to_hit!=null) bits.push(`${plusify(a.to_hit)} zum Treffen`);if(a.schaden!=null) bits.push(`${a.schaden} Schaden`);if(a.zusatz) bits.push(`und ${capitalize(a.zusatz)}`);if(a.reichweite) bits.push(`(${a.reichweite})`);let line = `<b>${name}</b> ${bits.filter(Boolean).join(', ')}`.replace(/\s+,/g,',');if(a.rettungswurf){const r=a.rettungswurf;const mis = r.bei_misserfolg ? r.bei_misserfolg : 'negative Wirkung';const dur = r.dauer ? ` Dauer: ${r.dauer}.` : '';line += ` (Rettungswurf ${r.art} ${txt(r.zw)} oder ${mis}.${dur})`;}if(a.anzahl!=null) line += ` [x${a.anzahl}]`;return line;}
 function capitalize(s){ return s ? s.charAt(0).toUpperCase()+s.slice(1) : s; }
-
 function formatPaNote(paBemerkung) {
   if (!Array.isArray(paBemerkung) || paBemerkung.length === 0) return '';
   const textNotes = paBemerkung.filter(note => typeof note === 'string');
   const shieldNote = paBemerkung.find(note => typeof note === 'object' && note.icon === 'shield');
-  
   let shieldPart = '';
   if (shieldNote) {
     shieldPart = `<span class="icon-shield" title="${shieldNote.description || ''}">
@@ -183,64 +253,50 @@ function formatPaNote(paBemerkung) {
       ${shieldNote.value || ''}
     </span>`;
   }
-
   let textPart = '';
   if (textNotes.length > 0  ) {
     textPart = `, (${textNotes.join('; ').replace(/vs/gi, 'gegen')})`;
   }
-  
   return shieldPart + textPart;
 }
-
 function formatNote(note) {
     if (!note || (Array.isArray(note) && note.length === 0)) return '';
     const noteString = Array.isArray(note) ? note.join('; ') : String(note);
     return noteString.trim() ? ` (${noteString.replace(/vs/gi, 'gegen')})` : '';
 }
-
-// KORRIGIERT: Die Kategorisierung basiert nun auf dem `typ`-Feld des Beute-Objekts.
 function renderLoot(arr) {
   if (!Array.isArray(arr) || !arr.length) return '<span class="muted">Keine.</span>';
-
   const treasure = [];
   const equipment = [];
   const harvest = [];
-
   const formatItemDetails = (item) => {
     let details = [];
     if (item.wert != null) details.push(`Wert ${item.wert}`);
     if (item.anzahl != null) details.push(`${item.anzahl} Stück`);
     return details.length ? ` (${details.join(', ')})` : '';
   };
-
   arr.forEach(b => {
     if (b.typ === "GM") {
       treasure.push(`${b.wurf} Goldmünzen`);
     } else if (b.wurf) {
-      // Bestimme die Kategorie basierend auf dem `typ`-Feld.
       const isHarvestable = b.typ && b.typ.startsWith('Erntbar:');
       const itemString = `<span class="muted">${b.wurf}</span>`;
-      
       if (isHarvestable) {
         harvest.push(itemString);
       } else {
         equipment.push(itemString);
       }
     } else { 
-      // Fallback für einfache Items ohne Würfelwurf (z.B. nur { "typ": "Dolch", "wert": 2 })
       const isHarvestable = b.typ && b.typ.startsWith('Erntbar:');
       const itemName = isHarvestable ? b.typ.replace(/^Erntbar:\s*/, '') : b.typ;
       const itemString = `${itemName}${formatItemDetails(b)}`;
-
       if (isHarvestable) {
         harvest.push(itemString);
       } else {
-        // Einfache Items ohne Wurf werden als Schatz/Ausrüstung behandelt, nicht als Wurf-Item
         treasure.push(itemString);
       }
     }
   });
-
   let html = '';
   if (treasure.length > 0) {
     html += `<div class="loot-category"><b>Schatz:</b> ${treasure.join(', ')}</div>`;
@@ -251,13 +307,16 @@ function renderLoot(arr) {
   if (harvest.length > 0) {
     html += `<div class="loot-category"><b>Erntbares:</b>${harvest.map(h => `<span class="loot-item">${h}</span>`).join('')}</div>`;
   }
-  
   return html || '<span class="muted">Keine.</span>';
 }
 
 
 // --- Event Listener initialisieren ---
 $('#file-loader').addEventListener('change', handleFileLoad);
+// Event Listener für die Live-Suche
+$('#search-name').addEventListener('input', filterAndPopulateSidebar);
+$('#search-type').addEventListener('input', filterAndPopulateSidebar);
+$('#search-hg').addEventListener('change', filterAndPopulateSidebar); // 'change' ist besser für <select>
 
 </script>
 </body>
