@@ -184,7 +184,7 @@ json
   "ep": 100,
   "lp": 14,
   "sr": 2,
-  "sr_bemerkung": "",
+  "sr_bemerkung": [],
   "bew": "4",
   "pa": 12,
   "asw": 12,
@@ -192,7 +192,13 @@ json
   "rz": 10,
   "rr": 10,
   "rw": 11,
-  "pa_bemerkung": "",
+  "pa_bemerkung": [
+    "11 vs Wuchtwaffen",
+    {
+      "icon": "shield",
+      "value": "+1",
+  }
+],
   "asw_bemerkung": "",
   "angriffe": [
     { "name": "Nahkampf", "to_hit": 3, "schaden": "5 (1W8)" },
