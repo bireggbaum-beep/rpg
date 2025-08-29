@@ -113,6 +113,7 @@ Zusätzliche Bewegungsarten in Klammern: „X (Flug Y, Schwimmen Z)“.
 Beispiele: „4“, „4 (Flug 7)“, „5 (Flug 8, Schwimmen 3)“.
 Notation und Tokens
 Würfelnotation: „XWY±Z“ (Großes W).
+Beute-Mapping: "(W6|…)" – Ein W6 entscheidet Erfolg und Auswahl (z.B. "(W6|1-2 Pfeile, 3-4 Bolzen, 5-6 nichts)").
 Reichweite-Tokens: „angrenzend“, „1xKurz“, „2xLang“, „3xLang“, „Kegel N“, „Linie N“.
 Zustände (Begriffs-Set, systemneutral formuliert): betäubt, gelähmt, festgesetzt, zu Boden, verlangsamt, in Flammen, furchtsam.
 Beschreibung – Anforderungen (Pflicht)
@@ -200,10 +201,16 @@ json
   "besonderheiten": [
     "Beispiel: Resistenz: Stichwaffen (halber Schaden)"
   ],
-  "beute": [
-    { "typ": "GM", "wurf": "2W6" },
-    { "wurf": "25% (W20|5)", "wahl": [ { "typ": "Kurzschwert" }, { "typ": "Pfeile", "anzahl": 10 } ] }
-  ],
+"beute": [
+  { "typ": "GM", "wurf": "2W6" },
+  {
+    "wurf": "(W6|1-2 Kurzschwert, 3-4 Pfeile, 5-6 nichts)",
+    "wahl": [
+      { "typ": "Kurzschwert" },
+      { "typ": "Pfeile", "anzahl": 10 }
+    ]
+  }
+],
   "beschreibung": "1–3 Sätze, 25–70 Wörter; mind. zwei der Aspekte: Erscheinung/Atmosphäre, Verhalten/Taktik, Umfeld/Hook. Keine Zahlen/Regeln."
 }
 
@@ -218,7 +225,9 @@ Rolle wählen (siehe 12). Wenn keine Controller/Unterstützer: keine Effekte; se
 schaden als String: fester Wert, optional Würfel in Klammern.
 Jeder Effekt mit vollständigem rettungswurf; jede Fern-/Flächenwirkung mit reichweite.
 bew im Format „X“ bzw. „X (Flug Y, …)“.
-Beute-Chancen als „W6|Y)“; „oder“-Beute via wahl.
+- Beute: Verwende (W6|…)-Mapping im Feld "wurf" für Drops/Alternativen; "wahl" enthält Mengen/Werte.
+- GM (Gold) bleibt in klassischer Würfelnotation (z.B. "1W6"), ohne Mapping.
+- "nichts" nur im Mapping-Text (nicht in "wahl"); Namen in Mapping und "wahl" müssen exakt übereinstimmen.
 Globale Erklärpflicht beachten (Keywords in Besonderheiten erläutern).
 beschreibung: 1–3 Sätze, 25–70 Wörter, mind. zwei Inhalte (Erscheinung, Verhalten, Umfeld), keine Crunch-Begriffe.
 
