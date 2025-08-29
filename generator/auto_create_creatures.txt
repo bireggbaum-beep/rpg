@@ -1,4 +1,4 @@
-Statblock Spezifikation – Auto-Creatur v1.1.3
+Statblock Spezifikation – Auto-Creatur v1.1.4
 Zweck
 Einheitliche Regeln, damit Menschen und AIs konsistent spielbare Gegner-Statblöcke erzeugen, die ohne Rückfragen am Spieltisch funktionieren.
 Globale Erklärpflicht (explizit)
@@ -54,15 +54,56 @@ Bei limitierter Nutzung anzahl setzen.
 Zauber (optional)
 Struktur wie Angriffe. Zusätzlich erlaubt: auto: true (automatische Wirkung ohne to_hit).
 Auch hier gilt: reichweite angeben, wenn nicht Nahbereich; rettungswurf, wenn Effekt/Save.
-Beute (Array) Erlaubte Formen
-Gold: { "typ": "GM", "wurf": "2W6" }
-Gegenstand immer: { "typ": "Wolfspelz", "wert": 10 } oder { "typ": "Pfeile", "anzahl": 10 }
-Prozentdrop: { "wurf": "25% (W20|5)", "typ": "Werkzeuge" }
-Prozentdrop mit Auswahl: { "wurf": "20% (W20|4)", "wahl": [ { "typ": "Kurzschwert" }, { "typ": "Pfeile", "anzahl": 10 } ] }
+
+Beute (Array) – Erlaubte Formen (W6-Mapping)
+
+- Gold (klassisch, kein Mapping):
+  - { "typ": "GM", "wurf": "2W6" }
+
+- Gegenstand immer:
+  - { "typ": "Wolfspelz", "wert": 10 }
+  - { "typ": "Pfeile", "anzahl": 10 }
+
+- W6-Mapping (Shortcut, empfohlen für Drops mit Auswahl):
+  - Syntax in wurf: "(W6|…)" – ein W6 entscheidet Erfolg und Auswahl.
+  - Beispiel (2 Optionen, 50/50 bei Erfolg):
+    - { "wurf": "(W6|1-2 Pfeile, 3-4 Bolzen, 5-6 nichts)",
+        "wahl": [ { "typ": "Pfeile", "anzahl": 10 }, { "typ": "Bolzen", "anzahl": 10 } ] }
+  - Beispiel (gewichtete 1:2-Chance bei Erfolg):
+    - { "wurf": "(W6|1 Edelstein (Malachit), 2-3 Silberkette, 4-6 nichts)",
+        "wahl": [ { "typ": "Edelstein (Malachit)", "wert": 15 }, { "typ": "Silberkette", "wert": 15 } ] }
+  - Beispiel (garantiert, keine Niete):
+    - { "wurf": "(W6|1-6 Erntbar: Knochensplitter)",
+        "wahl": [ { "typ": "Erntbar: Knochensplitter" } ] }
+
+- Optional: Raritätslabels (Alternative zum Mapping, falls gewünscht)
+  - "selten (W6|2)", "ungewöhnlich (W6|3)", "häufig (W6|4)", "sehr häufig (W6|5)", "garantiert (W6|6)"
+  - Beispiel:
+    - { "wurf": "selten (W6|2)", "wahl": [ { "typ": "Messer (schartig)" }, { "typ": "Werkzeugbeutel (arm)" } ] }
+
 Regeln
-Wahrscheinlichkeiten immer in wurf als „X% (W20|Y)“.
-wahl listet gleichgewichtete Alternativen (falls nicht anders angegeben).
-anzahl bei Beute = Stückzahl/Stack; wert = Verkaufswert (optional).
+
+- Ein Wurf pro Beutezeile:
+  - Mapping-Variante: Ein W6. Die im Mapping genannten Augenzahlen = Erfolg; alles andere = nichts.
+  - Bei Erfolg und mehreren Optionen bestimmt das Mapping, welche Option fällt (z.B. 1-2 erste Option, 3-4 zweite Option).
+  - "nichts" wird nur im Mapping-Text genannt, niemals in "wahl".
+- wahl dient der Struktur:
+  - Trägt pro Option Details wie "anzahl" und/oder "wert".
+  - Die "typ"-Namen in wurf und in wahl müssen exakt übereinstimmen.
+- Gewichtung:
+  - Vergib im Mapping mehr Augenzahlen an häufiger gewünschte Optionen (z.B. "2-3 Silberkette" statt "nur 3").
+  - wahl NICHT duplizieren; Gewichtung passiert im Mapping.
+- Gold/Währung:
+  - Bleibt in Würfelnotation (z.B. "1W6", "3W6") und nutzt kein Mapping.
+- anzahl bei Beute = Stückzahl/Stack; wert = Verkaufswert (optional).
+Erntbar-Richtlinie (Kurz)
+- Ca. 70% aller Kreaturen sind überhaupt erntbar (ja/nein je Kreatur).
+- Wenn erntbar = ja: 1–2 passende "Erntbar: …"-Zeilen mit Mapping hinzufügen.
+  - Offensichtliches Material (Pelz, Knochensplitter) oft "garantiert (W6|6)" oder "(W6|1-4 …, 5-6 nichts)".
+  - Innere Teile (Drüse, Giftbeutel, Essenz) sparsamer (z.B. "(W6|1-2 …, 3-6 nichts)").
+- Zivilisierte Humanoide i.d.R. nicht erntbar; Ausnahmen: Goblinohr, Orkzahn o.ä.
+
+
 Besonderheiten (Array)
 Freier Text, kurz und eindeutig (Resistenzen, Immunitäten, Anfälligkeiten, Taktiken etc.).
 Globale Erklärpflicht: Alle Keywords/Abkürzungen, die irgendwo im Statblock auftauchen (z.B. „immun“, „0 vs …“, „körperlos“, „Regeneration“), müssen hier in Klartext erläutert sein.
@@ -128,7 +169,7 @@ Angriffe: schaden als String („Z“ oder „Z (XWY±Z)“), to_hit Integer.
 Effekt/Save vorhanden? Dann rettungswurf vollständig (art, zw, Erfolg/Misserfolg, Dauer).
 Fern-/Flächenangriffe haben reichweite.
 anzahl gesetzt bei limitierten Aktionen.
-Beute-Chancen im Format „X% (W20|Y)“; wahl korrekt verwendet.
+Beute-Chancen gem. Erklärung in Beute (Array); wahl korrekt verwendet.
 Globale Erklärpflicht erfüllt (Keywords erklärt).
 Werte grob im HG-Korridor (to_hit, LP, SR, PA/ASW).
 Minimal-Template (zum Ausfüllen)
@@ -177,7 +218,7 @@ Rolle wählen (siehe 12). Wenn keine Controller/Unterstützer: keine Effekte; se
 schaden als String: fester Wert, optional Würfel in Klammern.
 Jeder Effekt mit vollständigem rettungswurf; jede Fern-/Flächenwirkung mit reichweite.
 bew im Format „X“ bzw. „X (Flug Y, …)“.
-Beute-Chancen als „X% (W20|Y)“; „oder“-Beute via wahl.
+Beute-Chancen als „W6|Y)“; „oder“-Beute via wahl.
 Globale Erklärpflicht beachten (Keywords in Besonderheiten erläutern).
 beschreibung: 1–3 Sätze, 25–70 Wörter, mind. zwei Inhalte (Erscheinung, Verhalten, Umfeld), keine Crunch-Begriffe.
 
