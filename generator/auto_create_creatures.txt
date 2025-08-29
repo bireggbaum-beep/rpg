@@ -1,62 +1,88 @@
-Statblock Spezifikation – Auto-Creatur v1.1.4
+Statblock Spezifikation – Auto-Creatur v1.1.5
+=============================================
+
 Zweck
-Einheitliche Regeln, damit Menschen und AIs konsistent spielbare Gegner-Statblöcke erzeugen, die ohne Rückfragen am Spieltisch funktionieren.
+-------
+Einheitliche Regeln, damit Menschen und AIs konsistent spielbare Gegner-Statblöcke erzeugen, die ohne Rückfragen am Spieltisch funktionieren und von der Web-Anwendung korrekt dargestellt werden.
+
 Globale Erklärpflicht (explizit)
-Jede verkürzte/keywordartige Angabe in irgendeinem Feld MUSS unter Besonderheiten in Klartext erläutert werden (Wirkung, Grenzen, Beispiele). Gilt für alle Felder.
+--------------------------------
+Jede verkürzte/keywordartige Angabe in irgendeinem Feld MUSS unter `besonderheiten` in Klartext erläutert werden (Wirkung, Grenzen, Beispiele). Gilt für alle Felder.
 Beispiele: immun, Immunität, Resistenz, Anfälligkeit, „0 vs …“, „halber/doppelter Schaden“, Vorteil/Nachteil, automatisch/Auto-Treffer, kritisch bei 19–20, Regeneration, körperlos/ätherisch, spaltet sich/absorbiert/reflektiert, versteinern, betäubt, festgesetzt, zu Boden.
+
 Top-Level-Felder (Pflicht, falls nicht „optional“ markiert)
-name: String
-typ: String (z.B. Humanoid, Untot, Tier, Monster, Riese, Elementar, Schleimwesen, Gestaltwandler)
-hg: Integer (1,2,…) oder Bruch als String („1/8“, „1/4“, „1/2“)
-ep: Integer
-lp: Integer
-sr: Integer
-sr_bemerkung: Optionaler String (z.B. „Leder“, „0 vs Wuchtwaffen“)
-bew: String. Format:
-Nur Boden: „4“
-Mit weiteren Modi: „4 (Flug 7, Schwimmen 3)“
-pa: Integer (Parade)
-asw: Integer (Ausweichwert)
-ini: Integer (darf negativ sein)
-rz: Integer oder „immun“
-rr: Integer oder „immun“
-rw: Integer oder „immun“
-pa_bemerkung, asw_bemerkung: Optionaler String
-angriffe: Array von Angriffsobjekten (siehe 4)
-besonderheiten: Array von Strings (freier Text; Erklärpflicht beachten)
-beute: Array von Beuteobjekten (siehe 6)
-beschreibung: String (Pflicht; siehe 10)
-Angriffe (Objekte in „angriffe“) Pflichtfelder je Angriff
-name: String
-to_hit: Integer (Angriffsbonus; Feldname ist to_hit, nicht „bonus“)
-schaden: String mit festem Wert und optionaler Würfelnotation in Klammern
-Nur fester Wert: z.B. „6“
-Fest + Würfel: z.B. „8 (2W4+3)“
-Der feste Wert ist maßgeblich. Die Klammer ist nur optional für Tische, die würfeln wollen.
-Empfehlung zur Klammer: Erwartungswert XWY+Z → X·(Y+1)/2 + Z; .5 wird aufgerundet; ±1 Abweichung toleriert.
-Optionale Felder
-reichweite: String-Token, wenn nicht Nahkampf. Erlaubt:
-„angrenzend“, „1xKurz“, „2xLang“, „3xLang“, „Kegel N“, „Linie N“
-anzahl: Integer (Einsätze pro Begegnung, z.B. 1)
-zusatz: Kurztext (z.B. „zu Boden“, „festgesetzt“, „Gift“)
-rettungswurf: Objekt – Pflicht, wenn der Angriff einen Save/Zustand/Effekt auslöst
-art: „RZ“ | „RR“ | „RW“
-zw: Integer (Zielwert)
-bei_misserfolg: Kurztext mit Wirkung (z.B. „1 Runde betäubt“, „Gift: 1W4/Runde, max 3 Runden“)
-bei_erfolg: Kurztext (z.B. „keine Wirkung“, „halber Schaden“)
-dauer: String (z.B. „1 Runde“, „1W4 Runden“, „bis Ziel aufsteht“)
-wiederholung: Optional (z.B. „Ende jeder eigenen Runde“)
-tags: Optionales Array kurzer Labels (z.B. [„gift“, „krankheit“, „flächenangriff“])
-Pflichten/Hinweise
-Jeder Fern- oder Flächenangriff braucht eine reichweite.
-Jeder Zustand/Effekt braucht ein rettungswurf-Objekt (Art, ZW, Erfolg/Misserfolg, Dauer).
-Bei limitierter Nutzung anzahl setzen.
+----------------------------------------------------------
+- name: String
+- typ: String (z.B. Humanoid, Untot, Tier, Monster, Riese, Elementar, Schleimwesen, Gestaltwandler)
+- hg: Integer (1,2,…) oder Bruch als String („1/8“, „1/4“, „1/2“)
+- ep: Integer
+- lp: Integer
+- sr: Integer
+- sr_bemerkung: Optionaler String oder Array von Strings (z.B. „Leder“, „0 vs Wuchtwaffen“)
+- bew: String. Format:
+  - Nur Boden: „4“
+  - Mit weiteren Modi: „4 (Flug 7, Schwimmen 3)“
+- pa: Integer (Parade)
+- asw: Integer (Ausweichwert)
+- ini: Integer (darf negativ sein)
+- rz: Integer oder „immun“
+- rr: Integer oder „immun“
+- rw: Integer oder „immun“
+- pa_bemerkung: Optionales Array. Kann eine Mischung aus Strings und einem speziellen Schild-Objekt enthalten.
+  - Zweck: Dient dazu, situative Boni/Mali auf die Parade (PA) zu notieren.
+  - Format:
+    - Text-Notizen: Einfache Strings im Array (z.B. "11 vs Wuchtwaffen"). Werden als (Text) angezeigt.
+    - Schild-Bonus: Ein einzelnes Objekt mit fester Struktur, um einen Schildbonus darzustellen.
+      {
+        "icon": "shield",
+        "value": "+1",
+        "description": "Schild zählt nur von vorn"
+      }
+      - icon: Muss "shield" sein.
+      - value: Der Bonus als String (z.B. "+1", "+2").
+      - description: Optionaler Text, der als Tooltip beim Hovern über das Icon angezeigt wird.
+- asw_bemerkung: Optionaler String oder Array von Strings.
+- angriffe: Array von Angriffsobjekten (siehe Sektion 4).
+- besonderheiten: Array von Strings (freier Text; Erklärpflicht beachten).
+- beute: Array von Beuteobjekten (siehe Sektion 6).
+- beschreibung: String (Pflicht; siehe Sektion 10).
+
+Angriffe (Objekte in „angriffe“)
+--------------------------------
+Pflichtfelder je Angriff:
+- name: String
+- to_hit: Integer (Angriffsbonus; Feldname ist to_hit, nicht „bonus“)
+- schaden: String mit festem Wert und optionaler Würfelnotation in Klammern.
+  - Nur fester Wert: z.B. „6“
+  - Fest + Würfel: z.B. „8 (2W4+3)“
+  - Der feste Wert ist maßgeblich. Die Klammer ist nur optional für Tische, die würfeln wollen.
+  - Empfehlung zur Klammer: Erwartungswert XWY+Z → X·(Y+1)/2 + Z; .5 wird aufgerundet; ±1 Abweichung toleriert.
+
+Optionale Felder:
+- reichweite: String-Token, wenn nicht Nahkampf. Erlaubt: „angrenzend“, „1xKurz“, „2xLang“, „3xLang“, „Kegel N“, „Linie N“
+- anzahl: Integer (Einsätze pro Begegnung, z.B. 1)
+- zusatz: Kurztext (z.B. „zu Boden“, „festgesetzt“, „Gift“)
+- rettungswurf: Objekt – Pflicht, wenn der Angriff einen Save/Zustand/Effekt auslöst.
+  - art: „RZ“ | „RR“ | „RW“
+  - zw: Integer (Zielwert)
+  - bei_misserfolg: Kurztext mit Wirkung (z.B. „1 Runde betäubt“, „Gift: 1W4/Runde, max 3 Runden“)
+  - bei_erfolg: Kurztext (z.B. „keine Wirkung“, „halber Schaden“)
+  - dauer: String (z.B. „1 Runde“, „1W4 Runden“, „bis Ziel aufsteht“)
+  - wiederholung: Optional (z.B. „Ende jeder eigenen Runde“)
+- tags: Optionales Array kurzer Labels (z.B. [„gift“, „krankheit“, „flächenangriff“])
+
+Pflichten/Hinweise:
+- Jeder Fern- oder Flächenangriff braucht eine `reichweite`.
+- Jeder Zustand/Effekt braucht ein `rettungswurf`-Objekt (Art, ZW, Erfolg/Misserfolg, Dauer).
+- Bei limitierter Nutzung `anzahl` setzen.
+
 Zauber (optional)
-Struktur wie Angriffe. Zusätzlich erlaubt: auto: true (automatische Wirkung ohne to_hit).
-Auch hier gilt: reichweite angeben, wenn nicht Nahbereich; rettungswurf, wenn Effekt/Save.
+------------------
+Struktur wie Angriffe. Zusätzlich erlaubt: `auto: true` (automatische Wirkung ohne `to_hit`).
+Auch hier gilt: `reichweite` angeben, wenn nicht Nahbereich; `rettungswurf`, wenn Effekt/Save.
 
 Beute (Array) – Erlaubte Formen (W6-Mapping)
-
+---------------------------------------------
 - Gold (klassisch, kein Mapping):
   - { "typ": "GM", "wurf": "2W6" }
 
@@ -65,71 +91,57 @@ Beute (Array) – Erlaubte Formen (W6-Mapping)
   - { "typ": "Pfeile", "anzahl": 10 }
 
 - W6-Mapping (Shortcut, empfohlen für Drops mit Auswahl):
-  - Syntax in wurf: "(W6|…)" – ein W6 entscheidet Erfolg und Auswahl.
+  - Syntax in `wurf`: "(W6|…)" – ein W6 entscheidet Erfolg und Auswahl.
   - Beispiel (2 Optionen, 50/50 bei Erfolg):
     - { "wurf": "(W6|1-2 Pfeile, 3-4 Bolzen, 5-6 nichts)",
         "wahl": [ { "typ": "Pfeile", "anzahl": 10 }, { "typ": "Bolzen", "anzahl": 10 } ] }
-  - Beispiel (gewichtete 1:2-Chance bei Erfolg):
-    - { "wurf": "(W6|1 Edelstein (Malachit), 2-3 Silberkette, 4-6 nichts)",
-        "wahl": [ { "typ": "Edelstein (Malachit)", "wert": 15 }, { "typ": "Silberkette", "wert": 15 } ] }
   - Beispiel (garantiert, keine Niete):
     - { "wurf": "(W6|1-6 Erntbar: Knochensplitter)",
         "wahl": [ { "typ": "Erntbar: Knochensplitter" } ] }
 
-- Optional: Raritätslabels (Alternative zum Mapping, falls gewünscht)
-  - "selten (W6|2)", "ungewöhnlich (W6|3)", "häufig (W6|4)", "sehr häufig (W6|5)", "garantiert (W6|6)"
-  - Beispiel:
-    - { "wurf": "selten (W6|2)", "wahl": [ { "typ": "Messer (schartig)" }, { "typ": "Werkzeugbeutel (arm)" } ] }
+Regeln:
+- Ein Wurf pro Beutezeile.
+- `wahl` dient der Struktur und trägt Details wie "anzahl" und/oder "wert".
+- Die "typ"-Namen in `wurf` und in `wahl` müssen exakt übereinstimmen.
+- "nichts" wird nur im Mapping-Text genannt, niemals in "wahl".
+- Gold/Währung bleibt in Würfelnotation und nutzt kein Mapping.
 
-Regeln
-
-- Ein Wurf pro Beutezeile:
-  - Mapping-Variante: Ein W6. Die im Mapping genannten Augenzahlen = Erfolg; alles andere = nichts.
-  - Bei Erfolg und mehreren Optionen bestimmt das Mapping, welche Option fällt (z.B. 1-2 erste Option, 3-4 zweite Option).
-  - "nichts" wird nur im Mapping-Text genannt, niemals in "wahl".
-- wahl dient der Struktur:
-  - Trägt pro Option Details wie "anzahl" und/oder "wert".
-  - Die "typ"-Namen in wurf und in wahl müssen exakt übereinstimmen.
-- Gewichtung:
-  - Vergib im Mapping mehr Augenzahlen an häufiger gewünschte Optionen (z.B. "2-3 Silberkette" statt "nur 3").
-  - wahl NICHT duplizieren; Gewichtung passiert im Mapping.
-- Gold/Währung:
-  - Bleibt in Würfelnotation (z.B. "1W6", "3W6") und nutzt kein Mapping.
-- anzahl bei Beute = Stückzahl/Stack; wert = Verkaufswert (optional).
 Erntbar-Richtlinie (Kurz)
-- Ca. 70% aller Kreaturen sind überhaupt erntbar (ja/nein je Kreatur).
-- Wenn erntbar = ja: 1–2 passende "Erntbar: …"-Zeilen mit Mapping hinzufügen.
-  - Offensichtliches Material (Pelz, Knochensplitter) oft "garantiert (W6|6)" oder "(W6|1-4 …, 5-6 nichts)".
-  - Innere Teile (Drüse, Giftbeutel, Essenz) sparsamer (z.B. "(W6|1-2 …, 3-6 nichts)").
-- Zivilisierte Humanoide i.d.R. nicht erntbar; Ausnahmen: Goblinohr, Orkzahn o.ä.
-
+--------------------------
+- Ca. 70% aller Kreaturen sind überhaupt erntbar.
+- Wenn ja, 1–2 passende "Erntbar: …"-Zeilen mit Mapping hinzufügen.
+- Zivilisierte Humanoide i.d.R. nicht erntbar.
 
 Besonderheiten (Array)
-Freier Text, kurz und eindeutig (Resistenzen, Immunitäten, Anfälligkeiten, Taktiken etc.).
-Globale Erklärpflicht: Alle Keywords/Abkürzungen, die irgendwo im Statblock auftauchen (z.B. „immun“, „0 vs …“, „körperlos“, „Regeneration“), müssen hier in Klartext erläutert sein.
+----------------------
+Freier Text, kurz und eindeutig. Globale Erklärpflicht beachten: Alle Keywords/Abkürzungen (z.B. „immun“, „körperlos“, „Regeneration“) müssen hier in Klartext erläutert sein.
+
 Bewegung (bew)
-Immer Bodenbewegung als String.
-Zusätzliche Bewegungsarten in Klammern: „X (Flug Y, Schwimmen Z)“.
-Beispiele: „4“, „4 (Flug 7)“, „5 (Flug 8, Schwimmen 3)“.
+---------------
+Immer Bodenbewegung als String. Zusätzliche Bewegungsarten in Klammern: „X (Flug Y, Schwimmen Z)“.
+
 Notation und Tokens
-Würfelnotation: „XWY±Z“ (Großes W).
-Beute-Mapping: "(W6|…)" – Ein W6 entscheidet Erfolg und Auswahl (z.B. "(W6|1-2 Pfeile, 3-4 Bolzen, 5-6 nichts)").
-Reichweite-Tokens: „angrenzend“, „1xKurz“, „2xLang“, „3xLang“, „Kegel N“, „Linie N“.
-Zustände (Begriffs-Set, systemneutral formuliert): betäubt, gelähmt, festgesetzt, zu Boden, verlangsamt, in Flammen, furchtsam.
+-------------------
+- Würfelnotation: „XWY±Z“ (Großes W).
+- Beute-Mapping: "(W6|…)"
+- Reichweite-Tokens: „angrenzend“, „1xKurz“, „2xLang“, „3xLang“, „Kegel N“, „Linie N“.
+- Zustände (systemneutral): betäubt, gelähmt, festgesetzt, zu Boden, verlangsamt, in Flammen, furchtsam.
+
 Beschreibung – Anforderungen (Pflicht)
-Umfang: 1–3 Sätze, ca. 25–70 Wörter.
-Inhalt: Mindestens 2 der 3 Aspekte
-Erscheinung/Atmosphäre (Aussehen, Geräusch, Geruch).
-Verhalten/Taktik (typisches Vorgehen).
-Umfeld/Hook (typische Orte, kleiner Aufhänger).
-Stil: Regelfrei, keine Zahlen/Würfel/Bonus-/Zustandsbegriffe; keine Wiederholung von Crunch aus Besonderheiten; knapp, spielleitungsfreundlich.
-Designziele nach HG (Richtwerte für Generierung/Validierung; kein Statblock-Feld)
+--------------------------------------
+- Umfang: 1–3 Sätze, ca. 25–70 Wörter.
+- Inhalt: Mind. 2 der 3 Aspekte (Erscheinung/Atmosphäre, Verhalten/Taktik, Umfeld/Hook).
+- Stil: Regelfrei, keine Zahlen/Würfel/Zustandsbegriffe.
+
+Designziele nach HG (Richtwerte für Generierung/Validierung)
+-----------------------------------------------------------
 Hinweise:
-to_hit je Angriff nahe „Angriffsbonus“ des HG (±1 ok).
-PA/ASW an „Verteidigung (ca.)“ ausrichten.
-LP/SR ins Korridor bringen (hohe SR → eher niedrigere LP und umgekehrt).
-„Schaden/Runde“ nur intern für Balancing; ohne SC-Referenz optional.
-Richtwerte je HG
+- to_hit je Angriff nahe „Angriffsbonus“ des HG (±1 ok).
+- PA/ASW an „Verteidigung (ca.)“ ausrichten.
+- LP/SR ins Korridor bringen (hohe SR → eher niedrigere LP und umgekehrt).
+- „Schaden/Runde“ nur intern für Balancing; ohne SC-Referenz optional.
+
+Richtwerte je HG:
 HG 1/8: EP 25; LP 1–5; SR 0–1; Angriffsbonus +0 bis +2; Schaden/Runde 1; Verteidigung 10–12
 HG 1/4: EP 50; LP 4–10; SR 1–2; Angriffsbonus +1 bis +3; Schaden/Runde 1–2; Verteidigung 11–13
 HG 1/2: EP 100; LP 10–18; SR 1–3; Angriffsbonus +2 bis +4; Schaden/Runde 2–3; Verteidigung 12–14
@@ -145,38 +157,23 @@ HG 9: EP 4.750; LP 120–180; SR 6–8; Angriffsbonus +8 bis +11; Schaden/Runde 
 HG 10: EP 6.250; LP 140–220; SR 7–9; Angriffsbonus +9 bis +12; Schaden/Runde 32–40; Verteidigung 19–20
 HG 11: EP 10.000; LP 170–270; SR 7–10; Angriffsbonus +10 bis +14; Schaden/Runde 40–50; Verteidigung 20–22
 HG 12: EP 17.000; LP 200–330; SR 8–11; Angriffsbonus +11 bis +15; Schaden/Runde 50–65; Verteidigung 21–23
-Vielfalt- und Einfachheitsregeln (Rollen-Addendum)
-Wähle pro Gegner genau eine Rolle.
-Rollen und Verteilung (Richtwerte):
-HG 1/8–1: Bruiser 45%, Skirmisher 25%, Schütze 15%, Controller 10%, Unterstützer 5%
-HG 2–3: Bruiser 35%, Skirmisher 20%, Schütze 15%, Controller 20%, Unterstützer 10%
-HG 4+: Bruiser 30%, Skirmisher 20%, Schütze 15%, Controller 25%, Unterstützer 10%
-Rollenkürzel:
-Bruiser: 1–2 einfache Nahkampfangriffe, keine Save-/Zustands-Effekte.
-Skirmisher: Mobil, 1 Nahkampf + 1 Fern oder Bewegungs-Trick; höchstens 1 kleine Utility (ohne Save).
-Schütze: Fokus Fernkampf; höchstens 1 Spezialschuss (ohne Zustand) oder 1 seltener kleiner Effekt (anzahl 1).
-Controller: 1 Save-basierter CC/Flächenangriff (anzahl 1–2), restliche Angriffe simpel.
-Unterstützer: Buff/Debuff/Heilung (anzahl), kein zusätzlicher CC-Spam.
-Effekt-Budget:
-Nicht-Controller/Unterstützer: Standard = 0 Effekte. In max. 30% der Fälle 1 kleiner Effekt (z.B. „zu Boden“), dann anzahl 1.
-Controller/Unterstützer: Max. 1 Save-/AoE-Effekt (selten 2, wenn beide limitiert).
-Begegnungsweite:
-Pro Begegnung höchstens ein Drittel der Gegner mit Effekten.
-Standard: maximal 1 AoE-CC pro Begegnung (außer Bosskämpfe).
+
 Validierungs-Checkliste (kurz)
-Pflichtfelder vorhanden: name, typ, hg, ep, lp, sr, bew, pa, asw, ini, rz, rr, rw, angriffe[], besonderheiten[], beute[], beschreibung.
-bew-Format korrekt („X“ oder „X (Flug Y, …)“).
-Angriffe: schaden als String („Z“ oder „Z (XWY±Z)“), to_hit Integer.
-Effekt/Save vorhanden? Dann rettungswurf vollständig (art, zw, Erfolg/Misserfolg, Dauer).
-Fern-/Flächenangriffe haben reichweite.
-anzahl gesetzt bei limitierten Aktionen.
-Beute-Chancen gem. Erklärung in Beute (Array); wahl korrekt verwendet.
-Globale Erklärpflicht erfüllt (Keywords erklärt).
-Werte grob im HG-Korridor (to_hit, LP, SR, PA/ASW).
+------------------------------
+- Pflichtfelder vorhanden: name, typ, hg, ep, lp, sr, bew, pa, asw, ini, rz, rr, rw, angriffe[], besonderheiten[], beute[], beschreibung.
+- `bew`-Format korrekt („X“ oder „X (Flug Y, …)“).
+- `pa_bemerkung` Format korrekt: Ist ein Array. Enthält nur Strings und/oder maximal ein Schild-Objekt (`{ "icon": "shield", ... }`).
+- Angriffe: `schaden` als String („Z“ oder „Z (XWY±Z)“), `to_hit` Integer.
+- Effekt/Save vorhanden? Dann `rettungswurf` vollständig (art, zw, Erfolg/Misserfolg, Dauer).
+- Fern-/Flächenangriffe haben `reichweite`.
+- `anzahl` gesetzt bei limitierten Aktionen.
+- Beute-Chancen gem. Erklärung in Beute (Array); `wahl` korrekt verwendet.
+- Globale Erklärpflicht erfüllt (Keywords erklärt).
+- Werte grob im HG-Korridor (to_hit, LP, SR, PA/ASW).
+
 Minimal-Template (zum Ausfüllen)
+--------------------------------
 json
-
-
 {
   "name": "NAME",
   "typ": "TYP",
@@ -184,7 +181,7 @@ json
   "ep": 100,
   "lp": 14,
   "sr": 2,
-  "sr_bemerkung": [],
+  "sr_bemerkung": "",
   "bew": "4",
   "pa": 12,
   "asw": 12,
@@ -192,15 +189,14 @@ json
   "rz": 10,
   "rr": 10,
   "rw": 11,
- "pa_bemerkung": [
-   "11 vs Wuchtwaffen",
-   {
-     "icon": "shield",
-     "value": "+1",
-     "description": "Schild zählt nur von vorn"
-   }
+  "pa_bemerkung": [
+    "11 vs Wuchtwaffen",
+    {
+      "icon": "shield",
+      "value": "+1",
+      "description": "Schild zählt nur von vorn"
+    }
   ],
-
   "asw_bemerkung": "",
   "angriffe": [
     { "name": "Nahkampf", "to_hit": 3, "schaden": "5 (1W8)" },
@@ -209,36 +205,31 @@ json
   "besonderheiten": [
     "Beispiel: Resistenz: Stichwaffen (halber Schaden)"
   ],
-"beute": [
-  { "typ": "GM", "wurf": "2W6" },
-  {
-    "wurf": "(W6|1-2 Kurzschwert, 3-4 Pfeile, 5-6 nichts)",
-    "wahl": [
-      { "typ": "Kurzschwert" },
-      { "typ": "Pfeile", "anzahl": 10 }
-    ]
-  }
-],
+  "beute": [
+    { "typ": "GM", "wurf": "2W6" },
+    {
+      "wurf": "(W6|1-2 Kurzschwert, 3-4 Pfeile, 5-6 nichts)",
+      "wahl": [
+        { "typ": "Kurzschwert" },
+        { "typ": "Pfeile", "anzahl": 10 }
+      ]
+    }
+  ],
   "beschreibung": "1–3 Sätze, 25–70 Wörter; mind. zwei der Aspekte: Erscheinung/Atmosphäre, Verhalten/Taktik, Umfeld/Hook. Keine Zahlen/Regeln."
 }
 
-Option: Interner Damage-Check (nur für Balancing, kein Feld)
-Grobformel (falls gewünscht): p ≈ clamp((21 + to_hit – Zielverteidigung)/20, 0.05, 0.95); Erwartungsschaden ≈ p × durchschnittlicher Einzelschaden (Multiattacken/On-Hit/Additionen berücksichtigen). Ohne verlässliche SC-Referenzen optional/überspringbar.
-
-
 Kompakter Prompt-Hinweis (für Generatoren/AI)
 =============================================
-Erzeuge Statblöcke strikt nach v1.1.3.
-Rolle wählen (siehe 12). Wenn keine Controller/Unterstützer: keine Effekte; selten 1 kleiner Effekt (anzahl 1).
-schaden als String: fester Wert, optional Würfel in Klammern.
-Jeder Effekt mit vollständigem rettungswurf; jede Fern-/Flächenwirkung mit reichweite.
-bew im Format „X“ bzw. „X (Flug Y, …)“.
+Erzeuge Statblöcke strikt nach v1.1.5.
+Rolle wählen (siehe Addendum v1.1a). Wenn keine Controller/Unterstützer: keine Effekte; selten 1 kleiner Effekt (anzahl 1).
+`schaden` als String: fester Wert, optional Würfel in Klammern.
+Jeder Effekt mit vollständigem `rettungswurf`; jede Fern-/Flächenwirkung mit `reichweite`.
+`bew` im Format „X“ bzw. „X (Flug Y, …)“.
 - Beute: Verwende (W6|…)-Mapping im Feld "wurf" für Drops/Alternativen; "wahl" enthält Mengen/Werte.
 - GM (Gold) bleibt in klassischer Würfelnotation (z.B. "1W6"), ohne Mapping.
 - "nichts" nur im Mapping-Text (nicht in "wahl"); Namen in Mapping und "wahl" müssen exakt übereinstimmen.
 Globale Erklärpflicht beachten (Keywords in Besonderheiten erläutern).
-beschreibung: 1–3 Sätze, 25–70 Wörter, mind. zwei Inhalte (Erscheinung, Verhalten, Umfeld), keine Crunch-Begriffe.
-
+`beschreibung`: 1–3 Sätze, 25–70 Wörter, mind. zwei Inhalte (Erscheinung, Verhalten, Umfeld), keine Crunch-Begriffe.
 
 Addendum v1.1a: Vielfalt- und Einfachheitsregeln
 ================================================
@@ -246,35 +237,30 @@ Rollenverteilung pro HG (Richtwerte; genau eine Rolle pro Gegner wählen)
 HG 1/8–1: Bruiser 45%, Skirmisher 25%, Schütze 15%, Controller 10%, Unterstützer 5%
 HG 2–3: Bruiser 35%, Skirmisher 20%, Schütze 15%, Controller 20%, Unterstützer 10%
 HG 4+: Bruiser 30%, Skirmisher 20%, Schütze 15%, Controller 25%, Unterstützer 10%
+
 Rollendefinitionen (kurz)
 Bruiser: 1–2 Nahkampfangriffe, keine Save-/Zustandseffekte.
 Skirmisher: 1 Nahkampf + 1 Fern oder Mobilitäts-Trick; höchstens 1 limitierte Utility (ohne Save).
 Schütze: Fokus Fernkampf; optional 1 Spezialschuss, aber ohne Zustandseffekt oder max. 1 Save-Effekt (anzahl 1).
 Controller: 1 Save-basierter CC/Flächenangriff (anzahl 1–2), restliche Angriffe simpel.
 Unterstützer: Buff/Debuff/Heilung (anzahl), kein zusätzlicher CC-Spam.
-Effekt-Budget pro Gegner
-Nicht-Controller/Unterstützer: 0 Save-/Zustands-Effekte (Standard). In höchstens 30% dieser Fälle ist 1 kleiner Effekt erlaubt (z.B. „zu Boden“, anzahl 1).
-Controller/Unterstützer: max. 1 Save-basierter Effekt (selten 2, wenn beide anzahl-begrenzt).
-Begegnungsweite Begrenzung
-In einer Begegnung sollen höchstens 1/3 der Gegner Save-/CC-Effekte haben.
-Max. 1 AoE-CC pro Begegnung als Standard (Bosskämpfe ausgenommen).
-Angriffszahl und Limitierungen
-1–2 Angriffe total sind Standard. 3 nur bei Elite/Boss.
-Jeder Effektangriff hat anzahl (z.B. 1 oder 2). Dauer/ZW klar angeben (Spec v1.1).
-Beispiel-Heuristik für die AI (implizit)
-Erzeuge zuerst die Rolle nach obiger Gewichtung, dann:
-Bruiser/Skirmisher/Schütze → erstelle nur simple Angriffe; keine CC, außer seltene Ausnahme (anzahl 1).
-Controller/Unterstützer → genau 1 Effekt definieren (mit rettungswurf), rest simple.
-Kompakter Prompt-Zusatz für deine Generatoren Füge das deiner Promptvorlage an, damit „keine Effekte“ endlich der Normalfall wird:
-text
 
+Effekt-Budget pro Gegner
+- Nicht-Controller/Unterstützer: 0 Save-/Zustands-Effekte (Standard). In höchstens 30% dieser Fälle ist 1 kleiner Effekt erlaubt (z.B. „zu Boden“, anzahl 1).
+- Controller/Unterstützer: max. 1 Save-basierter Effekt (selten 2, wenn beide anzahl-begrenzt).
+
+Begegnungsweite Begrenzung
+- In einer Begegnung sollen höchstens 1/3 der Gegner Save-/CC-Effekte haben.
+- Max. 1 AoE-CC pro Begegnung als Standard (Bosskämpfe ausgenommen).
+
+Angriffszahl und Limitierungen
+- 1–2 Angriffe total sind Standard. 3 nur bei Elite/Boss.
+- Jeder Effektangriff hat `anzahl` (z.B. 1 oder 2). Dauer/ZW klar angeben (Spec v1.1.5).
+
+Kompakter Prompt-Zusatz für deine Generatoren
+---------------------------------------------
+Füge das deiner Promptvorlage an, damit „keine Effekte“ endlich der Normalfall wird:
 Nutze die Rollenverteilung aus Addendum v1.1a. Wähle genau eine Rolle je Gegner.
 - Wenn Rolle ≠ Controller/Unterstützer: Erzeuge KEINE Save-/Zustands-Effekte. Erlaube in höchstens 30% der Fälle EINEN kleinen Effekt (z.B. „zu Boden“), dann mit anzahl=1 und vollständigem rettungswurf.
 - Wenn Rolle = Controller/Unterstützer: Erzeuge GENAU EINEN Save-/Zustands- oder AoE-Effekt (anzahl 1–2). Alle übrigen Angriffe sind simpel.
 - In Summe: Max. 1/3 der Gegner mit Effekten; höchstens ein AoE-CC pro Begegnung.
-
-
-
-
-
-
