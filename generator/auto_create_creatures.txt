@@ -177,6 +177,7 @@ json
 {
   "name": "NAME",
   "typ": "TYP",
+  "traits": ["BEISPIEL_TRAIT_1", "BEISPIEL_TRAIT_2"],
   "hg": "1/2",
   "ep": 100,
   "lp": 14,
@@ -210,8 +211,8 @@ json
     {
       "wurf": "(W6|1-2 Kurzschwert, 3-4 Pfeile, 5-6 nichts)",
       "wahl": [
-        { "typ": "Kurzschwert" },
-        { "typ": "Pfeile", "anzahl": 10 }
+        { "typ": "Kurzschwert", "wert": 10 }, 
+        { "typ": "Pfeile", "anzahl": 10 } 
       ]
     }
   ],
