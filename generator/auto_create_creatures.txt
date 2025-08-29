@@ -57,6 +57,8 @@ Pflichtfelder je Angriff:
   - Fest + Würfel: z.B. „8 (2W4+3)“
   - Der feste Wert ist maßgeblich. Die Klammer ist nur optional für Tische, die würfeln wollen.
   - Empfehlung zur Klammer: Erwartungswert XWY+Z → X·(Y+1)/2 + Z; .5 wird aufgerundet; ±1 Abweichung toleriert.
+- rz, rr, rw: dieser Wert muss mit W20 erreicht oder überwürfelt werden. Niedriger ist besser. Profil muss zur Kreatur passen.
+
 
 Optionale Felder:
 - reichweite: String-Token, wenn nicht Nahkampf. Erlaubt: „angrenzend“, „1xKurz“, „2xLang“, „3xLang“, „Kegel N“, „Linie N“
