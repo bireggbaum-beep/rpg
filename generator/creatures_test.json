@@ -1,1 +1,45 @@
+[
+  {
+    "name": "Gruft-Skelettkrieger",
+    "typ": "Untot",
+    "traits": ["Skelett"],
+    "hg": 1,
+    "ep": 150,
+    "lp": 18,
+    "sr": 2,
+    "sr_bemerkung": "Knochen, 0 vs Wuchtwaffen",
+    "bew": "3",
+    "pa": 14,
+    "asw": 12,
+    "ini": 0,
+    "rz": 8,
+    "rr": 11,
+    "rw": "immun",
+    "pa_bemerkung": ["11 vs Wuchtwaffen", {"icon": "shield", "value": "+1"}],
+    "asw_bemerkung": "Nur gegen Projektile",
+    "angriffe": [
+      {"name": "Rostiges Schwert", "to_hit": 3, "schaden": "5"},
+      {"name": "Schildstoss", "to_hit": 2, "schaden": "2", "zusatz": "zu Boden"}
+    ]
+  },
+  {
+    "name": "Riesenratte",
+    "typ": "Tier",
+    "hg": "1/4",
+    "ep": 50,
+    "lp": 8,
+    "sr": 0,
+    "bew": "5",
+    "pa": 11,
+    "asw": 11,
+    "ini": 2,
+    "rz": 10,
+    "rr": 12,
+    "rw": 9,
+    "angriffe": [
+      {"name": "Biss", "to_hit": 2, "schaden": "3", "zusatz": "Krankheit (RR 10)"}
+    ],
+    "beschreibung": "Eine überdurchschnittlich große und aggressive Ratte, deren Fell verfilzt ist und deren Augen bösartig leuchten."
+  }
+]
 
