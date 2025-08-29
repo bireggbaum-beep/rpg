@@ -1,4 +1,4 @@
-Statblock Spezifikation – Auto-Creatur v1.1.6
+Statblock Spezifikation – Auto-Creatur v1.1.7
 =============================================
 
 Zweck
@@ -170,6 +170,25 @@ Validierungs-Checkliste (kurz)
 - Beute-Chancen gem. Erklärung in Beute (Array); `wahl` korrekt verwendet.
 - Globale Erklärpflicht erfüllt (Keywords erklärt).
 - Werte grob im HG-Korridor (to_hit, LP, SR, PA/ASW).
+
+Datenstruktur
+-------------
+Die finale Ausgabe ist ein JSON-Array der alle generierten Gegner enthält:
+Beispiel einer validen Datei:
+[
+  {
+    "name": "Gegner 1",
+    "typ": "Humanoid",
+    ...
+  },
+  {
+    "name": "Gegner 2",
+    "typ": "Tier",
+    ...
+  }
+]
+
+
 
 Minimal-Template (zum Ausfüllen)
 --------------------------------
