@@ -169,3 +169,37 @@ json
 }
 Option: Interner Damage-Check (nur für Balancing, kein Feld)
 Grobformel (falls gewünscht): p ≈ clamp((21 + to_hit – Zielverteidigung)/20, 0.05, 0.95); Erwartungsschaden ≈ p × durchschnittlicher Einzelschaden (Multiattacken/On-Hit/Additionen berücksichtigen). Ohne verlässliche SC-Referenzen optional/überspringbar.
+
+
+Addendum v1.1a: Vielfalt- und Einfachheitsregeln
+Rollenverteilung pro HG (Richtwerte; genau eine Rolle pro Gegner wählen)
+HG 1/8–1: Bruiser 45%, Skirmisher 25%, Schütze 15%, Controller 10%, Unterstützer 5%
+HG 2–3: Bruiser 35%, Skirmisher 20%, Schütze 15%, Controller 20%, Unterstützer 10%
+HG 4+: Bruiser 30%, Skirmisher 20%, Schütze 15%, Controller 25%, Unterstützer 10%
+Rollendefinitionen (kurz)
+Bruiser: 1–2 Nahkampfangriffe, keine Save-/Zustandseffekte.
+Skirmisher: 1 Nahkampf + 1 Fern oder Mobilitäts-Trick; höchstens 1 limitierte Utility (ohne Save).
+Schütze: Fokus Fernkampf; optional 1 Spezialschuss, aber ohne Zustandseffekt oder max. 1 Save-Effekt (anzahl 1).
+Controller: 1 Save-basierter CC/Flächenangriff (anzahl 1–2), restliche Angriffe simpel.
+Unterstützer: Buff/Debuff/Heilung (anzahl), kein zusätzlicher CC-Spam.
+Effekt-Budget pro Gegner
+Nicht-Controller/Unterstützer: 0 Save-/Zustands-Effekte (Standard). In höchstens 30% dieser Fälle ist 1 kleiner Effekt erlaubt (z.B. „zu Boden“, anzahl 1).
+Controller/Unterstützer: max. 1 Save-basierter Effekt (selten 2, wenn beide anzahl-begrenzt).
+Begegnungsweite Begrenzung
+In einer Begegnung sollen höchstens 1/3 der Gegner Save-/CC-Effekte haben.
+Max. 1 AoE-CC pro Begegnung als Standard (Bosskämpfe ausgenommen).
+Angriffszahl und Limitierungen
+1–2 Angriffe total sind Standard. 3 nur bei Elite/Boss.
+Jeder Effektangriff hat anzahl (z.B. 1 oder 2). Dauer/ZW klar angeben (Spec v1.1).
+Beispiel-Heuristik für die AI (implizit)
+Erzeuge zuerst die Rolle nach obiger Gewichtung, dann:
+Bruiser/Skirmisher/Schütze → erstelle nur simple Angriffe; keine CC, außer seltene Ausnahme (anzahl 1).
+Controller/Unterstützer → genau 1 Effekt definieren (mit rettungswurf), rest simple.
+Kompakter Prompt-Zusatz für deine Generatoren Füge das deiner Promptvorlage an, damit „keine Effekte“ endlich der Normalfall wird:
+text
+
+
+Nutze die Rollenverteilung aus Addendum v1.1a. Wähle genau eine Rolle je Gegner.
+- Wenn Rolle ≠ Controller/Unterstützer: Erzeuge KEINE Save-/Zustands-Effekte. Erlaube in höchstens 30% der Fälle EINEN kleinen Effekt (z.B. „zu Boden“), dann mit anzahl=1 und vollständigem rettungswurf.
+- Wenn Rolle = Controller/Unterstützer: Erzeuge GENAU EINEN Save-/Zustands- oder AoE-Effekt (anzahl 1–2). Alle übrigen Angriffe sind simpel.
+- In Summe: Max. 1/3 der Gegner mit Effekten; höchstens ein AoE-CC pro Begegnung.
