@@ -171,6 +171,7 @@ Grobformel (falls gewünscht): p ≈ clamp((21 + to_hit – Zielverteidigung)/20
 
 
 Kompakter Prompt-Hinweis (für Generatoren/AI)
+=============================================
 Erzeuge Statblöcke strikt nach v1.1.3.
 Rolle wählen (siehe 12). Wenn keine Controller/Unterstützer: keine Effekte; selten 1 kleiner Effekt (anzahl 1).
 schaden als String: fester Wert, optional Würfel in Klammern.
@@ -181,9 +182,8 @@ Globale Erklärpflicht beachten (Keywords in Besonderheiten erläutern).
 beschreibung: 1–3 Sätze, 25–70 Wörter, mind. zwei Inhalte (Erscheinung, Verhalten, Umfeld), keine Crunch-Begriffe.
 
 
-
-
 Addendum v1.1a: Vielfalt- und Einfachheitsregeln
+================================================
 Rollenverteilung pro HG (Richtwerte; genau eine Rolle pro Gegner wählen)
 HG 1/8–1: Bruiser 45%, Skirmisher 25%, Schütze 15%, Controller 10%, Unterstützer 5%
 HG 2–3: Bruiser 35%, Skirmisher 20%, Schütze 15%, Controller 20%, Unterstützer 10%
@@ -209,7 +209,6 @@ Bruiser/Skirmisher/Schütze → erstelle nur simple Angriffe; keine CC, außer s
 Controller/Unterstützer → genau 1 Effekt definieren (mit rettungswurf), rest simple.
 Kompakter Prompt-Zusatz für deine Generatoren Füge das deiner Promptvorlage an, damit „keine Effekte“ endlich der Normalfall wird:
 text
-
 
 Nutze die Rollenverteilung aus Addendum v1.1a. Wähle genau eine Rolle je Gegner.
 - Wenn Rolle ≠ Controller/Unterstützer: Erzeuge KEINE Save-/Zustands-Effekte. Erlaube in höchstens 30% der Fälle EINEN kleinen Effekt (z.B. „zu Boden“), dann mit anzahl=1 und vollständigem rettungswurf.
