@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>Auto‑Creatur Statblock – PF kompakt v2</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&family=Crimson+Text:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{--pf-red:#7e1f1f;--ink:#1c1c1c;--muted:#565656;--chip:#ece6e0;--bg:#f6f2ee;--rule:#d9cfc7}
+  html,body{margin:0;background:var(--bg);color:var(--ink);font:400 12px/1.35 "Roboto Condensed",Arial,system-ui}
+  .wrap{max-width:820px;margin:14px auto;padding:0 10px}
+  .io{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+  textarea{min-height:140px;width:100%;border:1px solid var(--rule);border-radius:6px;padding:8px;background:#fff;font:400 12px/1.35 ui-monospace,Menlo,Consolas,monospace}
+  button{background:var(--pf-red);color:#fff;border:0;border-radius:5px;padding:6px 10px;font:700 12px/1 "Roboto Condensed";letter-spacing:.04em;cursor:pointer}
+  .sb{background:#fff;border:1px solid var(--rule)}
+  .head{background:linear-gradient(#f1e7e0,#eaddd3);border-bottom:2px solid var(--pf-red);padding:8px 10px}
+  .name{font:700 19px/1.1 "Roboto Condensed";letter-spacing:.01em;margin:0}
+  .line{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:4px}
+  .chip{
+    background:var(--chip); border:1px solid var(--rule); color:#1b1b1b;
+    padding:2px 7px; border-radius:999px;
+    font:700 10.5px/1 "Roboto Condensed"; /* 1 kleiner */
+    text-transform:uppercase; letter-spacing:.08em; font-variant:small-caps;
+  }
+  .hg{
+    margin-left:auto;
+    font:700 10.5px/1 "Roboto Condensed"; /* 1 kleiner */
+    letter-spacing:.08em; font-variant:small-caps; color:#1b1b1b;
+  }
+  .desc{font-family:"Crimson Text",serif;font-size:12px;line-height:1.35;color:#2a2a2a;margin-top:6px;font-style:italic}
+  .sec{padding:8px 10px;border-top:1px solid var(--rule)}
+  .sec h3{font:700 11px/1 "Roboto Condensed";letter-spacing:.12em;text-transform:uppercase;color:var(--pf-red);margin:0 0 6px}
+  .row{margin:2px 0}
+  .muted{color:var(--muted)}
+  .attblock .attline{margin:2px 0}
+  .lootline b{font-weight:700}
+  .small{font-size:11px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="io">
+    <textarea id="src" placeholder='Füge hier EINEN Statblock (JSON-Objekt) ein...'></textarea>
+    <div>
+      <button id="render">Rendern</button>
+      <div class="small" style="margin-top:6px">Beute zeigt nur „wurf“-Mapping und feste Items. „wahl“ bleibt verborgen. GM bleibt z.B. 1W6.</div>
+    </div>
+  </div>
+  <div id="out" class="sb"></div>
+</div>
+
+<script>
+const $ = s => document.querySelector(s);
+function txt(x){return (x===null||x===undefined||x==="")?"–":String(x)}
+function plusify(v){
+  if(v===undefined||v===null) return "–";
+  if(String(v).toLowerCase()==="immun") return "immun";
+  const n=Number(v); return isNaN(n)?String(v):((n>=0?'+':'')+n);
+}
+
+// Parse Besonderheiten in Kategorien und gleich nutzerfreundlich formatiert
+function parseRes(bes){
+  const res={imm:[],res:[],weak:[],other:[]};
+  (bes||[]).forEach(s=>{
+    const t=String(s||'').trim();
+    if(/^immun/i.test(t)){
+      let val=t.replace(/^immun(?:ität|itäten)?(?:\s*:\s*|\s+gegen\s*)?/i,'').trim();
+      if(val) res.imm.push(`Immun ${/^gegen\s/i.test(val)?val:('gegen '+val)}`);
+    } else if(/^resistenz/i.test(t)){
+      let val=t.replace(/^resistenzen?|resistenz/i,'')
+               .replace(/^(?:\s*:\s*|\s+gegen\s*)?/,'').trim();
+      if(val) res.res.push(`Resistent ${/^gegen\s/i.test(val)?val:('gegen '+val)}`);
+    } else if(/^anfälligkeit/i.test(t)){
+      let val=t.replace(/^anfälligkeiten?|anfälligkeit/i,'')
+               .replace(/^(?:\s*:\s*|\s+gegen\s*)?/,'').trim();
+      if(val) res.weak.push(`Anfällig ${/^gegen\s/i.test(val)?val:('gegen '+val)}`);
+    } else {
+      res.other.push(t);
+    }
+  });
+  return res;
+}
+
+function fmtBew(b){
+  if(!b) return "–";
+  const m=b.match(/^(\d+)(?:\s*\((.+)\))?$/);
+  if(!m) return b;
+  const modes = m[2]? m[2].replace(/,\s*/g,'; ').replace(/vs/gi,'gegen') : '';
+  return modes? `${m[1]}; ${modes}` : m[1];
+}
+
+function naturalAttackLine(a){
+  // kein automatisches Verb anhängen
+  const name = (a.name||'Angriff').replace('ß','ss');
+  const bits=[];
+  if(a.to_hit!=null) bits.push(`${plusify(a.to_hit)} zum Treffen`);
+  if(a.schaden!=null) bits.push(`${a.schaden} Schaden`);
+  if(a.zusatz) bits.push(`und ${capitalize(a.zusatz)}`);
+  if(a.reichweite) bits.push(`(${a.reichweite})`);
+  let line = `<b>${name}</b> ${bits.filter(Boolean).join(', ')}`.replace(/\s+,/g,',');
+  if(a.rettungswurf){
+    const r=a.rettungswurf;
+    const mis = r.bei_misserfolg ? r.bei_misserfolg : 'negative Wirkung';
+    const dur = r.dauer ? ` Dauer: ${r.dauer}.` : '';
+    line += ` (Rettungswurf ${r.art} ${txt(r.zw)} oder ${mis}.${dur})`;
+  }
+  if(a.anzahl!=null) line += ` [x${a.anzahl}]`;
+  return line;
+}
+function capitalize(s){ return s ? s.charAt(0).toUpperCase()+s.slice(1) : s; }
+
+function boldMapNums(s){ return s.replace(/\b(\d+(?:-\d+)?)\b/g,'<b>$1</b>'); }
+function lootAsOneLine(arr){
+  if(!Array.isArray(arr)||!arr.length) return '<span class="muted">Keine Beute.</span>';
+  const parts=[];
+  arr.forEach(b=>{
+    if(b.typ==="GM"){
+      parts.push(`${txt(b.wurf)} <b>Goldmünzen</b>`);
+    } else if(b.wurf){
+      parts.push(boldMapNums(txt(b.wurf)));
+    } else if(b.typ){
+      const t=b.typ.startsWith('Erntbar:')?('<b>Erntbar:</b> '+b.typ.replace(/^Erntbar:\s*/,'')):b.typ;
+      parts.push(t);
+    }
+  });
+  if(parts.length===1) return parts[0];
+  if(parts.length===2) return parts[0]+' und '+parts[1];
+  return parts.slice(0,-1).join(', ')+', und '+parts.slice(-1);
+}
+
+function render(d){
+  const res=parseRes(d.besonderheiten||[]);
+  const traits = Array.isArray(d.traits)?d.traits:[];
+  const srNote = d.sr_bemerkung ? d.sr_bemerkung.replace(/,\s*/g,'; ').replace(/vs/gi,'gegen') : '';
+  const paNote = d.pa_bemerkung ? d.pa_bemerkung.replace(/,\s*/g,'; ').replace(/vs/gi,'gegen') : '';
+  const hasBes = res.imm.length || res.res.length || res.weak.length || res.other.length;
+
+  $('#out').innerHTML = `
+    <div class="head">
+      <div class="name">${txt(d.name)}</div>
+      <div class="line">
+        ${d.typ?`<span class="chip">${d.typ}</span>`:''}
+        ${traits.map(t=>`<span class="chip">${t}</span>`).join('')}
+        ${d.ep!=null?`<span class="chip">${d.ep} EP</span>`:''}
+        ${d.hg!=null?`<span class="hg">Herausforderungsgrad: ${txt(d.hg)}</span>`:''}
+      </div>
+      ${d.beschreibung?`<div class="desc">${d.beschreibung}</div>`:''}
+    </div>
+
+    <div class="sec">
+      <div class="row"><b>Lebenspunkte</b> ${txt(d.lp)}</div>
+      <div class="row"><b>Bewegung</b> ${fmtBew(d.bew)}; <b>INI</b> ${plusify(d.ini)}</div>
+    </div>
+
+    <div class="sec">
+      <h3>Verteidigung</h3>
+      <div class="row"><b>Abwehr Nahkampf (PA)</b> ${txt(d.pa)}${paNote?` (${paNote})`:''}</div>
+      <div class="row"><b>Abwehr Fernkampf (ASW)</b> ${txt(d.asw)}</div>
+      <div class="row"><b>Schadensreduktion</b> ${txt(d.sr)}${srNote?` (${srNote})`:''}</div>
+<div class="rettungswuerfe">
+  <span><b>Zähigkeit</b> ${plusify(d.rz)}</span>
+  <span>|</span>
+  <span><b>Reflexe</b> ${plusify(d.rr)}</span>
+  <span>|</span>
+  <span><b>Willenskraft</b> ${plusify(d.rw)}</span>
+</div>
+    </div>
+
+    ${Array.isArray(d.angriffe)&&d.angriffe.length?`
+    <div class="sec"><h3>Angriffe</h3>
+      <div class="attblock">
+        ${d.angriffe.map(a=>`<div class="attline">${naturalAttackLine(a)}</div>`).join('')}
+      </div>
+    </div>`:''}
+
+    ${hasBes?`
+    <div class="sec"><h3>Besonderheiten</h3>
+      ${res.imm.map(x=>`<div class="row">${x}</div>`).join('')}
+      ${res.res.map(x=>`<div class="row">${x}</div>`).join('')}
+      ${res.weak.map(x=>`<div class="row">${x}</div>`).join('')}
+      ${res.other.map(x=>`<div class="row">${x}</div>`).join('')}
+    </div>`:''}
+
+    <div class="sec"><h3>Beute</h3><div class="lootline">${lootAsOneLine(d.beute||[])}</div></div>
+  `;
+}
+
+$('#render').addEventListener('click', ()=>{
+  try{ render(JSON.parse($('#src').value.trim())); }
+  catch(e){ $('#out').innerHTML='<div class="sec"><b>JSON-Fehler:</b> '+e.message+'</div>'; }
+});
+
+// Beispiel
+const sample = {
+  "name":"Gruft‑Skelettkrieger","typ":"Untot","traits":["Skelett"],"hg":1,"ep":150,
+  "lp":18,"sr":2,"sr_bemerkung":"Knochen, 0 vs Wuchtwaffen",
+  "bew":"3","pa":14,"asw":12,"ini":0,
+  "rz":8,"rr":11,"rw":"immun","pa_bemerkung":"11 vs Wuchtwaffen",
+  "angriffe":[
+    {"name":"Rostiges Schwert","to_hit":3,"schaden":"5"},
+    {"name":"Schildstoss","to_hit":2,"schaden":"2","zusatz":"zu Boden",
+     "rettungswurf":{"art":"RR","zw":10,"bei_misserfolg":"Ziel geht zu Boden","bei_erfolg":"keine Wirkung","dauer":"bis es aufsteht"}}
+  ],
+  "besonderheiten":[
+    "Immun gegen alle geistesbeeinflussenden Effekte (z.B. Furcht, Einschüchtern, Schlaf)",
+    "Resistenz: Stichwaffen (halber Schaden)",
+    "Anfälligkeit: Wuchtwaffen (doppelter Schaden)",
+    "Kann vertrieben werden",
+    "Kein kritischer Schaden"
+  ],
+  "beute":[
+    {"typ":"GM","wurf":"1W6"},
+    {"wurf":"(W6|1 Bronze-Armreif, 2 Zerbrochener Siegelring, 3 Totenkopf-Amulett, 4-6 nichts)",
+     "wahl":[{"typ":"Bronze-Armreif","wert":10},{"typ":"Zerbrochener Siegelring","wert":5},{"typ":"Totenkopf-Amulett","wert":10}]},
+    {"typ":"Erntbar: Knochensplitter"}
+  ],
+  "beschreibung":"Klappernde Reste vergessener Krieger, deren leere Augenhöhlen in der Dunkelheit glimmen. Sie marschieren stur nach vorn, heben Schilde im Takt alter Disziplin und weichen Schmerz nicht aus. In stillen Grüften hallt ihr metallisches Scharren unheilvoll wider."
+};
+$('#src').value = JSON.stringify(sample, null, 2);
+render(sample);
+</script>
+</body>
+</html>
