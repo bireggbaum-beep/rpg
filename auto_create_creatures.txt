@@ -26,7 +26,7 @@ pa_bemerkung, asw_bemerkung: Optional String
 angriffe: Array von Angriffsobjekten (siehe unten)
 besonderheiten: Array von Strings (freier Text; Explizitheitspflicht beachten)
 beute: Array von Beuteobjekten (siehe unten)
-beschreibung: Optionaler kurzer Flavour-Text
+beschreibung: String (Pflicht). Kurzer, regelarmer Flavour-Text gemäß Abschnitt „Beschreibung – Anforderungen“.
 Angriffe (Objektstruktur im Array „angriffe“) Pflicht
 name: String (z.B. „Kurzschwert“, „Biss“, „Schallschrei“)
 to_hit: Integer (Angriffsbonus; nicht „bonus“)
@@ -44,6 +44,7 @@ bei_erfolg: Kurztext (z.B. „keine Wirkung“, „halber Schaden“)
 dauer: String (z.B. „1 Runde“, „1W4 Runden“, „bis Ende nächste Runde“)
 wiederholung: Optional (z.B. „Ende jeder eigenen Runde“, „täglich“)
 tags: Optional Array (z.B. [„gift“, „krankheit“, „flächenangriff“])
+
 Hinweise
 Jeder Fern-/Flächenangriff braucht eine reichweite.
 Jeder Effekt/Zustand braucht ein rettungswurf-Objekt (inkl. Erfolg/Misserfolg und Dauer).
@@ -67,6 +68,25 @@ Globale Explizitheitsregel: Alle Keywords/Abkürzungen aus irgendeinem Feld werd
 Bewegung (bew)
 Immer Bodenbewegung als String.
 Weitere Modi in Klammern: „X (Flug Y, Schwimmen Z)“.
+Beschreibung - Anforderungen (normativ): 
+- Pflicht: MUSS vorhanden sein.
+- Umfang: MUSS 1–3 Sätze umfassen und ca. 25–70 Wörter enthalten.
+- Inhalt (Soll-Kriterien): Muss mindestens zwei der folgenden drei Aspekte enthalten:
+    1. Erscheinung/Atmosphäre (markanter Eindruck: Aussehen, Geräusch, Geruch).
+    2. Verhalten/Taktik (typisches Vorgehen, Jagd-/Kampfstil).
+    3. Umfeld/Hook (typische Orte, Begegnungsanlass, kleiner Aufhänger).
+- Stilregeln:
+    - MUSS regelfrei sein: KEINE Zahlen, Boni, Würfelnotation, Zustandsnamen oder Mechanikbegriffe.
+    - MUSS knapp und spielleitungsfreundlich sein (keine Wiederholung von Regeln aus Besonderheiten).
+    - SOLL in knapper, bildhafter Prosa geschrieben sein (3. Person, Präsens oder zeitlos).
+-  Rollenspezifische Akzente (gemäß Addendum)
+    - Bruiser/Schütze/Skirmisher: Fokus auf Bewegung, Positionierung, körperlichen Eindruck.
+    - Controller/Unterstützer: Gefühl des Signatureffekts andeuten (ohne Crunch).
+- Akzeptankriterien (Validierung):
+    - [MUSS] 25–70 Wörter, 1–3 Sätze.
+    - [MUSS] Mindestens zwei der drei Inhalte (Erscheinung, Verhalten, Umfeld).
+    - [MUSS] Keine Zahlen/Würfel/Regelbegriffe.
+    - [SOLL] Keine Dopplung von Besonderheiten-Inhalten; eher Stimmung als Regeln.
 Notation und Tokens
 Würfel: „XWY+Z“ (z.B. „1W6“, „2W4+1“)
 Reichweite: „angrenzend“, „1xKurz“, „2xLang“, „3xLang“, „Kegel N“, „Linie N“
@@ -128,35 +148,8 @@ json
   "pa_bemerkung": "",
   "asw_bemerkung": "",
   "angriffe": [
-    {
-      "name": "Nahkampfangriff",
-      "to_hit": 3,
-      "schaden": 5,
-      "zusatz": "",
-      "rettungswurf": {
-        "art": "RZ",
-        "zw": 10,
-        "bei_misserfolg": "",
-        "bei_erfolg": "",
-        "dauer": "",
-        "wiederholung": ""
-      }
-    },
-    {
-      "name": "Fern-/Flächenangriff",
-      "to_hit": 2,
-      "schaden": 3,
-      "reichweite": "2xLang",
-      "anzahl": 1,
-      "zusatz": "",
-      "rettungswurf": {
-        "art": "RW",
-        "zw": 10,
-        "bei_misserfolg": "",
-        "bei_erfolg": "",
-        "dauer": "1 Runde"
-      }
-    }
+    { "name": "Nahkampfangriff", "to_hit": 3, "schaden": 5 },
+    { "name": "Fern-/Flächenangriff", "to_hit": 2, "schaden": 3, "reichweite": "2xLang" }
   ],
   "besonderheiten": [
     "Beispiel: Resistenz: Stichwaffen (halber Schaden)"
@@ -165,8 +158,9 @@ json
     { "typ": "GM", "wurf": "2W6" },
     { "wurf": "25% (W20|5)", "wahl": [ { "typ": "Kurzschwert" }, { "typ": "Pfeile", "anzahl": 10 } ] }
   ],
-  "beschreibung": ""
+  "beschreibung": "1–3 Sätze, 25–70 Wörter, mit mind. zwei der Aspekte: Erscheinung/Atmosphäre, Verhalten/Taktik, Umfeld/Hook. Keine Zahlen/Regeln."
 }
+
 Option: Interner Damage-Check (nur für Balancing, kein Feld)
 Grobformel (falls gewünscht): p ≈ clamp((21 + to_hit – Zielverteidigung)/20, 0.05, 0.95); Erwartungsschaden ≈ p × durchschnittlicher Einzelschaden (Multiattacken/On-Hit/Additionen berücksichtigen). Ohne verlässliche SC-Referenzen optional/überspringbar.
 
@@ -203,3 +197,9 @@ Nutze die Rollenverteilung aus Addendum v1.1a. Wähle genau eine Rolle je Gegner
 - Wenn Rolle ≠ Controller/Unterstützer: Erzeuge KEINE Save-/Zustands-Effekte. Erlaube in höchstens 30% der Fälle EINEN kleinen Effekt (z.B. „zu Boden“), dann mit anzahl=1 und vollständigem rettungswurf.
 - Wenn Rolle = Controller/Unterstützer: Erzeuge GENAU EINEN Save-/Zustands- oder AoE-Effekt (anzahl 1–2). Alle übrigen Angriffe sind simpel.
 - In Summe: Max. 1/3 der Gegner mit Effekten; höchstens ein AoE-CC pro Begegnung.
+
+
+
+
+
+
