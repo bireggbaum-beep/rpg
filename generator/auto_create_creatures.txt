@@ -212,9 +212,10 @@ json
       "wurf": "(W6|1-2 Kurzschwert, 3-4 Pfeile, 5-6 nichts)",
       "wahl": [
         { "typ": "Kurzschwert", "wert": 10 }, 
-        { "typ": "Pfeile", "anzahl": 10 } 
+        { "typ": "Pfeile", "anzahl": 10 },
       ]
-    }
+    },
+    {"wurf": "(W6|1-2 Kreaturen-Auge, 3-6 nichts)", "typ": "Erntbar: Kreaturen-Auge", "wert": 5 }
   ],
   "beschreibung": "1–3 Sätze, 25–70 Wörter; mind. zwei der Aspekte: Erscheinung/Atmosphäre, Verhalten/Taktik, Umfeld/Hook. Keine Zahlen/Regeln."
 }
