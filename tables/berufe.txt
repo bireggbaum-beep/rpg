@@ -1,12 +1,12 @@
 Beruf                  Attributsmodifkator              Erlernte Fähigkeiten
 Söldner                STR +2, KON +1, INT -1           Umgang mit improvisierten Waffen
-Jäger                  DEX +2, WIS +1, CHA -1           Spuren lesen (+1)
-Schmied                STR +2, KON +1, DEX -1           Wartung
-Stadtwache             STR +1, KON +1, CHA -1           Beschützerinstinkt
-Seefahrer              STR +1, KON +2, INT -1           Resistenz gegen Gifte und Krankheiten
+Jäger                  GES +2, WIS +1, CHA -1           Spuren lesen (+1)
+Schmied                STR +2, KON +1, GES -1           Wartung
+Stadtwache             STR +1, KON +2, GES -1           Beschützerinstinkt
+Seefahrer              GES +1, KON +2, INT -1           Resistenz gegen Gifte und Krankheiten
 Geistlicher            WIS +2, CHA +1, STR -1           Untote vertreiben, Geistheilung
-Bibliothekar           INT +3, STR -2, KON -1           Gegenstand identifizieren, Monsterkunde
-Barde                  CHA +2, DEX +1, STR -1           Lied des Mutes
+Bibliothekar           INT +2, KON -1, WIS +1           Gegenstand identifizieren, Monsterkunde
+Barde                  CHA +2, GES +1, STR -1           Lied des Mutes
 Händler                CHA +2, INT +1, STR -1           Auge des Wucherers
 Dorfheiler             INT +1, WIS +2, STR-1            Leichte Wunden versorgen, Krankheit lindern
 Hexenjäger             WIS +2, STR +1, INT -1           Glaubensstärke, Hexenbann
