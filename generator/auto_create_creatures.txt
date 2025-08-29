@@ -192,13 +192,15 @@ json
   "rz": 10,
   "rr": 10,
   "rw": 11,
-  "pa_bemerkung": [
-    "11 vs Wuchtwaffen",
-    {
-      "icon": "shield",
-      "value": "+1",
-  }
-],
+ "pa_bemerkung": [
+   "11 vs Wuchtwaffen",
+   {
+     "icon": "shield",
+     "value": "+1",
+     "description": "Schild zählt nur von vorn"
+   }
+  ],
+
   "asw_bemerkung": "",
   "angriffe": [
     { "name": "Nahkampf", "to_hit": 3, "schaden": "5 (1W8)" },
