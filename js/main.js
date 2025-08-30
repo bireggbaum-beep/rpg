@@ -3,7 +3,6 @@ import { naturalAttackLine, renderLoot } from './render.js';
 
 
 document.addEventListener("DOMContentLoaded", () => {
-  const $ = s => document.querySelector(s);
   let creatureData = [];
   let currentCreatureIndex = -1;
   let editorVisible = false;
@@ -231,19 +230,6 @@ function init() {
 // Neue Variable für Sortier-Status (nach den anderen let Deklarationen)
 let currentSort = 'none'; // 'none', 'alpha', 'hg'
 
-// Neue Funktion: HG-Wert für Sortierung normalisieren
- function normalizeHg(hg) {
-  if (hg === null || hg === undefined) return 999; // Ohne HG ans Ende
-  if (typeof hg === 'string') {
-    // Brüche wie "1/8", "1/4", "1/2" in Dezimalzahlen umwandeln
-    if (hg.includes('/')) {
-      const parts = hg.split('/');
-      return parseFloat(parts[0]) / parseFloat(parts[1]);
-    }
-  }
-  return parseFloat(hg);
-}
-
 // Erweiterte filterAndPopulateSidebar Funktion (ersetzen Sie die bestehende):
  function filterAndPopulateSidebar() {
   const nameFilter = ($("#search-name").value || "").toLowerCase();
@@ -395,120 +381,6 @@ let currentSort = 'none'; // 'none', 'alpha', 'hg'
     list.appendChild(li);
   });
 }
-
-  // ANPASSUNG 1 & 2: Verbessertes Attack-Line Rendering
-  function naturalAttackLine(a) {
-    // Zauber/Spezialfähigkeiten (keine Trefferbonus/Schaden)
-    if (a.isSpell) {
-      let line = `<b>${a.name}</b>`;
-      if (a.anzahl) line += ` [${a.anzahl}x]`;
-      if (a.beschreibung) line += ` ${a.beschreibung}`;
-      if (a.reichweite) {
-        // Wenn Reichweite nur eine Zahl ist, als RW formatieren
-        if (/^\d+$/.test(a.reichweite)) {
-          line += `, RW: ${a.reichweite}`;
-        } else {
-          line += ` (${a.reichweite})`;
-        }
-      }
-      return line;
-    }
-    
-    // Normale Angriffe
-    const name = (a.name || 'Angriff');
-    const bits = [];
-    
-    if (a.to_hit != null) bits.push(`${plusify(a.to_hit)} zum Treffen`);
-    if (a.schaden != null) bits.push(`${a.schaden} Schaden`);
-    
-    // ANPASSUNG 1: Reichweite richtig formatieren
-    if (a.reichweite) {
-      if (/^\d+$/.test(a.reichweite)) {
-        // Wenn nur eine Zahl, als RW formatieren (für Fernkampf)
-        bits.push(`(RW: ${a.reichweite})`);
-      } else {
-        // Sonst wie angegeben (z.B. "3xLang")
-        bits.push(`(${a.reichweite})`);
-      }
-    }
-    
-    if (a.zusatz) bits.push(`und ${a.zusatz}`);
-    
-    let line = `<b>${name}</b> ${bits.filter(Boolean).join(', ')}`;
-    
-    // Rettungswurf anhängen
-    if (a.rettungswurf) {
-      const r = a.rettungswurf;
-      const mis = r.bei_misserfolg || 'negative Wirkung';
-      line += ` (Rettungswurf ${r.art} ${txt(r.zw)} oder ${mis})`;
-    }
-    
-    if (a.anzahl && !a.isSpell) line += ` [${a.anzahl}x]`;
-    
-    return line;
-  }
-
-  // ANPASSUNG 3: Verbessertes Beute-Rendering
-function renderLoot(beute) {
-  if (!beute || beute.length === 0) return '<span class="muted">Keine.</span>';
-  
-  const schatz = beute.filter(b => b.typ === "Schatz");
-  const ausruestung = beute.filter(b => b.typ === "Ausrüstung");
-  const zutaten = beute.filter(b => b.typ === "Zutaten");
-  
-  let html = "";
-  
-  // Schatz
-  if (schatz.length > 0) {
-    html += `<div class="loot-category"><b>Schatz:</b></div>`;
-    schatz.forEach(item => {
-      let text = "";
-      if (item.wurf) text += item.wurf + " ";
-      if (item.beschreibung) text += item.beschreibung;
-      html += `<div class="loot-item">${text}</div>`;
-    });
-  }
-  
-  // Ausrüstung
-  if (ausruestung.length > 0) {
-    html += `<div class="loot-category"><b>Ausrüstung:</b></div>`;
-    ausruestung.forEach(item => {
-      let text = "";
-      // ZUERST Würfelwurf
-      if (item.wurf) text += `<span class="muted">${item.wurf}</span> `;
-      // DANN Anzahl
-      if (item.anzahl && item.anzahl > 1) text += `${item.anzahl}x `;
-      // DANN Beschreibung
-      text += item.beschreibung || "Ausrüstung";
-      // DANN Wert
-      if (item.wert) text += ` (Wert: ${item.wert} GM)`;
-      html += `<div class="loot-item">${text}</div>`;
-    });
-  }
-  
-  // Zutaten (erntbar)
-  if (zutaten.length > 0) {
-    html += `<div class="loot-category"><b>Zutaten (erntbar):</b></div>`;
-    zutaten.forEach(item => {
-      let text = "";
-      // ZUERST Würfelwurf
-      if (item.wurf) text += `<span class="muted">${item.wurf}</span> `;
-      // DANN Anzahl
-      if (item.anzahl && item.anzahl > 1) text += `${item.anzahl}x `;
-      // DANN Beschreibung
-      text += item.beschreibung || "Zutat";
-      // DANN Wert
-      if (item.wert) text += ` (Wert: ${item.wert} GM)`;
-      html += `<div class="loot-item">${text}</div>`;
-    });
-  }
-  
-  return html || '<span class="muted">Keine.</span>';
-}
-
-
-
-
   function renderStatblock(d) {
     const res = parseRes(d.besonderheiten || []);
     const traits = Array.isArray(d.traits) ? d.traits : [];
