@@ -1,6 +1,6 @@
 import { $, txt, plusify, formatNote, parseRes, fmtBew, formatPaNote, normalizeHg } from './utils.js';
 import { naturalAttackLine, renderLoot } from './render.js';
-import { filterAndSort, populateList, populateGroupedList } from './list.js';
+import { filterAndSort, populateList} from './list.js';
 
 document.addEventListener("DOMContentLoaded", () => {
   let creatureData = [];
