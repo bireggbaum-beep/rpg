@@ -1,15 +1,25 @@
 // js/list.js
-import { txt, normalizeHg } from './utils.js';
+import { normalizeHg } from './utils.js';
 
-export function filterAndSort(creatures, { term = '', hg = 'alle', sort = 'az' } = {}) {
-  const search = term.trim().toLowerCase();
+export function filterAndSort(
+  creatures,
+  { nameTerm = '', typeTerm = '', hg = '', sort = 'az' } = {}
+) {
+  const n = nameTerm.trim().toLowerCase();
+  const t = typeTerm.trim().toLowerCase();
+
   let result = creatures
     .map((item, index) => ({ item, index }))
     .filter(({ item }) => {
-      const hay = `${item.name || ''} ${item.typ || ''}`.toLowerCase();
-      const okSearch = !search || hay.includes(search);
-      const okHg = hg === 'alle' || String(item.hg) === String(hg);
-      return okSearch && okHg;
+      const hayName = String(item.name || '').toLowerCase();
+      const hayType = `${item.typ || ''} ${
+        Array.isArray(item.traits) ? item.traits.join(' ') : ''
+      }`.toLowerCase();
+
+      const okName = !n || hayName.includes(n);
+      const okType = !t || hayType.includes(t);
+      const okHg = !hg || String(item.hg) === String(hg);
+      return okName && okType && okHg;
     });
 
   if (sort === 'hg') {
@@ -22,11 +32,22 @@ export function filterAndSort(creatures, { term = '', hg = 'alle', sort = 'az' }
   } else {
     result.sort((a, b) => String(a.item.name).localeCompare(String(b.item.name), 'de'));
   }
+
   return result;
 }
 
 export function populateList(listEl, items, { activeIndex = -1, onSelect } = {}) {
+  if (!listEl) return;
   listEl.innerHTML = '';
+
+  if (items.length === 0) {
+    const li = document.createElement('li');
+    li.className = 'muted';
+    li.textContent = 'Keine Treffer';
+    listEl.appendChild(li);
+    return;
+  }
+
   items.forEach(({ item, index }) => {
     const li = document.createElement('li');
     li.className = 'creature-item' + (index === activeIndex ? ' active' : '');
@@ -34,18 +55,12 @@ export function populateList(listEl, items, { activeIndex = -1, onSelect } = {})
     li.dataset.index = index;
     li.textContent = item.name || '(ohne Namen)';
 
-    const click = () => {
-      if (typeof onSelect === 'function') onSelect(index);
-    };
+    const click = () => { if (typeof onSelect === 'function') onSelect(index); };
     li.addEventListener('click', click);
     li.addEventListener('keydown', e => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        click();
-      }
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); click(); }
     });
 
     listEl.appendChild(li);
   });
 }
-
