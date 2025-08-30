@@ -1,4 +1,4 @@
-Statblock Spezifikation – Auto-Creatur v1.2.0
+Statblock Spezifikation – Auto-Creatur v1.2.1
 =============================================
 
 Zweck
@@ -158,6 +158,10 @@ Hinweise:
 - PA/ASW an „Verteidigung (ca.)“ ausrichten.
 - LP/SR ins Korridor bringen (hohe SR → eher niedrigere LP und umgekehrt).
 - „Schaden/Runde“ nur intern für Balancing; ohne SC-Referenz optional.
+- Alle Kreaturen sind ausnahmslos in einen HG zwischen HG1/8 bis HG12 einzuordnen.
+- HG1/8 sind die schwächsten Kreaturen. HG12 die stärksten.
+- EP und Verteidigung sind sehr starke Boundaries und sind wenn immer möglich anzustreben. Ausser eine spezielle Eigenschaft/Fähigkeit/Besonderheit einer Kreatur rechtfertigt eine grössere Abweichung.
+- Nur für Konversionen aus anderen Bestiarien: die Kreaturen sind auf den Herausforderungsgrad HG1/8 bis HG12 zu mappen und die oben genannten Richtlinien anzuwenden. Boundaries sind einzuhalten, wenn nicht durch besondere Eigenheiten/Attacken/Besonderheiten usw. gerechtfertigt. 
 
 Richtwerte je HG:
 HG 1/8: EP 25; LP 1–5; SR 0–1; Angriffsbonus +0 bis +2; Schaden/Runde 1; Verteidigung 10–12
