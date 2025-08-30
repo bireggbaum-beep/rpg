@@ -5,7 +5,7 @@ import { filterAndSort, populateList } from './list.js';
 
 document.addEventListener("DOMContentLoaded", () => {
   let creatureData = [];
-  let currentCreatureIndex = -1;
+  let currentIndex = -1;
   let editorVisible = false;
   let sortMode = 'az';            // 'az' oder 'hg'
   let currentIndex = -1;
@@ -146,7 +146,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   ];
 
-let currentIndex = -1;
+let  = -1;
 
 function setupNewList() {
   const elList     = document.querySelector('#creature-list');
@@ -165,10 +165,10 @@ function setupNewList() {
     });
 
     populateList(elList, items, {
-      activeIndex: currentIndex,
+      activeIndex: ,
       onSelect: (idx) => {
-        currentIndex = idx;
-        renderStatblock(creatureData[currentIndex]);
+         = idx;
+        renderStatblock(creatureData[]);
         refreshList();
       }
     });
