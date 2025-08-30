@@ -186,3 +186,49 @@
 .sidebar li.active .creature-meta {
   color: rgba(255,255,255,0.9);
 }
+
+.view-selector {
+  background: linear-gradient(135deg, #2a2a2a, #1e1e1e);
+  padding: 12px;
+  border-bottom: 2px solid #4a7c59;
+}
+
+.selector-header {
+  font-size: 0.75em;
+  text-transform: uppercase;
+  color: #888;
+  margin-bottom: 8px;
+  letter-spacing: 1px;
+}
+
+.view-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 3px;
+  transition: background 0.2s;
+}
+
+.view-option:hover {
+  background: rgba(74, 124, 89, 0.2);
+}
+
+.view-option input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: #4a7c59;
+}
+
+.option-text {
+  font-size: 0.9em;
+}
+
+.sidebar-divider {
+  margin: 0;
+  border: none;
+  height: 3px;
+  background: linear-gradient(to bottom, #444, #222);
+}
+
