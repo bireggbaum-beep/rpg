@@ -146,7 +146,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   ];
 
-let sortMode = 'az';
 let currentIndex = -1;
 
 function setupNewList() {
