@@ -147,55 +147,52 @@ document.addEventListener("DOMContentLoaded", () => {
 // let currentIndex = -1;
 
 function setupNewList() {
-  // 1. Elemente holen (das hast du schon)
+  // Elemente holen - ANGEPASST für Typ-Dropdown
   const elList     = document.querySelector('#creature-list');
   const elSearchNm = document.querySelector('#search-name');
-  const elSearchTp = document.querySelector('#search-type');
+  const elTypeDrop = document.querySelector('#search-type');  // NEU: Dropdown statt Textfeld
   const elHg       = document.querySelector('#search-hg');
   const btnAlpha   = document.querySelector('#sort-alpha');
   const btnSortHg  = document.querySelector('#sort-hg');
   
-  // NEU: Checkbox holen
-  const groupToggle = document.querySelector('#group-by-type');
-  
-  // NEU: Gruppierungs-Status
-  let isGrouped = false;
+  // Typ-Dropdown füllen
+  function populateTypeFilter() {
+    if (!elTypeDrop) return;
+    
+    const types = [...new Set(creatureData.map(c => c.typ).filter(Boolean))];
+    types.sort((a, b) => a.localeCompare(b, 'de'));
+    
+    elTypeDrop.innerHTML = '<option value="">Alle Typen</option>';
+    types.forEach(typ => {
+      const opt = document.createElement('option');
+      opt.value = typ;
+      opt.textContent = typ;
+      elTypeDrop.appendChild(opt);
+    });
+  }
 
-  // 2. refreshList Funktion (angepasst mit if/else)
+  // Liste rendern
   function refreshList() {
     const items = filterAndSort(creatureData, {
       nameTerm: elSearchNm?.value || '',
-      typeTerm: elSearchTp?.value || '',
+      typ: elTypeDrop?.value || '',  // ANGEPASST: typ statt typeTerm
       hg: elHg?.value || '',
       sort: sortMode
     });
 
-    // NEU: Gruppiert oder normale Liste
-    if (isGrouped) {
-      populateGroupedList(elList, items, {
-        groupBy: 'typ',
-        activeIndex: currentIndex,
-        onSelect: (idx) => {
-          currentIndex = idx;
-          renderStatblock(creatureData[currentIndex]);
-          refreshList();
-        }
-      });
-    } else {
-      populateList(elList, items, {
-        activeIndex: currentIndex,
-        onSelect: (idx) => {
-          currentIndex = idx;
-          renderStatblock(creatureData[currentIndex]);
-          refreshList();
-        }
-      });
-    }
+    populateList(elList, items, {
+      activeIndex: currentIndex,
+      onSelect: (idx) => {
+        currentIndex = idx;
+        renderStatblock(creatureData[currentIndex]);
+        refreshList();
+      }
+    });
   }
 
-  // 3. Event-Listener (das hast du schon)
+  // Events
   elSearchNm?.addEventListener('input', refreshList);
-  elSearchTp?.addEventListener('input', refreshList);
+  elTypeDrop?.addEventListener('change', refreshList);  // ANGEPASST
   elHg?.addEventListener('change', refreshList);
   btnAlpha?.addEventListener('click', () => {
     sortMode = 'az';
@@ -209,16 +206,12 @@ function setupNewList() {
     btnAlpha.classList.remove('active');
     refreshList();
   });
-  
-  // NEU: HIER kommt der Checkbox-Listener hin! Nach den anderen Events:
-  groupToggle?.addEventListener('change', (e) => {
-    isGrouped = e.target.checked;
-    refreshList();
-  });
 
-  // 4. Erstes Rendering
+  // Initial füllen und rendern
+  populateTypeFilter();  // NEU: Typ-Dropdown füllen
   refreshList();
-}  // Ende der setupNewList Funktion
+}
+
 
 
   
