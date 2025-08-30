@@ -164,10 +164,10 @@ function setupNewList() {
     });
 
     populateList(elList, items, {
-      activeIndex: ,
+      activeIndex: currentIndex,
       onSelect: (idx) => {
-         = idx;
-        renderStatblock(creatureData[]);
+        currentIndex = idx;
+        renderStatblock(creatureData[currentIndex]);
         refreshList();
       }
     });
