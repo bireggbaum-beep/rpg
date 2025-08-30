@@ -3,21 +3,17 @@ import { normalizeHg } from './utils.js';
 
 export function filterAndSort(
   creatures,
-  { nameTerm = '', typeTerm = '', hg = '', sort = 'az' } = {}
+  { nameTerm = '', typ = '', hg = '', sort = 'az' } = {}
 ) {
   const n = nameTerm.trim().toLowerCase();
-  const t = typeTerm.trim().toLowerCase();
 
   let result = creatures
     .map((item, index) => ({ item, index }))
     .filter(({ item }) => {
       const hayName = String(item.name || '').toLowerCase();
-      const hayType = `${item.typ || ''} ${
-        Array.isArray(item.traits) ? item.traits.join(' ') : ''
-      }`.toLowerCase();
-
+      
       const okName = !n || hayName.includes(n);
-      const okType = !t || hayType.includes(t);
+      const okType = !typ || item.typ === typ;
       const okHg = !hg || String(item.hg) === String(hg);
       return okName && okType && okHg;
     });
@@ -53,7 +49,15 @@ export function populateList(listEl, items, { activeIndex = -1, onSelect } = {})
     li.className = 'creature-item' + (index === activeIndex ? ' active' : '');
     li.tabIndex = 0;
     li.dataset.index = index;
-    li.textContent = item.name || '(ohne Namen)';
+    
+    // Immer Name, Typ und HG anzeigen
+    li.innerHTML = `
+      <div class="creature-name">${item.name || 'Unbenannt'}</div>
+      <div class="creature-meta">
+        <span class="creature-type">${item.typ || 'Kein Typ'}</span>
+        <span class="creature-hg">HG ${item.hg || '?'}</span>
+      </div>
+    `;
 
     const click = () => { if (typeof onSelect === 'function') onSelect(index); };
     li.addEventListener('click', click);
@@ -62,75 +66,5 @@ export function populateList(listEl, items, { activeIndex = -1, onSelect } = {})
     });
 
     listEl.appendChild(li);
-  });
-}
-// Diese Funktion in list.js einfügen (am Ende der Datei)
-export function populateGroupedList(listEl, items, { groupBy = 'typ', activeIndex = -1, onSelect } = {}) {
-  if (!listEl) return;
-  listEl.innerHTML = '';
-  
-  // Gruppiere die Items
-  const groups = {};
-  items.forEach(({ item, index }) => {
-    const key = item[groupBy] || 'Andere';
-    if (!groups[key]) groups[key] = [];
-    groups[key].push({ item, index });
-  });
-  
-  // Sortiere Gruppennamen alphabetisch
-  const sortedGroups = Object.keys(groups).sort((a, b) => a.localeCompare(b, 'de'));
-  
-  // Rendere jede Gruppe
-  sortedGroups.forEach(groupName => {
-    const groupItems = groups[groupName];
-    
-    // Gruppe-Header (klickbar zum auf/zuklappen)
-    const groupHeader = document.createElement('li');
-    groupHeader.className = 'group-header';
-    groupHeader.innerHTML = `
-      <span class="group-arrow">▼</span>
-      <span class="group-name">${groupName}</span>
-      <span class="group-count">(${groupItems.length})</span>
-    `;
-    
-    const groupContent = document.createElement('ul');
-    groupContent.className = 'group-content';
-    
-    // Items in der Gruppe
-    groupItems.forEach(({ item, index }) => {
-      const li = document.createElement('li');
-      li.className = 'creature-item' + (index === activeIndex ? ' active' : '');
-      li.tabIndex = 0;
-      li.dataset.index = index;
-      li.textContent = item.name || '(ohne Namen)';
-      
-      const click = () => { if (onSelect) onSelect(index); };
-      li.addEventListener('click', click);
-      li.addEventListener('keydown', e => {
-        if (e.key === 'Enter' || e.key === ' ') { 
-          e.preventDefault(); 
-          click(); 
-        }
-      });
-      
-      groupContent.appendChild(li);
-    });
-    
-    // Toggle-Funktion für Gruppe
-    groupHeader.addEventListener('click', () => {
-      const arrow = groupHeader.querySelector('.group-arrow');
-      const isOpen = groupContent.style.display !== 'none';
-      
-      if (isOpen) {
-        groupContent.style.display = 'none';
-        arrow.textContent = '▶';
-      } else {
-        groupContent.style.display = 'block';
-        arrow.textContent = '▼';
-      }
-    });
-    
-    listEl.appendChild(groupHeader);
-    listEl.appendChild(groupContent);
   });
 }
