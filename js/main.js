@@ -1,3 +1,7 @@
+import { $, txt, plusify, formatNote, parseRes, fmtBew, formatPaNote, normalizeHg } from './utils.js';
+import { naturalAttackLine, renderLoot } from './render.js';
+
+
 document.addEventListener("DOMContentLoaded", () => {
   const $ = s => document.querySelector(s);
   let creatureData = [];
