@@ -8,7 +8,6 @@ document.addEventListener("DOMContentLoaded", () => {
   let currentIndex = -1;
   let editorVisible = false;
   let sortMode = 'az';            // 'az' oder 'hg'
-  let currentIndex = -1;
 
 
   const sampleData = [
