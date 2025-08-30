@@ -146,10 +146,60 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   ];
 
+let sortMode = 'az';
+let currentIndex = -1;
+
+function setupNewList() {
+  const elList     = document.querySelector('#creature-list');
+  const elSearchNm = document.querySelector('#search-name');
+  const elSearchTp = document.querySelector('#search-type');
+  const elHg       = document.querySelector('#search-hg');
+  const btnAlpha   = document.querySelector('#sort-alpha');
+  const btnSortHg  = document.querySelector('#sort-hg');
+
+  function refreshList() {
+    const items = filterAndSort(creatureData, {
+      nameTerm: elSearchNm?.value || '',
+      typeTerm: elSearchTp?.value || '',
+      hg: elHg?.value || '',
+      sort: sortMode
+    });
+
+    populateList(elList, items, {
+      activeIndex: currentIndex,
+      onSelect: (idx) => {
+        currentIndex = idx;
+        renderStatblock(creatureData[currentIndex]);
+        refreshList();
+      }
+    });
+  }
+
+  elSearchNm?.addEventListener('input', refreshList);
+  elSearchTp?.addEventListener('input', refreshList);
+  elHg?.addEventListener('change', refreshList);
+  btnAlpha?.addEventListener('click', () => {
+    sortMode = 'az';
+    btnAlpha.classList.add('active');
+    btnSortHg.classList.remove('active');
+    refreshList();
+  });
+  btnSortHg?.addEventListener('click', () => {
+    sortMode = 'hg';
+    btnSortHg.classList.add('active');
+    btnAlpha.classList.remove('active');
+    refreshList();
+  });
+
+  refreshList();
+}
+
+  
 function init() {
   creatureData = sampleData;
   populateHgFilter();
-  filterAndPopulateSidebar();
+//  filterAndPopulateSidebar();
+   setupNewList();
   $("#out").innerHTML = `<div id="placeholder"><p>Beispieldaten geladen. Bitte wählen Sie einen Gegner aus der Liste links.</p></div>`;
   $("#file-name").textContent = "Beispieldaten";
 
