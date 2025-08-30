@@ -107,4 +107,30 @@ export function populateGroupedList(listEl, items, { groupBy = 'typ', activeInde
       const click = () => { if (onSelect) onSelect(index); };
       li.addEventListener('click', click);
       li.addEventListener('keydown', e => {
-
+        if (e.key === 'Enter' || e.key === ' ') { 
+          e.preventDefault(); 
+          click(); 
+        }
+      });
+      
+      groupContent.appendChild(li);
+    });
+    
+    // Toggle-Funktion für Gruppe
+    groupHeader.addEventListener('click', () => {
+      const arrow = groupHeader.querySelector('.group-arrow');
+      const isOpen = groupContent.style.display !== 'none';
+      
+      if (isOpen) {
+        groupContent.style.display = 'none';
+        arrow.textContent = '▶';
+      } else {
+        groupContent.style.display = 'block';
+        arrow.textContent = '▼';
+      }
+    });
+    
+    listEl.appendChild(groupHeader);
+    listEl.appendChild(groupContent);
+  });
+}
