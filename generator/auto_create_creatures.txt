@@ -1,4 +1,4 @@
-Statblock Spezifikation – Auto-Creatur v1.1.9
+Statblock Spezifikation – Auto-Creatur v1.2.0
 =============================================
 
 Zweck
@@ -87,34 +87,47 @@ Auch hier gilt: `reichweite` angeben, wenn nicht Nahbereich; `rettungswurf`, wen
 
 Beute (Array) – Erlaubte Formen (W6-Mapping)
 ---------------------------------------------
-- Gold (klassisch, kein Mapping):
-  - { "typ": "GM", "wurf": "2W6" }
+Jedes Beute-Item ist ein eigenständiges Objekt mit folgenden Feldern:
 
-- Gegenstand immer:
-  - { "typ": "Wolfspelz", "wert": 10 }
-  - { "typ": "Pfeile", "anzahl": 10 }
+Pflichtfeld:
+- typ: "Schatz" | "Ausrüstung" | "Zutaten"
 
-- W6-Mapping (Shortcut, empfohlen für Drops mit Auswahl):
-  - Syntax in `wurf`: "(W6|…)" – ein W6 entscheidet Erfolg und Auswahl.
-  - Beispiel (2 Optionen, 50/50 bei Erfolg):
-    - { "wurf": "(W6|1-2 Pfeile, 3-4 Bolzen, 5-6 nichts)",
-        "wahl": [ { "typ": "Pfeile", "anzahl": 10 }, { "typ": "Bolzen", "anzahl": 10 } ] }
-  - Beispiel (garantiert, keine Niete):
-    - { "wurf": "(W6|1-6 Erntbar: Knochensplitter)",
-        "wahl": [ { "typ": "Erntbar: Knochensplitter" } ] }
+Optionale Felder:
+- beschreibung: String (z.B. "Goldmünzen", "Schwert", "Giftzahn")
+- wurf: String (Würfelnotation oder W6-Mapping als reiner Text)
+  - Beispiele: "2W6", "(W6|1-3)", "(W6|1-2 Drop, 3-6 nichts)"
+- wert: Integer (Wert in Goldmünzen)
+- anzahl: Integer (Stückzahl, wenn > 1)
+
+Beispiele:
+- Schatz:
+  { "typ": "Schatz", "wurf": "2W6", "beschreibung": "Goldmünzen" }
+
+- Ausrüstung (garantiert):
+  { "typ": "Ausrüstung", "beschreibung": "Schwert", "wert": 15 }
+
+- Ausrüstung (mit Chance):
+  { "typ": "Ausrüstung", "beschreibung": "Streitaxt", "wurf": "(W6|1-2)", "wert": 10 }
+
+- Zutaten (erntbar, mit Chance):
+  { "typ": "Zutaten", "beschreibung": "Giftzahn", "wurf": "(W6|1-3)", "wert": 25 }
+
+- Mit Anzahl:
+  { "typ": "Ausrüstung", "beschreibung": "Pfeile", "anzahl": 20, "wert": 5 }
 
 Regeln:
-- Ein Wurf pro Beutezeile.
-- `wahl` dient der Struktur und trägt Details wie "anzahl" und/oder "wert".
-- Die "typ"-Namen in `wurf` und in `wahl` müssen exakt übereinstimmen.
-- "nichts" wird nur im Mapping-Text genannt, niemals in "wahl".
-- Gold/Währung bleibt in Würfelnotation und nutzt kein Mapping.
+- KEINE "wahl" Arrays mehr verwenden
+- Der "wurf" Text ist rein informativ (zeigt Wahrscheinlichkeiten)
+- "Schatz" = Währung/Gold
+- "Ausrüstung" = Gegenstände, Waffen, Rüstungen
+- "Zutaten" = Erntbare Materialien von Kreaturen
+- Ca. 70% aller Kreaturen haben erntbare Zutaten
 
 Erntbar-Richtlinie (Kurz)
 --------------------------
-- Ca. 70% aller Kreaturen sind überhaupt erntbar.
-- Wenn ja, 1–2 passende "Erntbar: …"-Zeilen mit Mapping hinzufügen.
-- Zivilisierte Humanoide i.d.R. nicht erntbar.
+- Ca. 70% aller Kreaturen sind erntbar
+- Wenn ja, 1–2 passende "Zutaten"-Zeilen hinzufügen
+- Zivilisierte Humanoide i.d.R. nicht erntbar
 
 Besonderheiten (Array)
 ----------------------
@@ -136,7 +149,7 @@ Beschreibung – Anforderungen (Pflicht)
 - Umfang: 1–3 Sätze, ca. 30–70 Wörter.
 - Inhalt: Mind. 2 der 3 Aspekte (Erscheinung/Atmosphäre, Verhalten/Taktik, Umfeld/Hook).
 - Stil: Regelfrei, keine Zahlen/Würfel/Zustandsbegriffe.
-- Bei Konversion aus anderen Systemen möglichst nah am Ursprungstext.
+- Bei Konversion aus anderen Systemen möglichst nah am Ursprungstext. Besonderheiten, die nur im Beschreibugstext erschienen, sind unter Besonderheiten zu erfassen.
 
 Designziele nach HG (Richtwerte für Generierung/Validierung)
 -----------------------------------------------------------
@@ -195,9 +208,8 @@ Beispiel einer validen Datei:
 
 
 
-Minimal-Template (zum Ausfüllen)
---------------------------------
-json
+Minimal-Template (zum Ausfüllen) - AKTUALISIERT
+------------------------------------------------
 {
   "name": "NAME",
   "typ": "TYP",
@@ -231,17 +243,12 @@ json
     "Beispiel: Resistenz: Stichwaffen (halber Schaden)"
   ],
   "beute": [
-    { "typ": "GM", "wurf": "2W6" },
-    {
-      "wurf": "(W6|1-2 Kurzschwert, 3-4 Pfeile, 5-6 nichts)",
-      "wahl": [
-        { "typ": "Kurzschwert", "wert": 10 }, 
-        { "typ": "Pfeile", "anzahl": 10 },
-      ]
-    },
-    {"wurf": "(W6|1-2 Kreaturen-Auge, 3-6 nichts)", "typ": "Erntbar: Kreaturen-Auge", "wert": 5 }
+    { "typ": "Schatz", "wurf": "2W6", "beschreibung": "Goldmünzen" },
+    { "typ": "Ausrüstung", "beschreibung": "Kurzschwert", "wurf": "(W6|1-3)", "wert": 10 },
+    { "typ": "Ausrüstung", "beschreibung": "Pfeile", "wurf": "(W6|4-5)", "anzahl": 10 },
+    { "typ": "Zutaten", "beschreibung": "Kreaturen-Auge", "wurf": "(W6|1-2)", "wert": 5 }
   ],
-  "beschreibung": "1–3 Sätze, 25–70 Wörter; mind. zwei der Aspekte: Erscheinung/Atmosphäre, Verhalten/Taktik, Umfeld/Hook. Keine Zahlen/Regeln."
+  "beschreibung": "1–3 Sätze, 30–70 Wörter..."
 }
 
 Kompakter Prompt-Hinweis (für Generatoren/AI)
@@ -255,7 +262,11 @@ Jeder Effekt mit vollständigem `rettungswurf`; jede Fern-/Flächenwirkung mit `
 - GM (Gold) bleibt in klassischer Würfelnotation (z.B. "1W6"), ohne Mapping.
 - "nichts" nur im Mapping-Text (nicht in "wahl"); Namen in Mapping und "wahl" müssen exakt übereinstimmen.
 Globale Erklärpflicht beachten (Keywords in Besonderheiten erläutern).
-`beschreibung`: 1–3 Sätze, 25–70 Wörter, mind. zwei Inhalte (Erscheinung, Verhalten, Umfeld), keine Crunch-Begriffe.
+`beschreibung`: 1–3 Sätze, 30–70 Wörter, mind. zwei Inhalte (Erscheinung, Verhalten, Umfeld), keine Crunch-Begriffe.
+Beute: KEINE "wahl" Arrays verwenden! Jedes Beute-Item ist ein eigenständiges Objekt.
+- Typ: "Schatz" (Gold), "Ausrüstung" (Items), "Zutaten" (erntbar)
+- Würfelwurf im "wurf" Feld ist nur informativer Text
+- Mehrere Items = mehrere separate Objekte im beute Array
 
 Addendum v1.1a: Vielfalt- und Einfachheitsregeln
 ================================================
