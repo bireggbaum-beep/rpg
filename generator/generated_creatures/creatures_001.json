@@ -1,1 +1,501 @@
+[
+  {
+    "name": "Eisenschild-Zwergenkrieger",
+    "typ": "Humanoid",
+    "traits": [
+      "Zwerg"
+    ],
+    "hg": "1",
+    "ep": 150,
+    "lp": 22,
+    "sr": 5,
+    "sr_bemerkung": "Kettenhemd und Helm",
+    "bew": "3",
+    "pa": 15,
+    "asw": 11,
+    "ini": 0,
+    "rz": 9,
+    "rr": 13,
+    "rw": 10,
+    "pa_bemerkung": [
+      {
+        "icon": "shield",
+        "value": "+2",
+        "description": "Großer Eisenschild, zählt nur von vorn"
+      }
+    ],
+    "asw_bemerkung": "Behäbig durch Rüstung",
+    "angriffe": [
+      {
+        "name": "Kriegsaxt",
+        "to_hit": 4,
+        "schaden": "6 (1W8+1)"
+      }
+    ],
+    "besonderheiten": [
+      "Standhaft: Aufgrund seiner Zähigkeit sind Rettungswürfe gegen Effekte, die ihn zu Boden werfen oder verschieben würden, erleichtert (Bonus bereits in RZ eingerechnet).",
+      "Schildwall: Wenn er sich nicht bewegt, kann er seine Parade für eine Runde um weitere +1 erhöhen."
+    ],
+    "beute": [
+      {
+        "typ": "Schatz",
+        "wurf": "2W6",
+        "beschreibung": "Silbermünzen"
+      },
+      {
+        "typ": "Ausrüstung",
+        "beschreibung": "Großer Eisenschild",
+        "wurf": "(W6|1)",
+        "wert": 20
+      },
+      {
+        "typ": "Ausrüstung",
+        "beschreibung": "Kriegsaxt",
+        "wurf": "(W6|2-4)",
+        "wert": 10
+      }
+    ],
+    "beschreibung": "Dieser grimmig dreinblickende Zwerg ist in schwere Kettenrüstung gekleidet und verbirgt sich fast vollständig hinter einem massiven Eisenschild. Er bewegt sich langsam und methodisch, bildet eine unbewegliche Verteidigungslinie und schlägt mit seiner Axt auf jeden zu, der töricht genug ist, in seine Reichweite zu kommen."
+  },
+  {
+    "name": "Schattenkatze",
+    "typ": "Tier",
+    "traits": [
+      "Magisch"
+    ],
+    "hg": "2",
+    "ep": 200,
+    "lp": 25,
+    "sr": 1,
+    "sr_bemerkung": "Dickes Fell",
+    "bew": "6",
+    "pa": 13,
+    "asw": 16,
+    "ini": 5,
+    "rz": 12,
+    "rr": 9,
+    "rw": 13,
+    "pa_bemerkung": [],
+    "asw_bemerkung": "Schemenhafte Gestalt",
+    "angriffe": [
+      {
+        "name": "Biss",
+        "to_hit": 5,
+        "schaden": "5 (1W8)"
+      },
+      {
+        "name": "Krallen",
+        "to_hit": 5,
+        "schaden": "4 (1W6)"
+      }
+    ],
+    "besonderheiten": [
+      "Schemenhafte Gestalt: In schummrigem Licht oder Dunkelheit ist die Schattenkatze extrem schwer zu erkennen und zu treffen (ASW-Bonus bereits eingerechnet).",
+      "Anspringen: Wenn die Schattenkatze sich vor einem Angriff mindestens 4 Felder auf ihr Ziel zubewegt, kann sie mit ihrem Biss-Angriff zusätzlichen Schaden verursachen und das Ziel zu Boden werfen, falls ein Reflex-Rettungswurf (ZW 13) misslingt."
+    ],
+    "beute": [
+      {
+        "typ": "Zutaten",
+        "beschreibung": "Auge der Schattenkatze",
+        "wurf": "(W6|1)",
+        "wert": 50
+      },
+      {
+        "typ": "Zutaten",
+        "beschreibung": "Schattenkatzen-Fell",
+        "wurf": "(W6|2-3)",
+        "wert": 30
+      }
+    ],
+    "beschreibung": "Eine große, pechschwarze Raubkatze, deren Umrisse im Schatten zu verschwimmen scheinen. Sie bewegt sich lautlos und mit tödlicher Anmut, jagt bevorzugt aus dem Hinterhalt und nutzt ihre unglaubliche Geschwindigkeit, um Beute anzuspringen und schnell zu überwältigen, bevor sie wieder in der Dunkelheit verschwindet."
+  },
+  {
+    "name": "Verfluchter Ritter",
+    "typ": "Untot",
+    "traits": [
+      "Geist"
+    ],
+    "hg": "4",
+    "ep": 550,
+    "lp": 55,
+    "sr": 7,
+    "sr_bemerkung": "Verrosteter Plattenpanzer",
+    "bew": "3",
+    "pa": 16,
+    "asw": 10,
+    "ini": -1,
+    "rz": 10,
+    "rr": 15,
+    "rw": "immun",
+    "pa_bemerkung": [],
+    "asw_bemerkung": "Schwerfällig und unbeweglich",
+    "angriffe": [
+      {
+        "name": "Verfluchtes Großschwert",
+        "to_hit": 7,
+        "schaden": "9 (1W12+2)",
+        "zusatz": "Kritisch bei 19-20"
+      }
+    ],
+    "besonderheiten": [
+      "Immunität (Willenskraft): Als geistloser Untoter ist der Ritter immun gegen geistesbeeinflussende Effekte wie Furcht, Illusionen oder mentale Kontrolle.",
+      "Untot: Immun gegen Gift und Krankheit. Benötigt keine Luft, Nahrung oder Schlaf.",
+      "Kritische Treffer (19-20): Die Angriffe des Ritters mit seinem Großschwert sind bei einem natürlichen Würfelwurf von 19 oder 20 kritisch."
+    ],
+    "beute": [
+      {
+        "typ": "Schatz",
+        "beschreibung": "Antiker Siegelring",
+        "wert": 75
+      },
+      {
+        "typ": "Ausrüstung",
+        "beschreibung": "Verfluchtes Großschwert (intakt)",
+        "wurf": "(W6|1)",
+        "wert": 150
+      }
+    ],
+    "beschreibung": "Diese Gestalt ist in einen zerbeulten und verrosteten Plattenpanzer gehüllt, aus dessen Helm ein unheiliges Leuchten dringt. Er bewegt sich mit unnatürlicher, schleppender Entschlossenheit und schwingt sein riesiges Schwert mit unermüdlicher Kraft. Jeder seiner Schritte hallt wider wie ein Grabesläuten, ein unaufhaltsamer Bote des Todes."
+  },
+  {
+    "name": "Feuerelementar",
+    "typ": "Elementar",
+    "traits": [
+      "Feuer"
+    ],
+    "hg": "5",
+    "ep": 900,
+    "lp": 65,
+    "sr": 4,
+    "sr_bemerkung": "Wirbelnde Flammen",
+    "bew": "5 (Flug 5)",
+    "pa": 15,
+    "asw": 15,
+    "ini": 4,
+    "rz": 11,
+    "rr": 11,
+    "rw": 14,
+    "pa_bemerkung": [],
+    "asw_bemerkung": "Formlos",
+    "angriffe": [
+      {
+        "name": "Flammenhieb",
+        "to_hit": 7,
+        "schaden": "8 (1W10+2)",
+        "zusatz": "Ziel fängt Feuer"
+      }
+    ],
+    "besonderheiten": [
+      "In Flammen: Eine Kreatur, die vom Flammenhieb getroffen wird, fängt Feuer und erleidet am Anfang jeder ihrer Runden 3 (1W6) Feuerschaden. Das Feuer kann mit einer Aktion gelöscht werden (Reflex-Rettungswurf ZW 13).",
+      "Feueraura: Jede Kreatur, die ihre Runde angrenzend zum Elementar beginnt oder ihn mit einem Nahkampfangriff trifft, erleidet 3 (1W6) Feuerschaden.",
+      "Immunität: Feuerschaden. Anfälligkeit: Kälteschaden (erleidet doppelten Schaden)."
+    ],
+    "beute": [
+      {
+        "typ": "Zutaten",
+        "beschreibung": "Elementarer Feuerkern",
+        "wurf": "(W6|1-2)",
+        "wert": 150
+      }
+    ],
+    "beschreibung": "Eine wirbelnde Säule aus lebendigem Feuer, in der vage eine humanoide Gestalt zu erkennen ist. Der Elementar gleitet über den Boden und hinterlässt eine Spur aus Asche, während die Luft um ihn herum vor Hitze flimmert. Er greift an, indem er feurige Tentakel nach seinen Gegnern schlägt und versucht, alles um sich herum in Brand zu stecken."
+  },
+  {
+    "name": "Grauer Schleimkubus",
+    "typ": "Schleimwesen",
+    "traits": [],
+    "hg": "3",
+    "ep": 350,
+    "lp": 45,
+    "sr": 2,
+    "sr_bemerkung": "Gallertartige Masse",
+    "bew": "2",
+    "pa": 8,
+    "asw": 8,
+    "ini": -4,
+    "rz": 10,
+    "rr": 16,
+    "rw": "immun",
+    "pa_bemerkung": "Kann nicht parieren",
+    "asw_bemerkung": "Kann nicht ausweichen",
+    "angriffe": [
+      {
+        "name": "Säurehieb",
+        "to_hit": 5,
+        "schaden": "4 (1W6+1)",
+        "zusatz": "Säureschaden"
+      },
+      {
+        "name": "Verschlingen",
+        "to_hit": 5,
+        "schaden": "0",
+        "zusatz": "Ziel wird verschlungen",
+        "rettungswurf": {
+          "art": "RR",
+          "zw": 14,
+          "bei_misserfolg": "Ziel ist verschlungen, festgesetzt und erleidet pro Runde 5 (1W8) Säureschaden.",
+          "bei_erfolg": "Ziel wird zur Seite gestoßen.",
+          "dauer": "Bis Ziel entkommt (Stärke-Probe ZW 14) oder der Kubus stirbt.",
+          "wiederholung": "Ende jeder eigenen Runde"
+        }
+      }
+    ],
+    "besonderheiten": [
+      "Immunität (Willenskraft): Als geistloses Wesen ist der Schleim immun gegen geistesbeeinflussende Effekte.",
+      "Amorph: Der Schleim kann sich durch Öffnungen zwängen, die nur wenige Zentimeter breit sind.",
+      "Transparent: In seiner Ruhestellung ist der Schleim fast unsichtbar und schwer zu entdecken.",
+      "Immunität: Säure, Blitze, Hiebschaden."
+    ],
+    "beute": [
+      {
+        "typ": "Schatz",
+        "beschreibung": "Teilweise verdaute Münzen und Edelsteine",
+        "wurf": "(W6|1-4)",
+        "wert": 20
+      }
+    ],
+    "beschreibung": "Ein massiver, fast durchsichtiger Würfel aus gallertartiger Substanz, der langsam über den Boden gleitet und alles auf seinem Weg absorbiert. Er ist ein gedankenloser Fresser, der Korridore säubert und ahnungslose Abenteurer überrascht. Seine größte Gefahr ist nicht der direkte Angriff, sondern seine Fähigkeit, Gegner zu verschlingen und langsam zu verdauen."
+  },
+  {
+    "name": "Gargoyle",
+    "typ": "Konstrukt",
+    "traits": [
+      "Stein"
+    ],
+    "hg": "3",
+    "ep": 350,
+    "lp": 40,
+    "sr": 6,
+    "sr_bemerkung": "Steinerne Haut",
+    "bew": "4 (Flug 6)",
+    "pa": 16,
+    "asw": 12,
+    "ini": 1,
+    "rz": 10,
+    "rr": 13,
+    "rw": 11,
+    "pa_bemerkung": [],
+    "asw_bemerkung": "Schwerfällig",
+    "angriffe": [
+      {
+        "name": "Klaue",
+        "to_hit": 6,
+        "schaden": "7 (1W8+3)"
+      },
+      {
+        "name": "Biss",
+        "to_hit": 6,
+        "schaden": "6 (1W6+3)"
+      }
+    ],
+    "besonderheiten": [
+      "Steinerne Tarnung: Wenn der Gargoyle sich nicht bewegt, ist er von normalem Gestein nicht zu unterscheiden (Wahrnehmung ZW 15).",
+      "Immunität: Gift, Krankheit, Furcht, Schlaf, Betäubung."
+    ],
+    "beute": [
+      {
+        "typ": "Zutaten",
+        "beschreibung": "Gargoyle-Herz (versteinert)",
+        "wurf": "(W6|1)",
+        "wert": 100
+      },
+      {
+        "typ": "Zutaten",
+        "beschreibung": "Gargoyle-Klaue",
+        "wurf": "(W6|2-3)",
+        "wert": 50
+      }
+    ],
+    "beschreibung": "Eine groteske Statue aus dunklem Stein, die plötzlich zum Leben erwacht. Gargoyles sind stumme, unermüdliche Wächter, die oft an alten Gebäuden oder in Verliesen lauern. Sie sind unglaublich widerstandsfähig und greifen mit ihren scharfen Klauen und Zähnen an, um Eindringlinge zu zerfleischen."
+  },
+  {
+    "name": "Waldgeist",
+    "typ": "Geist",
+    "traits": [
+      "Natur"
+    ],
+    "hg": "2",
+    "ep": 200,
+    "lp": 20,
+    "sr": 0,
+    "sr_bemerkung": "Körperlos",
+    "bew": "4 (Flug 4)",
+    "pa": 14,
+    "asw": 14,
+    "ini": 3,
+    "rz": 12,
+    "rr": 11,
+    "rw": 9,
+    "pa_bemerkung": [],
+    "asw_bemerkung": "Ätherisch",
+    "angriffe": [
+      {
+        "name": "Berührung des Waldes",
+        "to_hit": 5,
+        "schaden": "4 (1W6+1)",
+        "zusatz": "Naturmagie"
+      },
+      {
+        "name": "Verwirrende Sporen",
+        "to_hit": 0,
+        "auto": true,
+        "schaden": "0",
+        "reichweite": "1xKurz",
+        "anzahl": 1,
+        "zusatz": "Verwirrt",
+        "rettungswurf": {
+          "art": "RW",
+          "zw": 13,
+          "bei_misserfolg": "Ziel ist 1 Runde verwirrt und greift die nächste Kreatur an.",
+          "bei_erfolg": "Keine Wirkung.",
+          "dauer": "1 Runde"
+        }
+      }
+    ],
+    "besonderheiten": [
+      "Körperlos: Kann sich durch feste Objekte bewegen. Immun gegen nicht-magischen Hieb-, Stich- und Wuchtschaden.",
+      "Naturverbunden: Erhält einen Bonus von +2 auf alle Rettungswürfe, solange er sich in einem natürlichen Waldgebiet befindet."
+    ],
+    "beute": [
+      {
+        "typ": "Zutaten",
+        "beschreibung": "Waldgeist-Essenz",
+        "wurf": "(W6|1)",
+        "wert": 75
+      },
+      {
+        "typ": "Zutaten",
+        "beschreibung": "Seltene Waldblume",
+        "wurf": "(W6|2-3)",
+        "wert": 25
+      }
+    ],
+    "beschreibung": "Ein schwebender, durchscheinender Geist, der aus Blättern, Moos und Nebel zu bestehen scheint. Waldgeister sind die Hüter alter Wälder und greifen Eindringlinge an, die ihre heiligen Haine stören. Sie verwirren ihre Gegner mit magischen Sporen und entziehen ihnen langsam die Lebensenergie."
+  },
+  {
+    "name": "Skelett-Krieger",
+    "typ": "Untot",
+    "traits": [
+      "Knochen"
+    ],
+    "hg": "1/2",
+    "ep": 100,
+    "lp": 13,
+    "sr": 3,
+    "sr_bemerkung": "Verrostete Rüstung",
+    "bew": "4",
+    "pa": 14,
+    "asw": 12,
+    "ini": 0,
+    "rz": 10,
+    "rr": 14,
+    "rw": "immun",
+    "pa_bemerkung": [
+      {
+        "icon": "shield",
+        "value": "+1",
+        "description": "Kleiner Schild"
+      }
+    ],
+    "asw_bemerkung": "",
+    "angriffe": [
+      {
+        "name": "Verrostetes Kurzschwert",
+        "to_hit": 3,
+        "schaden": "4 (1W6+1)"
+      }
+    ],
+    "besonderheiten": [
+      "Untot: Immun gegen Gift, Krankheit, Furcht, Schlaf, Betäubung, geistesbeeinflussende Effekte. Benötigt keine Luft, Nahrung oder Schlaf.",
+      "Knochenhaufen: Wenn das Skelett besiegt wird, zerfällt es in einen Haufen Knochen. Es kann wiederbelebt werden, wenn die Knochen innerhalb einer Stunde gesammelt werden."
+    ],
+    "beute": [
+      {
+        "typ": "Ausrüstung",
+        "beschreibung": "Verrostetes Kurzschwert",
+        "wurf": "(W6|1-3)",
+        "wert": 5
+      },
+      {
+        "typ": "Ausrüstung",
+        "beschreibung": "Kleiner Schild",
+        "wurf": "(W6|4)",
+        "wert": 5
+      }
+    ],
+    "beschreibung": "Ein klapperndes Gerippe, das in Fetzen alter Rüstung steckt und ein verrostetes Kurzschwert schwingt. Skelett-Krieger sind die einfachen Fußsoldaten untoter Armeen, die ohne Furcht oder Zögern angreifen, bis sie zu Staub zerfallen. Sie sind zäh und schwer zu besiegen, da sie keine Schmerzen empfinden."
+  },
+  {
+    "name": "Alchemist",
+    "typ": "Humanoid",
+    "traits": [
+      "Mensch"
+    ],
+    "hg": "1",
+    "ep": 150,
+    "lp": 18,
+    "sr": 0,
+    "sr_bemerkung": "Stoffkleidung",
+    "bew": "4",
+    "pa": 11,
+    "asw": 13,
+    "ini": 2,
+    "rz": 12,
+    "rr": 10,
+    "rw": 11,
+    "pa_bemerkung": [],
+    "asw_bemerkung": "",
+    "angriffe": [
+      {
+        "name": "Alchemistenfeuer (Wurf)",
+        "to_hit": 4,
+        "schaden": "6 (1W6)",
+        "reichweite": "1xKurz",
+        "zusatz": "Feuerschaden, entzündet"
+      },
+      {
+        "name": "Säureflasche (Wurf)",
+        "to_hit": 4,
+        "schaden": "6 (1W6)",
+        "reichweite": "1xKurz",
+        "zusatz": "Säureschaden, löst auf"
+      },
+      {
+        "name": "Dolch",
+        "to_hit": 2,
+        "schaden": "3 (1W4)"
+      }
+    ],
+    "besonderheiten": [
+      "Trankbrauer: Kann während eines Kampfes als Aktion einen Heiltrank (klein) für sich selbst brauen (1/Begegnung)."
+    ],
+    "beute": [
+      {
+        "typ": "Schatz",
+        "wurf": "1W10",
+        "beschreibung": "Goldmünzen"
+      },
+      {
+        "typ": "Ausrüstung",
+        "beschreibung": "Heiltrank (klein)",
+        "wurf": "(W6|1-2)",
+        "wert": 25
+      },
+      {
+        "typ": "Ausrüstung",
+        "beschreibung": "Alchemistenfeuer",
+        "wurf": "(W6|3)",
+        "wert": 35
+      },
+      {
+        "typ": "Ausrüstung",
+        "beschreibung": "Säureflasche",
+        "wurf": "(W6|4)",
+        "wert": 40
+      },
+      {
+        "typ": "Ausrüstung",
+        "beschreibung": "Diebeswerkzeug",
+        "wurf": "(W6|5)",
+        "wert": 35
 
