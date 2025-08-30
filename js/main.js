@@ -1,7 +1,7 @@
 import { $, txt, plusify, formatNote, parseRes, fmtBew, formatPaNote, normalizeHg } from './utils.js';
 import { naturalAttackLine, renderLoot } from './render.js';
 import { filterAndSort, populateList } from './list.js';
-
+import { filterAndSort, populateList, populateGroupedList } from './list.js';
 
 document.addEventListener("DOMContentLoaded", () => {
   let creatureData = [];
@@ -148,13 +148,21 @@ document.addEventListener("DOMContentLoaded", () => {
 // let currentIndex = -1;
 
 function setupNewList() {
+  // 1. Elemente holen (das hast du schon)
   const elList     = document.querySelector('#creature-list');
   const elSearchNm = document.querySelector('#search-name');
   const elSearchTp = document.querySelector('#search-type');
   const elHg       = document.querySelector('#search-hg');
   const btnAlpha   = document.querySelector('#sort-alpha');
   const btnSortHg  = document.querySelector('#sort-hg');
+  
+  // NEU: Checkbox holen
+  const groupToggle = document.querySelector('#group-by-type');
+  
+  // NEU: Gruppierungs-Status
+  let isGrouped = false;
 
+  // 2. refreshList Funktion (angepasst mit if/else)
   function refreshList() {
     const items = filterAndSort(creatureData, {
       nameTerm: elSearchNm?.value || '',
@@ -163,16 +171,30 @@ function setupNewList() {
       sort: sortMode
     });
 
-    populateList(elList, items, {
-      activeIndex: currentIndex,
-      onSelect: (idx) => {
-        currentIndex = idx;
-        renderStatblock(creatureData[currentIndex]);
-        refreshList();
-      }
-    });
+    // NEU: Gruppiert oder normale Liste
+    if (isGrouped) {
+      populateGroupedList(elList, items, {
+        groupBy: 'typ',
+        activeIndex: currentIndex,
+        onSelect: (idx) => {
+          currentIndex = idx;
+          renderStatblock(creatureData[currentIndex]);
+          refreshList();
+        }
+      });
+    } else {
+      populateList(elList, items, {
+        activeIndex: currentIndex,
+        onSelect: (idx) => {
+          currentIndex = idx;
+          renderStatblock(creatureData[currentIndex]);
+          refreshList();
+        }
+      });
+    }
   }
 
+  // 3. Event-Listener (das hast du schon)
   elSearchNm?.addEventListener('input', refreshList);
   elSearchTp?.addEventListener('input', refreshList);
   elHg?.addEventListener('change', refreshList);
@@ -188,9 +210,17 @@ function setupNewList() {
     btnAlpha.classList.remove('active');
     refreshList();
   });
+  
+  // NEU: HIER kommt der Checkbox-Listener hin! Nach den anderen Events:
+  groupToggle?.addEventListener('change', (e) => {
+    isGrouped = e.target.checked;
+    refreshList();
+  });
 
+  // 4. Erstes Rendering
   refreshList();
-}
+}  // Ende der setupNewList Funktion
+
 
   
 function init() {
