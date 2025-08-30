@@ -1,11 +1,15 @@
 import { $, txt, plusify, formatNote, parseRes, fmtBew, formatPaNote, normalizeHg } from './utils.js';
 import { naturalAttackLine, renderLoot } from './render.js';
+import { filterAndSort, populateList } from './list.js';
 
 
 document.addEventListener("DOMContentLoaded", () => {
   let creatureData = [];
   let currentCreatureIndex = -1;
   let editorVisible = false;
+  let sortMode = 'az';            // 'az' oder 'hg'
+  let currentIndex = -1;
+
 
   const sampleData = [
     {
@@ -190,6 +194,9 @@ function init() {
     };
     reader.readAsText(file);
   }
+
+
+  
   
   // NEUE FUNKTION: Kreaturen importieren und zur bestehenden Liste hinzufügen
   function handleFileImport(event) {
