@@ -145,7 +145,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   ];
 
-let currentIndex = -1;
+// let currentIndex = -1;
 
 function setupNewList() {
   const elList     = document.querySelector('#creature-list');
