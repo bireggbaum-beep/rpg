@@ -1,4 +1,4 @@
-Statblock Spezifikation – Auto-Creatur v1.1.8
+Statblock Spezifikation – Auto-Creatur v1.1.9
 =============================================
 
 Zweck
@@ -59,7 +59,7 @@ Pflichtfelder je Angriff:
   - Der feste Wert ist maßgeblich. Die Klammer ist nur optional für Tische, die würfeln wollen.
   - Empfehlung zur Klammer: Erwartungswert XWY+Z → X·(Y+1)/2 + Z; .5 wird aufgerundet; ±1 Abweichung toleriert.
 - rz, rr, rw: Rettungswürfe der Kreatur. dieser Wert muss mit W20 erreicht oder überwürfelt werden. Niedriger ist besser. Profil muss zur Kreatur passen.
-- traits: klassifiziert die Kreatur noch weiter. Array; Beispiele: typ: untot, traits: skelett; typ: humanoid, traits: goblin; Kreatur: Beschwörer-Initiant; typ: humanoid; traits: mensch, magier
+- traits: klassifiziert die Kreatur noch eine Ebene weiter. Array von 1-2 traits; Beispiele: typ: untot, traits: skelett; typ: humanoid, traits: goblin; Kreatur: Beschwörer-Initiant; typ: humanoid; traits: mensch, magier. Konvention: Mensch, Ork, Goblin, Kobold, Ratte, Magier, Vampier. Keine -oid-Endungen ausser bei Humanoid (nur bei typ). Keine zu tiefe Untergliederung.
 
 
 Optionale Felder:
@@ -133,9 +133,10 @@ Notation und Tokens
 
 Beschreibung – Anforderungen (Pflicht)
 --------------------------------------
-- Umfang: 1–3 Sätze, ca. 25–70 Wörter.
+- Umfang: 1–3 Sätze, ca. 30–70 Wörter.
 - Inhalt: Mind. 2 der 3 Aspekte (Erscheinung/Atmosphäre, Verhalten/Taktik, Umfeld/Hook).
 - Stil: Regelfrei, keine Zahlen/Würfel/Zustandsbegriffe.
+- Bei Konversion aus anderen Systemen möglichst nah am Ursprungstext.
 
 Designziele nach HG (Richtwerte für Generierung/Validierung)
 -----------------------------------------------------------
