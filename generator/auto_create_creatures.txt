@@ -305,3 +305,34 @@ Nutze die Rollenverteilung aus Addendum v1.1a. Wähle genau eine Rolle je Gegner
 - Wenn Rolle ≠ Controller/Unterstützer: Erzeuge KEINE Save-/Zustands-Effekte. Erlaube in höchstens 30% der Fälle EINEN kleinen Effekt (z.B. „zu Boden“), dann mit anzahl=1 und vollständigem rettungswurf.
 - Wenn Rolle = Controller/Unterstützer: Erzeuge GENAU EINEN Save-/Zustands- oder AoE-Effekt (anzahl 1–2). Alle übrigen Angriffe sind simpel.
 - In Summe: Max. 1/3 der Gegner mit Effekten; höchstens ein AoE-CC pro Begegnung.
+
+Addendum v1.2.2a: Design-Philosophie für Verteidigungswerte
+Zweck: Dieses Addendum präzisiert die konzeptionelle Absicht hinter den Verteidigungswerten (PA, ASW, SR) und den HG-Richtwerten, um eine konsistente und taktisch interessante Kreaturengestaltung zu gewährleisten.
+1. Interpretation der HG-Richtwerte
+Die in der Spezifikation genannten Tabellenwerte (z.B. für LP, SR, Angriffsbonus, Verteidigung) sind als Leitplanken und Orientierungshilfen zu verstehen, nicht als starre Grenzen.
+Flexibilität ist erwünscht: Einzelne Werte einer Kreatur dürfen und sollen von den Richtwerten abweichen, wenn es dem Konzept der Kreatur dient.
+Gesamtbild zählt: Die Stärke einer Kreatur ergibt sich aus dem Zusammenspiel all ihrer Werte. Eine Abweichung nach unten bei einem Wert (z.B. niedriger ASW) kann durch eine Abweichung nach oben bei einem anderen (z.B. hohe LP oder SR) ausgeglichen werden.
+Ausnahme: Die Felder hg (Herausforderungsgrad) und ep (Erfahrungspunkte) müssen immer exakt zueinander passen, da sie die finale Einstufung der Kreatur darstellen.
+2. Die drei Ebenen der Verteidigung: PA, ASW und SR
+Diese drei Werte repräsentieren unterschiedliche, voneinander unabhängige Verteidigungsebenen. Ihre korrekte Trennung ist entscheidend für die taktische Tiefe des Systems.
+PA (Parade) & ASW (Ausweichwert) – Die Treffervermeidung:
+Diese Werte repräsentieren ausschließlich das aktive Geschick einer Kreatur, einem Angriff zu entgehen (durch Blocken, Parieren oder Ausweichen).
+Sie bestimmen, ob ein Angriff trifft.
+Wichtig: Rüstung (getragen oder natürlich) beeinflusst PA oder ASW nicht. Diese Werte basieren auf Agilität, Training, Größe und Kampfstil.
+SR (Schadensreduktion) – Die Schadensabsorption:
+Dieser Wert repräsentiert die Fähigkeit, den Schaden eines erfolgreichen Treffers zu reduzieren.
+Er leitet sich direkt von der getragenen oder natürlichen Rüstung ab (z.B. Lederharnisch, Plattenpanzer, dicker Pelz, steinerne Haut).
+Eine Kreatur ohne Rüstung hat in der Regel SR 0.
+Sonderfall Schild:
+Ein Schild ist die einzige Ausrüstung, die die PA direkt erhöht. Dieser Bonus wird über das Schild-Objekt in pa_bemerkung vermerkt.
+Ein Schild gewährt keine SR.
+3. Förderung taktischer Asymmetrie
+Um taktische Entscheidungen im Kampf zu fördern, ist eine bewusste Differenzierung zwischen PA und ASW (Asymmetrie) ausdrücklich erwünscht.
+Prinzip: Der Unterschied zwischen PA und ASW sollte das Konzept der Kreatur widerspiegeln.
+Beispiel 1 (Tank): Ein schwerfälliger Ritter in Plattenrüstung sollte eine hohe SR (durch die Rüstung) und eine hohe PA (durch Training/Schild), aber einen niedrigen ASW (wegen der Behäbigkeit) haben.
+Beispiel 2 (Plänkler): Ein flinker Elf ohne Rüstung sollte eine SR von 0 oder 1, aber sehr hohe PA- und ASW-Werte haben, die sein überragendes Geschick darstellen.
+Durch die konsequente Anwendung dieser Prinzipien entstehen Kreaturen, die nicht nur den Regeln entsprechen, sondern auch intuitiv verständliche Stärken und Schwächen am Spieltisch aufweisen.
+
+
+
+
