@@ -425,7 +425,7 @@ let currentSort = 'none'; // 'none', 'alpha', 'hg'
     li.addEventListener("click", () => {
       document.querySelectorAll("#creature-list li").forEach(item => item.classList.remove("active"));
       li.classList.add("active");
-      currentCreatureIndex = originalIndex;
+      currentIndex = originalIndex;
       renderStatblock(creatureData[originalIndex]);
       editorVisible = false;
       const editor = document.querySelector("#inline-editor");
@@ -516,7 +516,7 @@ let currentSort = 'none'; // 'none', 'alpha', 'hg'
     const editor = document.querySelector("#inline-editor");
     if (editorVisible) {
       editor.classList.add("visible");
-      populateEditor(creatureData[currentCreatureIndex]);
+      populateEditor(creatureData[currentIndex]);
     } else {
       editor.classList.remove("visible");
     }
@@ -670,7 +670,7 @@ function addAttackField(attack = {}) {
   }
 
   function saveCreature() {
-    const creature = creatureData[currentCreatureIndex];
+    const creature = creatureData[currentIndex];
     if (!creature) return;
 
     creature.name = document.querySelector("#edit-name").value;
