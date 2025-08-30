@@ -14,6 +14,7 @@ Top-Level-Felder (Pflicht, falls nicht „optional“ markiert)
 ----------------------------------------------------------
 - name: String
 - typ: String (z.B. Humanoid, Untot, Tier, Monster, Riese, Elementar, Schleimwesen, Gestaltwandler)
+- traits: ["BEISPIEL_TRAIT_1", "BEISPIEL_TRAIT_2"],
 - hg: Integer (1,2,…) oder Bruch als String („1/8“, „1/4“, „1/2“)
 - ep: Integer
 - lp: Integer
@@ -58,6 +59,7 @@ Pflichtfelder je Angriff:
   - Der feste Wert ist maßgeblich. Die Klammer ist nur optional für Tische, die würfeln wollen.
   - Empfehlung zur Klammer: Erwartungswert XWY+Z → X·(Y+1)/2 + Z; .5 wird aufgerundet; ±1 Abweichung toleriert.
 - rz, rr, rw: Rettungswürfe der Kreatur. dieser Wert muss mit W20 erreicht oder überwürfelt werden. Niedriger ist besser. Profil muss zur Kreatur passen.
+- traits: klassifiziert die Kreatur noch weiter. Array; Beispiele: typ: untot, traits: skelett; typ: humanoid, traits: goblin; Kreatur: Beschwörer-Initiant; typ: humanoid; traits: mensch, magier
 
 
 Optionale Felder:
