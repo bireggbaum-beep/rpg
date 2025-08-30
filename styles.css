@@ -1,4 +1,3 @@
-<style>
   :root{--pf-red:#7e1f1f;--ink:#1c1c1c;--muted:#565656;--chip:#ece6e0;--bg:#f6f2ee;--rule:#d9cfc7}
   html,body{margin:0;background:var(--bg);color:var(--ink);font:400 12px/1.35 "Roboto Condensed",Arial,system-ui;height:100%}
   
@@ -187,5 +186,3 @@
 .sidebar li.active .creature-meta {
   color: rgba(255,255,255,0.9);
 }
- 
-</style>
