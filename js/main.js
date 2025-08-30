@@ -278,9 +278,155 @@ function exportAllCreatures() {
   URL.revokeObjectURL(url);
 }
 
-// ===== EDITOR (PLACEHOLDER) =====
+// ===== EDITOR FUNKTIONEN =====
 window.toggleEditor = function() {
-  alert('Editor noch nicht implementiert');
+  let editor = document.querySelector('.inline-editor');
+  if (!editor) {
+    const out = document.querySelector('#out');
+    const editorHTML = `
+      <div class="inline-editor visible">
+        <div class="editor-header">
+          <h3>Kreatur bearbeiten</h3>
+          <button onclick="closeEditor()" style="background:transparent;color:var(--ink);border:none;font-size:20px;cursor:pointer;">✕</button>
+        </div>
+        <div class="editor-body">
+          <form id="creature-form">
+            <div class="form-section">
+              <h4>Grunddaten</h4>
+              <div class="form-row">
+                <div class="form-group large">
+                  <label>Name</label>
+                  <input type="text" name="name">
+                </div>
+                <div class="form-group medium">
+                  <label>Typ</label>
+                  <input type="text" name="typ">
+                </div>
+                <div class="form-group small">
+                  <label>HG</label>
+                  <input type="text" name="hg">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group full">
+                  <label>Beschreibung</label>
+                  <textarea name="beschreibung" rows="2"></textarea>
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-section">
+              <h4>Kampfwerte</h4>
+              <div class="form-row">
+                <div class="form-group small">
+                  <label>LP</label>
+                  <input type="number" name="lp">
+                </div>
+                <div class="form-group small">
+                  <label>PA</label>
+                  <input type="number" name="abwehrNahkampf">
+                </div>
+                <div class="form-group small">
+                  <label>ASW</label>
+                  <input type="number" name="abwehrFernkampf">
+                </div>
+                <div class="form-group small">
+                  <label>INI</label>
+                  <input type="text" name="ini">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group small">
+                  <label>Zähigkeit</label>
+                  <input type="number" name="zaehigkeit">
+                </div>
+                <div class="form-group small">
+                  <label>Reflexe</label>
+                  <input type="number" name="reflexe">
+                </div>
+                <div class="form-group small">
+                  <label>Willenskraft</label>
+                  <input type="number" name="willenskriaft">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group medium">
+                  <label>Bewegung</label>
+                  <input type="text" name="bewegung">
+                </div>
+                <div class="form-group medium">
+                  <label>Sinne</label>
+                  <input type="text" name="sinne">
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="editor-footer">
+          <button onclick="saveCreature()">Speichern</button>
+          <button onclick="closeEditor()">Abbrechen</button>
+        </div>
+      </div>
+    `;
+    out.insertAdjacentHTML('beforeend', editorHTML);
+    
+    // Formular mit aktuellen Daten füllen
+    if (currentIndex >= 0 && creatureData[currentIndex]) {
+      const creature = creatureData[currentIndex];
+      const form = document.querySelector('#creature-form');
+      form.name.value = creature.name || '';
+      form.typ.value = creature.typ || '';
+      form.hg.value = creature.hg || '';
+      form.lp.value = creature.lp || '';
+      form.abwehrNahkampf.value = creature.abwehrNahkampf || '';
+      form.abwehrFernkampf.value = creature.abwehrFernkampf || '';
+      form.zaehigkeit.value = creature.zaehigkeit || '';
+      form.reflexe.value = creature.reflexe || '';
+      form.willenskriaft.value = creature.willenskriaft || '';
+      form.ini.value = creature.ini || '';
+      form.bewegung.value = creature.bewegung || '';
+      form.sinne.value = creature.sinne || '';
+      form.beschreibung.value = creature.beschreibung || '';
+    }
+  } else {
+    editor.classList.toggle('visible');
+  }
+};
+
+window.closeEditor = function() {
+  const editor = document.querySelector('.inline-editor');
+  if (editor) editor.remove();
+};
+
+window.saveCreature = function() {
+  if (currentIndex < 0) return;
+  
+  const form = document.querySelector('#creature-form');
+  const creature = creatureData[currentIndex];
+  
+  // Daten aus Formular übernehmen
+  creature.name = form.name.value;
+  creature.typ = form.typ.value;
+  creature.hg = form.hg.value;
+  creature.lp = parseInt(form.lp.value) || 0;
+  creature.abwehrNahkampf = parseInt(form.abwehrNahkampf.value) || 0;
+  creature.abwehrFernkampf = parseInt(form.abwehrFernkampf.value) || 0;
+  creature.zaehigkeit = parseInt(form.zaehigkeit.value) || 0;
+  creature.reflexe = parseInt(form.reflexe.value) || 0;
+  creature.willenskriaft = parseInt(form.willenskriaft.value) || 0;
+  creature.ini = form.ini.value;
+  creature.bewegung = form.bewegung.value;
+  creature.sinne = form.sinne.value;
+  creature.beschreibung = form.beschreibung.value;
+  
+  // Neu rendern
+  renderStatblock(creature);
+  populateHgFilter();
+  populateTypeFilter();
+  setupNewList();
+  
+  // Editor schließen
+  closeEditor();
 };
 
 // ===== INITIALISIERUNG =====
