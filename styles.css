@@ -187,48 +187,101 @@
   color: rgba(255,255,255,0.9);
 }
 
+/* Gruppierungs-Selector - angepasst für helles Theme */
 .view-selector {
-  background: linear-gradient(135deg, #2a2a2a, #1e1e1e);
-  padding: 12px;
-  border-bottom: 2px solid #4a7c59;
+  background: var(--bg);
+  padding: 10px;
+  border-bottom: 2px solid var(--pf-red);
+  margin: -10px -10px 10px -10px; /* Negativer Margin um Sidebar-Padding auszugleichen */
 }
 
 .selector-header {
-  font-size: 0.75em;
+  font: 700 10px/1 "Roboto Condensed";
   text-transform: uppercase;
-  color: #888;
-  margin-bottom: 8px;
-  letter-spacing: 1px;
+  color: var(--pf-red);
+  margin-bottom: 6px;
+  letter-spacing: 0.1em;
 }
 
 .view-option {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   cursor: pointer;
-  padding: 5px;
+  padding: 4px;
   border-radius: 3px;
   transition: background 0.2s;
 }
 
 .view-option:hover {
-  background: rgba(74, 124, 89, 0.2);
+  background: var(--chip);
 }
 
 .view-option input[type="checkbox"] {
-  width: 16px;
-  height: 16px;
-  accent-color: #4a7c59;
+  width: 14px;
+  height: 14px;
+  accent-color: var(--pf-red);
 }
 
 .option-text {
-  font-size: 0.9em;
+  font-size: 12px;
+  color: var(--ink);
 }
 
 .sidebar-divider {
-  margin: 0;
+  margin: 0 -10px 10px;
   border: none;
-  height: 3px;
-  background: linear-gradient(to bottom, #444, #222);
+  height: 1px;
+  background: var(--rule);
+}
+
+/* Akkordeon-Gruppen - angepasst für helles Theme */
+.group-header {
+  background: var(--chip);
+  padding: 6px 8px;
+  cursor: pointer;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  border-radius: 4px;
+  margin-bottom: 2px;
+  font-weight: 700;
+  color: var(--pf-red);
+  text-transform: uppercase;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+}
+
+.group-header:hover {
+  background: #e0d8d0;
+}
+
+.group-arrow {
+  width: 10px;
+  display: inline-block;
+  color: var(--muted);
+}
+
+.group-name {
+  flex: 1;
+}
+
+.group-count {
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 400;
+}
+
+.group-content {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 8px 0;
+  background: transparent;
+}
+
+.group-content .creature-item {
+  padding-left: 18px;
+  font-size: 12px;
 }
 
