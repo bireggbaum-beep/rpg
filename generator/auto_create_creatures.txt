@@ -79,8 +79,36 @@ Zweck: Dieses Addendum legt einen Standard-Herausforderungsgrad für gängige Kr
 | Vampir-Brut       | 3        | Schwächere Version eines echten Vampirs.  |
 
 ---
-Anweisung für die Generierung:
-Wenn eine Kreatur ohne spezifischen Rang (z.B. "Ork-Späher") erstellt wird, MUSS der hier definierte Basis-HG als Grundlage verwendet werden. Die EP und alle abgeleiteten Werte (LP, SR, Boni etc.) müssen diesem HG entsprechen.
+Anweisung für die Generierung: Zwei-Pfade-System
+=====================================================
+Um sowohl Konsistenz bei Standard-Gegnern als auch kreative Freiheit bei exotischen Wesen zu gewährleisten, folgt die Generierung einer von zwei Logiken, abhängig vom Kreaturentyp.
+
+---
+**Pfad 1: Standard-Kreaturen (Konsistenz-Pfad)**
+
+*   **Anwendung:** Dieser Pfad wird für alle Kreaturen verwendet, die in der Tabelle **"Basis-Herausforderungsgrade (HG) für Standard-Kreaturen"** aufgeführt sind (z.B. Ork, Goblin, Skelett, Wolf) und allgemein bekannte Gegner im TTRPG/Fantasy-Genre.
+*   **Regeln:**
+    1.  **Fester Anker:** Der HG und die EP der Kreatur MÜSSEN exakt dem Basis-HG aus der Tabelle entsprechen.
+    2.  **Werte im Korridor:** Alle abgeleiteten Werte (LP, SR, PA, ASW, Boni) MÜSSEN sich innerhalb der Korridore bewegen, die in der **"HG-Richtwerttabelle"** für diesen HG definiert sind.
+    3.  **Flexible Verteilung:** Innerhalb dieser Korridore ist die bewusste Verschiebung der Werte erwünscht, um das Konzept der Kreatur zu schärfen (z.B. ein Ork mit hoher PA und niedriger ASW oder umgekehrt).
+
+*   **Zweck:** Dieser Pfad stellt sicher, dass ein Ork immer wie ein Ork und ein Goblin immer wie ein Goblin "fühlt" und ihre Stärke verlässlich und vergleichbar ist.
+
+---
+**Pfad 2: Exotische Kreaturen (Kreativitäts-Pfad)**
+
+*   **Anwendung:** Dieser Pfad wird für alle Kreaturen verwendet, die **NICHT** in der Tabelle der Standard-Kreaturen aufgeführt sind (z.B. deine "Terranische Fasslilie", ein "Kristallgolem", ein "Gedankenschinder").
+*   **Regeln:**
+    1.  **HG als Power-Budget:** Der vom Ersteller gewählte HG (z.B. HG 3 für die Fasslilie) definiert das abstrakte "Power-Budget" der Kreatur. Die EP müssen diesem HG entsprechen.
+    2.  **Korridore als Orientierung, nicht als Zwang:** Die **"HG-Richtwerttabelle"** dient hier nur als **lose Orientierungshilfe**. Werte DÜRFEN und SOLLEN drastisch von den Korridoren abweichen, wenn es das Konzept der Kreatur erfordert.
+    3.  **Konzept über Korridor:** Das Konzept hat immer Vorrang.
+        -   Eine **Terranische Fasslilie (HG 3)** kann sehr niedrigen ASW haben. Um ihren HG 3 zu rechtfertigen, müssen ihre anderen Werte (z.B. extrem hohe LP, massive SR, hoher Schaden, starke Effekte) dies kompensieren.
+        -   Ein **Phasenspinner (HG 2)** könnte extrem hohe PA/ASW haben, dafür aber nur 1 LP.
+        -   Ein **Belebter Schleim (HG 1)** könnte PA/ASW 5 haben, aber immun gegen kritische Treffer und bestimmte Schadensarten sein.
+
+*   **Zweck:** Dieser Pfad gibt die maximale Freiheit, einzigartige und unkonventionelle Monster zu erschaffen, deren Stärke sich aus einer ungewöhnlichen Kombination von Fähigkeiten ergibt, anstatt aus einem standardisierten Set von Attributen.
+
+
 
 
 Globale Erklärpflicht (explizit)
