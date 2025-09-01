@@ -1,9 +1,20 @@
-Statblock Spezifikation – Auto-Creatur v1.2.2
+Statblock Spezifikation – Auto-Creatur v1.3.0
 =============================================
 
 Zweck
 -------
 Einheitliche Regeln, damit Menschen und AIs konsistent spielbare Gegner-Statblöcke erzeugen, die ohne Rückfragen am Spieltisch funktionieren und von der Web-Anwendung korrekt dargestellt werden.
+
+Referenzdatenbank für Ausrüstung
+--------------------------------
+Die folgende URL verweist auf die maßgebliche Liste für Standardausrüstung, Preise und Werte. Diese Datei dient als primäre Referenz für die Generierung von Beute und die Ausstattung von Kreaturen.
+
+**URL:** https://raw.githubusercontent.com/bireggbaum-beep/rpg/refs/heads/main/tables/ausruestung_und_preise.md
+
+- Die Ausrüstung und Beute ist nicht auf die Referenzliste beschränkt.
+- Bei der Verwendung von Standardgegenständen (z.B. "Holzschild", "Pfeile" ) müssen die Werte (Preis, Boni, etc.) mit dieser Referenzdatei übereinstimmen.
+- Neue oder einzigartige Gegenstände müssen in ihrem Design und Wert in einem logischen Verhältnis zu den Gegenständen in der Referenzdatei stehen.
+
 
 Globale Erklärpflicht (explizit)
 --------------------------------
@@ -85,49 +96,80 @@ Zauber (optional)
 Struktur wie Angriffe. Zusätzlich erlaubt: `auto: true` (automatische Wirkung ohne `to_hit`).
 Auch hier gilt: `reichweite` angeben, wenn nicht Nahbereich; `rettungswurf`, wenn Effekt/Save.
 
-Beute (Array) – Erlaubte Formen (W6-Mapping)
+Beute (Array) – Erlaubte Formen
 ---------------------------------------------
-Jedes Beute-Item ist ein eigenständiges Objekt mit folgenden Feldern:
+Das `beute`-Array enthält Objekte, die jeweils einen **einzelnen Beutewurf** repräsentieren (z.B. einen Wurf auf die Schatztabelle, einen Wurf auf die Ausrüstungstabelle). Die Werte für Standardgegenstände sollten aus der zentralen Referenzdatenbank für Ausrüstung übernommen werden.
 
-Pflichtfeld:
-- typ: "Schatz" | "Ausrüstung" | "Zutaten"
+**Struktur eines Beute-Objekts:**
 
-Optionale Felder:
-- beschreibung: String (z.B. "Goldmünzen", "Schwert", "Giftzahn")
-- wurf: String (Würfelnotation oder W6-Mapping als reiner Text)
-  - Beispiele: "2W6", "(W6|1-3)", "(W6|1-2 Drop, 3-6 nichts)"
-- wert: Integer (Wert in Goldmünzen)
-- anzahl: Integer (Stückzahl, wenn > 1)
+- `typ` (Pflichtfeld): "Schatz" | "Ausrüstung" | "Zutaten"
+- `beschreibung` (Pflichtfeld): Eine Beschreibung des Beutewurfs. Bei nur einem möglichen Gegenstand ist es der Name des Gegenstands. Bei mehreren Optionen ist es eine zusammenfassende Beschreibung (z.B. "Waffen und Werkzeuge").
+- `wurf` (Pflichtfeld): Die Würfelnotation, die für diesen Wurf gilt (z.B. "2W6", "(W6|1-3)").
+- `wert` (Optional): Der Wert des Gegenstands in Goldmünzen, falls es nur eine Option gibt.
+- `anzahl` (Optional): Die Stückzahl, falls es nur eine Option gibt und die Menge > 1 ist.
+- `optionen` (Optional): Ein Array von Ergebnis-Objekten. Dieses Feld wird verwendet, wenn ein einzelner Wurf zu unterschiedlichen Gegenständen führen kann. Wenn dieses Feld vorhanden ist, werden `wert` und `anzahl` auf der Hauptebene ignoriert.
 
-Beispiele:
-- Schatz:
-  { "typ": "Schatz", "wurf": "2W6", "beschreibung": "Goldmünzen" }
+**Struktur eines Ergebnis-Objekts innerhalb von `optionen`:**
 
-- Ausrüstung (garantiert):
-  { "typ": "Ausrüstung", "beschreibung": "Schwert", "wert": 15 }
+- `name` (Pflichtfeld): Der Name des spezifischen Gegenstands.
+- `wert` (Optional): Der Wert des Gegenstands in Goldmünzen.
+- `anzahl` (Optional): Die Stückzahl, wenn > 1.
+- `bedingung` (Pflichtfeld): Der Teil des Wurfergebnisses, der zu diesem Gegenstand führt (z.B. "1-2", "3-4").
 
-- Ausrüstung (mit Chance):
-  { "typ": "Ausrüstung", "beschreibung": "Streitaxt", "wurf": "(W6|1-2)", "wert": 10 }
+---
+**Inhaltliche Richtlinien für Beute:**
 
-- Zutaten (erntbar, mit Chance):
-  { "typ": "Zutaten", "beschreibung": "Giftzahn", "wurf": "(W6|1-3)", "wert": 25 }
+**1. Erntbar-Richtlinie:**
+- Ca. 70% aller Kreaturen sollten erntbare Materialien haben.
+- Wenn eine Kreatur erntbar ist, füge 1–2 Beute-Objekte vom Typ "Zutaten" hinzu.
+- Zivilisierte Humanoide (Menschen, Elfen, Zwerge) sind in der Regel nicht erntbar, es sei denn, sie haben eine besondere Eigenschaft (z.B. das Auge eines verfluchten Magiers). Tiere, Monster und magische Wesen sind primäre Kandidaten für erntbare Zutaten.
 
-- Mit Anzahl:
-  { "typ": "Ausrüstung", "beschreibung": "Pfeile", "anzahl": 20, "wert": 5 }
+**2. Beutetypen-Definition:**
+- "Schatz": Repräsentiert Währung (Gold, Silber, Edelsteine).
+- "Ausrüstung": Repräsentiert tragbare Gegenstände (Waffen, Rüstungen, Tränke, Werkzeuge).
+- "Zutaten": Repräsentiert erntbare Materialien von einer Kreatur (z.B. "Giftzahn", "Drachenschuppe", "Greifenfeder").
 
-Regeln:
-- KEINE "wahl" Arrays mehr verwenden
-- Der "wurf" Text ist rein informativ (zeigt Wahrscheinlichkeiten)
-- "Schatz" = Währung/Gold
-- "Ausrüstung" = Gegenstände, Waffen, Rüstungen
-- "Zutaten" = Erntbare Materialien von Kreaturen
-- Ca. 70% aller Kreaturen haben erntbare Zutaten
+---
+**Anwendungsbeispiele (aktualisiert):**
 
-Erntbar-Richtlinie (Kurz)
---------------------------
-- Ca. 70% aller Kreaturen sind erntbar
-- Wenn ja, 1–2 passende "Zutaten"-Zeilen hinzufügen
-- Zivilisierte Humanoide i.d.R. nicht erntbar
+**Beispiel 1: Bandit (Schatz und eine "entweder/oder" Ausrüstung)**
+```json
+"beute": [
+  { "typ": "Schatz", "beschreibung": "Silbermünzen", "wurf": "2W6" },
+  {
+    "typ": "Ausrüstung",
+    "beschreibung": "Waffen und Werkzeuge",
+    "wurf": "(W6|1-4)",
+    "optionen": [
+      { "name": "Krummsäbel", "wert": 12, "bedingung": "1-2" },
+      { "name": "Brecheisen", "wert": 10, "bedingung": "3-4" }
+    ]
+  }
+]
+
+**Beispiel 2: Goblin-Bogenschütze (hat garantiert Pfeile dabei)
+"beute": [
+  {
+    "typ": "Ausrüstung",
+    "beschreibung": "Pfeile",
+    "wurf": "(garantiert)",
+    "wert": 5,
+    "anzahl": 10
+  }
+]
+
+**Beispiel 3: Söldner (hat mit Chance eine Tasche mit Wurfmessern)
+"beute": [
+  {
+    "typ": "Ausrüstung",
+    "beschreibung": "Beutel mit Wurfmessern",
+    "wurf": "(W6|1-2)",
+    "optionen": [
+      { "name": "Wurfmesser", "wert": 15, "anzahl": 5, "bedingung": "1-2" }
+    ]
+  }
+]
+
 
 Besonderheiten (Array)
 ----------------------
@@ -179,6 +221,71 @@ Richtwerte je HG:
 | 10      | 6.250   | 140–220     | 7–9    | +6 bis +8               | +9 bis +12    | 16–17            |
 | 11      | 10.000  | 170–270     | 7–10   | +7 bis +9               | +10 bis +14   | 16–18            |
 | 12      | 17.000  | 200–330     | 8–11   | +8 bis +9               | +11 bis +15   | 17–19            |
+
+
+Ausrüstung: Rüstungen und Schilde
+---------------------------------
+Dieser Abschnitt definiert die Auswirkungen von Rüstungen und Schilden auf die defensiven Werte einer Kreatur.
+
+1. Rüstungen: Schadensreduktion (SR) und ASW-Behinderung
+
+Rüstungen bieten primär Schutz durch Schadensreduktion (SR). Je nach Kategorie (Leicht, Mittel, Schwer) können sie jedoch die Beweglichkeit behindern und den Ausweichwert (ASW) reduzieren.
+
+a) Rüstungstabelle:
+
+| Name                     | SR | Kategorie | Preis  | Verfügbarkeit          |
+|--------------------------|----|-----------|--------|-----------------------|
+| Einfache Robe            | 1  | Leicht    | 30 GM  | Alle                  |
+| Lederweste               | 1  | Mittel    | 45 GM  | Alle außer Magier     |
+| Gepolsterte Rüstung      | 1  | Mittel    | 45 GM  | Alle außer Magier     |
+| Lederharnisch            | 1  | Mittel    | 45 GM  | Alle außer Magier     |
+| Beschlagene Leder-rüstung| 2  | Mittel    | 60 GM  | Alle außer Magier     |
+| Verzauberte Robe         | 2  | Leicht    | 80 GM  | Nur Magier            |
+| Kettenhemd               | 3  | Schwer    | 140 GM | Kleriker/Krieger      |
+| Ringpanzer               | 3  | Schwer    | 170 GM | Kleriker/Krieger      |
+| Schuppenpanzer           | 4  | Schwer    | 190 GM | Nur Krieger           |
+| Robe des Erzmagiers      | 3  | Leicht    | 180 GM | Nur Magier            |
+| Lederrüstung der Elben   | 4  | Mittel    | 180 GM | Nur Waldläufer        |
+| Mithril Kettenhemd       | 5  | Mittel    | 290 GM | Kleriker/Krieger      |
+| Plattenrüstung           | 4  | Schwer    | 290 GM | Nur Krieger           |
+| Mithrilrüstung           | 5  | Schwer    | 320 GM | Nur Krieger           |
+| Zwergenrüstung           | 6  | Schwer    | 370 GM | Nur Krieger           |
+| Drachenfeuerpanzer       | 7  | Schwer    | 920 GM | Nur Krieger           |
+
+b) Richtwerte für ASW-Reduktion:
+
+Die ASW-Reduktion ist ein Richtwert, der an das Konzept der Kreatur und die spezifische Rüstung angepasst werden kann.
+
+| Kategorie | ASW-Malus (Richtwert) | Anwendungshinweis                                                                                             |
+|:----------|:----------------------|:--------------------------------------------------------------------------------------------------------------|
+| Leicht    | 0                     | Leichte Rüstungen sind auf Bewegungsfreiheit ausgelegt und behindern das Ausweichen nicht.                    |
+| Mittel    | -1                    | Der Standard-Malus für Rüstungen, die einen Kompromiss aus Schutz und Beweglichkeit darstellen.               |
+| Schwer    | -2 bis -3             | Schwere Rüstungen schränken die Agilität erheblich ein. Ein Kettenhemd könnte -2, ein Plattenpanzer -3 verursachen. |
+
+c) Konzeptuelle Anpassungen (Die "Meisterwerk"-Regel):
+
+Spezielle oder magische Rüstungen folgen ihrem Konzept, nicht starr der Kategorie. Dies ist entscheidend, um ihre Einzigartigkeit darzustellen.
+- Lederrüstung der Elben (Mittel): Verursacht keinen ASW-Malus (0).
+- Mithril Kettenhemd (Mittel): Verursacht keinen ASW-Malus (0).
+- Zwergenrüstung (Schwer): Hat einen reduzierten Malus von nur -2.
+- Verzauberte Robe / Robe des Erzmagiers (Leicht): Bieten Schutz durch Magie und haben keinen ASW-Malus (0).
+
+2. Schilde: Verbesserung der Parade (PA)
+
+Schilde erhöhen den Parade-Wert (PA). Der Bonus wird im Statblock unter `pa_bemerkung` als Schild-Objekt vermerkt.
+
+a) Schildtabelle:
+
+| Name           | PA-Bonus | Preis  | Verfügbarkeit       |
+|----------------|----------|--------|--------------------|
+| Holzschild     | +1       | 15 GM  | Alle außer Magier   |
+| Metallschild   | +2       | 45 GM  | Kleriker/Krieger   |
+| Turmschild     | +3       | 85 GM  | Nur Krieger        |
+
+b) Anwendungshinweis:
+Der PA-Bonus eines Schildes wird zum Basis-PA der Kreatur (der sich aus `9 + STR-Bonus` ergibt) addiert. Ein Turmschild kann zusätzlich einen ASW-Malus von -1 verursachen.
+
+
 
 Validierungs-Checkliste (kurz)
 ------------------------------
