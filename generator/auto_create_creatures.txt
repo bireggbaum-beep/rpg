@@ -1,4 +1,4 @@
-Statblock Spezifikation – Auto-Creatur v1.3.0
+Statblock Spezifikation – Auto-Creatur v1.3.1
 =============================================
 
 Zweck
