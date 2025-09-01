@@ -154,31 +154,31 @@ Beschreibung – Anforderungen (Pflicht)
 Designziele nach HG (Richtwerte für Generierung/Validierung)
 -----------------------------------------------------------
 Hinweise:
-- to_hit je Angriff nahe „Angriffsbonus“ des HG (±1 ok).
-- PA/ASW an „Verteidigung (ca.)“ ausrichten.
-- LP/SR ins Korridor bringen (hohe SR → eher niedrigere LP und umgekehrt).
-- „Schaden/Runde“ nur intern für Balancing; ohne SC-Referenz optional.
-- Alle Kreaturen sind ausnahmslos in einen HG zwischen HG1/8 bis HG12 einzuordnen.
-- HG1/8 sind die schwächsten Kreaturen. HG12 die stärksten.
-- Richtwerte je HG beachten, aber Freiheit für die Spielbarkeit und Kreaturenindividualität und -vielfalt sind gewünscht.
-- Für Konversionen: Extreme (wie Schaden 120 oder PA, ASW 50) sind zu vermeiden, da sie Gamebreaking wären. Massvoll und mit Bedacht konvertieren.
+- Die Werte in der Tabelle sind Leitplanken, um konsistente und konzepttreue Kreaturen zu gewährleisten. Die Freiheit für Spielbarkeit und Kreaturenindividualität ist aber weiterhin erwünscht.
+- Die Spalte "Primär-Attribut (Bonus)" ist die wichtigste Leitplanke. Sie begrenzt die Boni, die eine Kreatur durch ihre Attribute (z.B. Stärke, Geschick) erhalten kann.
+- Der `to_hit`-Wert eines Angriffs sollte nahe am "Angriffsbonus" des HG liegen (±1 ist akzeptabel).
+- Die Werte für Lebenspunkte (LP) und Schadensreduktion (SR) sollten innerhalb ihres Korridors ausbalanciert werden (z.B. hohe SR → eher niedrigere LP und umgekehrt).
+- Alle Kreaturen sind ausnahmslos in einen HG zwischen HG 1/8 (schwächste) und HG 12 (stärkste) einzuordnen.
+- Bei Konversionen aus anderen Systemen sind extreme Werte (z.B. PA/ASW über 25) zu vermeiden und an die hier definierten Rahmenbedingungen anzupassen.
 
 Richtwerte je HG:
-HG 1/8: EP 25; LP 1–5; SR 0–1; Angriffsbonus +0 bis +2; Schaden/Runde 1; Verteidigung 10–12
-HG 1/4: EP 50; LP 4–10; SR 1–2; Angriffsbonus +1 bis +3; Schaden/Runde 1–2; Verteidigung 11–13
-HG 1/2: EP 100; LP 10–18; SR 1–3; Angriffsbonus +2 bis +4; Schaden/Runde 2–3; Verteidigung 12–14
-HG 1: EP 150; LP 15–25; SR 2–4; Angriffsbonus +2 bis +4; Schaden/Runde 3–4; Verteidigung 13–14
-HG 2: EP 200; LP 20–35; SR 2–4; Angriffsbonus +3 bis +5; Schaden/Runde 4–5; Verteidigung 14
-HG 3: EP 350; LP 30–50; SR 3–5; Angriffsbonus +4 bis +6; Schaden/Runde 5–7; Verteidigung 14–15
-HG 4: EP 550; LP 40–65; SR 3–5; Angriffsbonus +5 bis +7; Schaden/Runde 7–9; Verteidigung 15
-HG 5: EP 900; LP 50–80; SR 4–6; Angriffsbonus +6 bis +8; Schaden/Runde 9–12; Verteidigung 16
-HG 6: EP 1.400; LP 65–100; SR 4–7; Angriffsbonus +6 bis +8; Schaden/Runde 12–15; Verteidigung 16–17
-HG 7: EP 2.250; LP 80–125; SR 5–7; Angriffsbonus +7 bis +9; Schaden/Runde 16–20; Verteidigung 17
-HG 8: EP 3.250; LP 100–150; SR 5–8; Angriffsbonus +7 bis +10; Schaden/Runde 20–25; Verteidigung 18
-HG 9: EP 4.750; LP 120–180; SR 6–8; Angriffsbonus +8 bis +11; Schaden/Runde 25–32; Verteidigung 18–19
-HG 10: EP 6.250; LP 140–220; SR 7–9; Angriffsbonus +9 bis +12; Schaden/Runde 32–40; Verteidigung 19–20
-HG 11: EP 10.000; LP 170–270; SR 7–10; Angriffsbonus +10 bis +14; Schaden/Runde 40–50; Verteidigung 20–22
-HG 12: EP 17.000; LP 200–330; SR 8–11; Angriffsbonus +11 bis +15; Schaden/Runde 50–65; Verteidigung 21–23
+| HG      | EP      | LP          | SR     | Primär-Attribut (Bonus) | Angriffsbonus | PA / ASW (Basis) |
+|:--------|:--------|:------------|:-------|:------------------------|:--------------|:-----------------|
+| 1/8     | 25      | 1–5         | 0–1    | +0 bis +1               | +0 bis +2     | 9–11             |
+| 1/4     | 50      | 4–10        | 1–2    | +1 bis +2               | +1 bis +3     | 10–12            |
+| 1/2     | 100     | 10–18       | 1–3    | +1 bis +2               | +2 bis +4     | 10–12            |
+| 1       | 150     | 15–25       | 2–4    | +2 bis +3               | +2 bis +4     | 11–12            |
+| 2       | 200     | 20–35       | 2–4    | +2 bis +4               | +3 bis +5     | 12–13            |
+| 3       | 350     | 30–50       | 3–5    | +3 bis +4               | +4 bis +6     | 12–13            |
+| 4       | 550     | 40–65       | 3–5    | +3 bis +5               | +5 bis +7     | 13–14            |
+| 5       | 900     | 50–80       | 4–6    | +4 bis +5               | +6 bis +8     | 13–14            |
+| 6       | 1.400   | 65–100      | 4–7    | +4 bis +6               | +6 bis +8     | 14–15            |
+| 7       | 2.250   | 80–125      | 5–7    | +5 bis +6               | +7 bis +9     | 14–15            |
+| 8       | 3.250   | 100–150     | 5–8    | +5 bis +7               | +7 bis +10    | 15–16            |
+| 9       | 4.750   | 120–180     | 6–8    | +6 bis +7               | +8 bis +11    | 15–16            |
+| 10      | 6.250   | 140–220     | 7–9    | +6 bis +8               | +9 bis +12    | 16–17            |
+| 11      | 10.000  | 170–270     | 7–10   | +7 bis +9               | +10 bis +14   | 16–18            |
+| 12      | 17.000  | 200–330     | 8–11   | +8 bis +9               | +11 bis +15   | 17–19            |
 
 Validierungs-Checkliste (kurz)
 ------------------------------
@@ -307,33 +307,30 @@ Nutze die Rollenverteilung aus Addendum v1.1a. Wähle genau eine Rolle je Gegner
 - In Summe: Max. 1/3 der Gegner mit Effekten; höchstens ein AoE-CC pro Begegnung.
 
 Addendum v1.2.2a: Design-Philosophie für Verteidigungswerte
+--------------------------------------------------------------------------
 Zweck: Dieses Addendum präzisiert die konzeptionelle Absicht hinter den Verteidigungswerten (PA, ASW, SR) und den HG-Richtwerten, um eine konsistente und taktisch interessante Kreaturengestaltung zu gewährleisten.
-1. Interpretation der HG-Richtwerte
-Die in der Spezifikation genannten Tabellenwerte (z.B. für LP, SR, Angriffsbonus, Verteidigung) sind als Leitplanken und Orientierungshilfen zu verstehen, nicht als starre Grenzen.
-Flexibilität ist erwünscht: Einzelne Werte einer Kreatur dürfen und sollen von den Richtwerten abweichen, wenn es dem Konzept der Kreatur dient.
-Gesamtbild zählt: Die Stärke einer Kreatur ergibt sich aus dem Zusammenspiel all ihrer Werte. Eine Abweichung nach unten bei einem Wert (z.B. niedriger ASW) kann durch eine Abweichung nach oben bei einem anderen (z.B. hohe LP oder SR) ausgeglichen werden.
-Ausnahme: Die Felder hg (Herausforderungsgrad) und ep (Erfahrungspunkte) müssen immer exakt zueinander passen, da sie die finale Einstufung der Kreatur darstellen.
-2. Die drei Ebenen der Verteidigung: PA, ASW und SR
-Diese drei Werte repräsentieren unterschiedliche, voneinander unabhängige Verteidigungsebenen. Ihre korrekte Trennung ist entscheidend für die taktische Tiefe des Systems.
-PA (Parade) & ASW (Ausweichwert) – Die Treffervermeidung:
-Diese Werte repräsentieren ausschließlich das aktive Geschick einer Kreatur, einem Angriff zu entgehen (durch Blocken, Parieren oder Ausweichen).
-Sie bestimmen, ob ein Angriff trifft.
-Wichtig: Rüstung (getragen oder natürlich) beeinflusst PA oder ASW nicht. Diese Werte basieren auf Agilität, Training, Größe und Kampfstil.
-SR (Schadensreduktion) – Die Schadensabsorption:
-Dieser Wert repräsentiert die Fähigkeit, den Schaden eines erfolgreichen Treffers zu reduzieren.
-Er leitet sich direkt von der getragenen oder natürlichen Rüstung ab (z.B. Lederharnisch, Plattenpanzer, dicker Pelz, steinerne Haut).
-Eine Kreatur ohne Rüstung hat in der Regel SR 0.
-Sonderfall Schild:
-Ein Schild ist die einzige Ausrüstung, die die PA direkt erhöht. Dieser Bonus wird über das Schild-Objekt in pa_bemerkung vermerkt.
-Ein Schild gewährt keine SR.
-3. Gestaltung von PA und ASW zur Charakterisierung:
-Die Beziehung zwischen Parade (PA) und Ausweichwert (ASW) ist ein wichtiges Werkzeug, um das Konzept einer Kreatur zu schärfen.
-Asymmetrische Werte (PA ≠ ASW): Dies ist ideal für spezialisierte Kreaturen. Ein schwerfälliger Tank sollte eine hohe PA, aber einen niedrigen ASW haben. Ein flinker Schurke sollte einen hohen ASW, aber eine niedrige PA haben. Diese Asymmetrie schafft klare taktische Stärken und Schwächen.
-Symmetrische Werte (PA = ASW): Dies ist ideal für Allrounder oder Kreaturen, deren Stärke und Geschicklichkeit ausgewogen sind. Ein gut ausgebildeter Soldat, ein vielseitiger Abenteurer oder bestimmte Bestien könnten identische PA- und ASW-Werte haben.
-Anweisung: Wähle das Verhältnis von PA und ASW so, dass es das Wesen der Kreatur am besten widerspiegelt. Eine Asymmetrie ist eine Option, keine Pflicht.
-Prinzip: Der Unterschied zwischen PA und ASW sollte das Konzept der Kreatur widerspiegeln.
-Durch die konsequente Anwendung dieser Prinzipien entstehen Kreaturen, die nicht nur den Regeln entsprechen, sondern auch intuitiv verständliche Stärken und Schwächen am Spieltisch aufweisen.
 
+1. Interpretation der HG-Richtwerte
+Die in der Spezifikation genannten Tabellenwerte (z.B. für LP, SR, Angriffsbonus) sind als Leitplanken und Orientierungshilfen zu verstehen, nicht als starre Grenzen.
+- Flexibilität ist erwünscht: Einzelne Werte einer Kreatur dürfen und sollen von den Richtwerten abweichen, wenn es dem Konzept der Kreatur dient.
+- Gesamtbild zählt: Die Stärke einer Kreatur ergibt sich aus dem Zusammenspiel all ihrer Werte. Eine Abweichung nach unten bei einem Wert (z.B. niedriger ASW) kann durch eine Abweichung nach oben bei einem anderen (z.B. hohe LP oder SR) ausgeglichen werden.
+- Ausnahme: Die Felder hg (Herausforderungsgrad) und ep (Erfahrungspunkte) müssen immer exakt zueinander passen, da sie die finale Einstufung der Kreatur darstellen.
+
+2. Die drei Ebenen der Verteidigung: PA, ASW und SR
+Diese drei Werte repräsentieren unterschiedliche Verteidigungsebenen. Ihre korrekte Trennung ist entscheidend für die taktische Tiefe des Systems.
+- PA (Parade) & ASW (Ausweichwert) – Die Treffervermeidung:
+  Diese Werte repräsentieren das aktive Geschick einer Kreatur, einem Angriff zu entgehen. PA basiert auf Stärke (Blocken, Parieren), ASW auf Geschick (Ausweichen). Sie bestimmen, ob ein Angriff trifft.
+- SR (Schadensreduktion) – Die Schadensabsorption:
+  Dieser Wert repräsentiert die Fähigkeit, den Schaden eines erfolgreichen Treffers zu reduzieren. Er leitet sich direkt von der getragenen oder natürlichen Rüstung ab. Eine Kreatur ohne Rüstung hat in der Regel SR 0.
+- Sonderfall Schild:
+  Ein Schild ist die einzige Ausrüstung, die die PA direkt erhöht. Dieser Bonus wird über das Schild-Objekt in `pa_bemerkung` vermerkt. Ein Schild gewährt keine SR.
+
+3. Gestaltung von PA und ASW zur Charakterisierung
+Die Beziehung zwischen Parade (PA) und Ausweichwert (ASW) ist ein wichtiges Werkzeug, um das Konzept einer Kreatur zu schärfen.
+- Asymmetrische Werte (PA ≠ ASW): Ideal für Spezialisten. Ein schwerfälliger Tank sollte eine hohe PA, aber einen niedrigen ASW haben. Ein flinker Schurke sollte einen hohen ASW, aber eine niedrige PA haben.
+- Symmetrische Werte (PA = ASW): Ideal für Allrounder oder Kreaturen mit ausgewogener Stärke und Geschicklichkeit (z.B. ein ausgebildeter Soldat, ein Wolf).
+
+Anweisung: Wähle das Verhältnis von PA und ASW so, dass es das Wesen der Kreatur am besten widerspiegelt. Eine Asymmetrie ist eine Option, keine Pflicht. Ein Unterschied zwischen PA und ASW bringt taktisch interessante Optionen, ist aber nicht für alle Kreaturen passend oder zwingend.  
 
 
 
