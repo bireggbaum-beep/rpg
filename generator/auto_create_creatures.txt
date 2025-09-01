@@ -326,11 +326,12 @@ Eine Kreatur ohne Rüstung hat in der Regel SR 0.
 Sonderfall Schild:
 Ein Schild ist die einzige Ausrüstung, die die PA direkt erhöht. Dieser Bonus wird über das Schild-Objekt in pa_bemerkung vermerkt.
 Ein Schild gewährt keine SR.
-3. Förderung taktischer Asymmetrie
-Um taktische Entscheidungen im Kampf zu fördern, ist eine bewusste Differenzierung zwischen PA und ASW (Asymmetrie) ausdrücklich erwünscht.
+3. Gestaltung von PA und ASW zur Charakterisierung:
+Die Beziehung zwischen Parade (PA) und Ausweichwert (ASW) ist ein wichtiges Werkzeug, um das Konzept einer Kreatur zu schärfen.
+Asymmetrische Werte (PA ≠ ASW): Dies ist ideal für spezialisierte Kreaturen. Ein schwerfälliger Tank sollte eine hohe PA, aber einen niedrigen ASW haben. Ein flinker Schurke sollte einen hohen ASW, aber eine niedrige PA haben. Diese Asymmetrie schafft klare taktische Stärken und Schwächen.
+Symmetrische Werte (PA = ASW): Dies ist ideal für Allrounder oder Kreaturen, deren Stärke und Geschicklichkeit ausgewogen sind. Ein gut ausgebildeter Soldat, ein vielseitiger Abenteurer oder bestimmte Bestien könnten identische PA- und ASW-Werte haben.
+Anweisung: Wähle das Verhältnis von PA und ASW so, dass es das Wesen der Kreatur am besten widerspiegelt. Eine Asymmetrie ist eine Option, keine Pflicht.
 Prinzip: Der Unterschied zwischen PA und ASW sollte das Konzept der Kreatur widerspiegeln.
-Beispiel 1 (Tank): Ein schwerfälliger Ritter in Plattenrüstung sollte eine hohe SR (durch die Rüstung) und eine hohe PA (durch Training/Schild), aber einen niedrigen ASW (wegen der Behäbigkeit) haben.
-Beispiel 2 (Plänkler): Ein flinker Elf ohne Rüstung sollte eine SR von 0 oder 1, aber sehr hohe PA- und ASW-Werte haben, die sein überragendes Geschick darstellen.
 Durch die konsequente Anwendung dieser Prinzipien entstehen Kreaturen, die nicht nur den Regeln entsprechen, sondern auch intuitiv verständliche Stärken und Schwächen am Spieltisch aufweisen.
 
 
