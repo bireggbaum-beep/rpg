@@ -56,6 +56,16 @@
   .loot-category b { font-weight: 700; }
   .loot-item { display: block; margin-left: 10px; padding-left: 10px; border-left: 2px solid var(--chip); margin-top: 2px; }
   .loot-item .muted { color: var(--muted); }
+  .loot-options {
+    margin-left: 20px;
+    padding-left: 10px;
+    border-left: 2px solid #eaddd3; /* Passend zum Design */
+    margin-top: 4px;
+   }
+   .loot-option-item {
+    font-size: 11px;
+   }
+
 
   /* Verbesserte Editor Styles */
   .edit-btn{position:absolute;top:8px;right:10px;font-size:10px;padding:4px 8px;}
