@@ -71,6 +71,37 @@
 | Drachenauge      | 25000 GM  | 50000 GM  | 37500 GM       | Ein Schatz von königlichem Ausmaß      |
 
 
+### Rüstungen
+
+| Name                     | SR | Kategorie | Preis  | Verfügbarkeit          |
+|--------------------------|----|-----------|--------|-----------------------|
+| Einfache Robe            | 1  | Leicht    | 30 GM  | Alle                  |
+| Lederweste               | 1  | Mittel    | 45 GM  | Alle außer Magier     |
+| Gepolsterte Rüstung      | 1  | Mittel    | 45 GM  | Alle außer Magier     |
+| Lederharnisch            | 1  | Mittel    | 45 GM  | Alle außer Magier     |
+| Beschlagene Leder-rüstung| 2  | Mittel    | 60 GM  | Alle außer Magier     |
+| Verzauberte Robe         | 2  | Leicht    | 80 GM  | Nur Magier            |
+| Kettenhemd               | 3  | Schwer    | 140 GM | Kleriker/Krieger      |
+| Ringpanzer               | 3  | Schwer    | 170 GM | Kleriker/Krieger      |
+| Schuppenpanzer           | 4  | Schwer    | 190 GM | Nur Krieger           |
+| Robe des Erzmagiers      | 3  | Leicht    | 180 GM | Nur Magier            |
+| Lederrüstung der Elben   | 4  | Mittel    | 180 GM | Nur Waldläufer        |
+| Mithril Kettenhemd       | 5  | Mittel    | 290 GM | Kleriker/Krieger      |
+| Plattenrüstung           | 4  | Schwer    | 290 GM | Nur Krieger           |
+| Mithrilrüstung           | 5  | Schwer    | 320 GM | Nur Krieger           |
+| Zwergenrüstung           | 6  | Schwer    | 370 GM | Nur Krieger           |
+| Drachenfeuerpanzer       | 7  | Schwer    | 920 GM | Nur Krieger           |
+
+### Schilde
+
+| Name           | PA-Bonus | Preis  | Verfügbarkeit       |
+|----------------|----------|--------|--------------------|
+| Holzschild     | +1       | 15 GM  | Alle außer Magier   |
+| Metallschild   | +2       | 45 GM  | Kleriker/Krieger   |
+| Turmschild     | +3       | 85 GM  | Nur Krieger        |
+
+
+
 # Waffenliste
 
 | Waffe                 | Schaden   | Attribut | Preis  | Eigenschaften                                            |
@@ -116,4 +147,7 @@
 | Stab des Erzmagiers| +3        | +15        | 7         | 3500 GM| Meisterwerk der Handwerkskunst             |
 | Wurzel des Nordens| +2        | +30        | 7         | 4000 GM| Versteinerte Ur-Baum-Wurzel                |
 | Stab des Firmaments| +4        | +10        | 7         | 5000 GM| Aus Meteoritengestein gefertigt            |
+
+
+
 
