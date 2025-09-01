@@ -1,56 +1,56 @@
 # Gegenstände und Preise
 
-| Gegenstand           | Preis  | Beschreibung                            |
-|---------------------|--------|---------------------------------------|
-| **Behälter und Transport**                        |        |                                       |
-| Rucksack            | 8 GM   | Trägt 30kg                            |
-| Gürteltasche        | 3 GM   | Trägt 3kg, schneller Zugriff          |
-| Wasserschlauch      | 2 GM   | 2 Liter Fassungsvermögen              |
-| Köcher              | 5 GM   | Für 30 Pfeile/Bolzen                  |
-| **Lichtquellen**                                |        |                                       |
-| Fackel (5 Stk)      | 2 GM   | Brennt je 1 Stunde                    |
-| Laterne             | 12 GM  | Braucht Öl, besseres Licht            |
-| Öl (1 Liter)        | 3 GM   | Brennt 6 Stunden                      |
-| Kerze (10 Stk)      | 1 GM   | Brennt je 1 Stunde                    |
-| **Kletterausrüstung**                            |        |                                       |
-| Seil (15m)          | 10 GM  | Trägt 150kg                          |
-| Seidenseil (15m)    | 50 GM  | Leichter und stärker                  |
-| Enterhaken          | 15 GM  | Zum Klettern                        |
-| Eisenhaken (10 Stk) | 5 GM   | Zum Sichern                         |
-| Hammer              | 8 GM   | Zum Einschlagen                     |
-| **Lagerausrüstung**                              |        |                                       |
-| Schlafsack          | 15 GM  | Schutz gegen Kälte                   |
-| Zelt (2 Personen)   | 25 GM  | Wetterschutz                        |
-| Decke               | 5 GM   | Einfacher Schutz                    |
-| Feuerstein & Stahl  | 3 GM   | Zum Feuermachen                    |
-| Zunderzweige (10)   | 10 GM   | Zum Feuermachen. Benötigt keine Probe.               |
-| **Werkzeuge**                                     |        |                                       |
-| Diebeswerkzeug      | 35 GM  | Für Schlösser                      |
-| Brecheisen          | 10 GM  | +2 auf Aufbrechen                  |
-| Schaufel            | 8 GM   | Zum Graben                        |
+| Gegenstand              | Preis  | Beschreibung                              |
+|------------------------|--------|-----------------------------------------|
+| **Behälter und Transport**                       |        |                                         |
+| Rucksack               | 8 GM   | Trägt 30kg                              |
+| Gürteltasche           | 3 GM   | Trägt 3kg, schneller Zugriff            |
+| Wasserschlauch         | 2 GM   | 2 Liter Fassungsvermögen                |
+| Köcher                 | 5 GM   | Für 30 Pfeile/Bolzen                    |
+| **Lichtquellen**                                  |        |                                         |
+| Fackel (5 Stk)         | 2 GM   | Brennt je 1 Stunde                      |
+| Laterne                | 12 GM  | Braucht Öl, besseres Licht               |
+| Öl (1 Liter)           | 3 GM   | Brennt 6 Stunden                        |
+| Kerze (10 Stk)         | 1 GM   | Brennt je 1 Stunde                      |
+| **Kletterausrüstung**                              |        |                                         |
+| Seil (15m)             | 10 GM  | Trägt 150kg                            |
+| Seidenseil (15m)       | 50 GM  | Leichter und stärker                    |
+| Enterhaken             | 15 GM  | Zum Klettern                          |
+| Eisenhaken (10 Stk)    | 5 GM   | Zum Sichern                           |
+| Hammer                 | 8 GM   | Zum Einschlagen                       |
+| **Lagerausrüstung**                                |        |                                         |
+| Schlafsack             | 15 GM  | Schutz gegen Kälte                     |
+| Zelt (2 Personen)      | 25 GM  | Wetterschutz                          |
+| Decke                  | 5 GM   | Einfacher Schutz                      |
+| Feuerstein & Stahl     | 3 GM   | Zum Feuermachen                      |
+| Zunderzweige (10)      | 10 GM  | Zum Feuermachen. Benötigt keine Probe. |
+| **Werkzeuge**                                     |        |                                         |
+| Diebeswerkzeug         | 35 GM  | Für Schlösser                        |
+| Brecheisen             | 10 GM  | +2 auf Aufbrechen                    |
+| Schaufel               | 8 GM   | Zum Graben                          |
 | Stange (2 Meter)       | 5 GM   | Fallen auslösen, Gegenstände erreichen |
-| Spiegel (klein)     | 20 GM  | Um Ecken schauen                 |
-| **Verpflegung**                                   |        |                                       |
-| Rationen (7 Tage)   | 10 GM  | Trockenfleisch und Brot            |
-| Gute Mahlzeit       | 2 GM   | In Taverne                      |
-| Feinschmecker-Mahlzeit | 5 GM | Gehobene Küche                |
-| **Tränke**                       |        |                                       |
-| Heilkräuter         | 10 GM  | Heilt 2 (1W4) LP (in 10 Min)          |
-| Heiltrank (klein)   | 25 GM  | Heilt 3 (1W4+1) LP                   |
-| Heiltrank (mittel)  | 60 GM  | Heilt 6 (1W6+2) LP                  |
-| Heiltrank (groß)    | 150 GM | Heilt 9 (1W8+4) LP                 |
-| Gift      | 50 GM  | Zähigkeit ZW 10 oder vergiftet. Wirkung abhängig vom spezifischen Gift.  |
-| Gegengift           | 45 GM  | Neutralisiert Gift             |
-| **Alchemie** 
-| Alchemistenfeuer    | 35 GM  | Wurfgeschoss. 1W6 Feuerschaden. Entzündet brennbares Material.        |
-| Säureflasche        | 40 GM  | Kann geworfen werden. 1W6 Säureschaden. Löst Holz, Metall, Leder in 10 min auf.                    |
-| Rauchbombe          | 20 GM  | Schwere Deckung (ASW+3) für 3 Runden in einem Bereich 3x3x3 Meter.  |
-| Betäubungsgift      | 50 GM  | Zähigkeit ZW 10 oder bewusstlos |
-| **Munition**                                      |        |                                       |
-| Pfeile (20)         | 5 GM   | Munition für Bögen                               |
-| Bolzen (20)         | 6 GM   | Munition für Armbrüste        |
-| Wurfmesser (5)      | 15 GM  |                               |
-| Wurfsterne (10)     | 30 GM  |                               |
+| Spiegel (klein)        | 20 GM  | Um Ecken schauen                   |
+| **Verpflegung**                                   |        |                                         |
+| Rationen (7 Tage)      | 10 GM  | Trockenfleisch und Brot              |
+| Gute Mahlzeit          | 2 GM   | In Taverne                        |
+| Feinschmecker-Mahlzeit | 5 GM   | Gehobene Küche                    |
+| **Tränke**                      |        |                                         |
+| Heilkräuter            | 10 GM  | Heilt 2 (1W4) LP (in 10 Min)          |
+| Heiltrank (klein)      | 25 GM  | Heilt 3 (1W4+1) LP                   |
+| Heiltrank (mittel)     | 60 GM  | Heilt 6 (1W6+2) LP                  |
+| Heiltrank (groß)       | 150 GM | Heilt 9 (1W8+4) LP                 |
+| Gift                   | 50 GM  | Zähigkeit ZW 10 oder vergiftet. Wirkung abhängig vom spezifischen Gift.  |
+| Gegengift              | 45 GM  | Neutralisiert Gift                  |
+| **Alchemie**                                       |        |                                         |
+| Alchemistenfeuer       | 35 GM  | Wurfgeschoss. 1W6 Feuerschaden. Entzündet brennbares Material.        |
+| Säureflasche           | 40 GM  | Kann geworfen werden. 1W6 Säureschaden. Löst Holz, Metall, Leder in 10 min auf.                    |
+| Rauchbombe             | 20 GM  | Schwere Deckung (ASW+3) für 3 Runden in einem Bereich 3x3x3 Meter.  |
+| Betäubungsgift         | 50 GM  | Zähigkeit ZW 10 oder bewusstlos     |
+| **Munition**                                      |        |                                         |
+| Pfeile (20)            | 5 GM   | Munition für Bögen                  |
+| Bolzen (20)            | 6 GM   | Munition für Armbrüste              |
+| Wurfmesser (5)         | 15 GM  |                                   |
+| Wurfsterne (10)        | 30 GM  |                                   |
 
 
 
@@ -149,5 +149,21 @@
 | Stab des Firmaments| +4        | +10        | 7         | 5000 GM| Aus Meteoritengestein gefertigt            |
 
 
+# Stufensteigerungskosten
+
+| Ziel-Stufe | Benötigte Gesamt-EP | EP-Kosten pro Stufe |
+|------------|---------------------|---------------------|
+| 1          | 0                   | -                   |
+| 2          | 600                 | 600                 |
+| 3          | 1.400               | 800                 |
+| 4          | 2.800               | 1.400               |
+| 5          | 5.000               | 2.200               |
+| 6          | 8.500               | 3.500               |
+| 7          | 14.000              | 5.500               |
+| 8          | 23.000              | 9.000               |
+| 9          | 36.000              | 13.000              |
+| 10         | 55.000              | 19.000              |
+| 11         | 80.000              | 25.000              |
+| 12         | 120.000             | 40.000              |
 
 
