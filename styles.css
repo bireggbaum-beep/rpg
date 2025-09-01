@@ -202,5 +202,40 @@
 .sidebar li.active .creature-meta {
   color: rgba(255,255,255,0.9);
 }
+/* CSS für die verbesserte Beute-Anzeige */
+.loot-options {
+    margin-left: 20px;
+    padding-left: 10px;
+    border-left: 2px solid #eaddd3; /* Passend zum Design */
+    margin-top: 4px;
+}
+.loot-option-item {
+    font-size: 11px;
+}
+
+/* CSS für den verbesserten Beute-Editor */
+.loot-editor-item .remove-btn { 
+    align-self: flex-start; 
+    margin-top: 0; 
+}
+.dynamic-sub-item { 
+    display: flex; 
+    gap: 8px; 
+    align-items: center; 
+    margin-bottom: 4px; 
+}
+.dynamic-sub-item input { 
+    flex: 1; 
+}
+.dynamic-sub-item .sub-remove-btn { 
+    flex-shrink: 0; 
+    height: 28px; 
+    width: 28px; 
+    margin: 0; 
+}
+.loot-options-editor { 
+    border-top: 1px solid var(--rule); 
+    padding-top: 8px; 
+}
 
 
