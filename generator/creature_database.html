@@ -964,32 +964,23 @@
             }
 
 
-            function saveCreature() {
+             function saveCreature() {
                 const creature = creatureData[currentCreatureIndex];
                 if (!creature) return;
 
+                // Alle anderen Felder bleiben gleich...
                 creature.name = document.querySelector("#edit-name").value;
-                // Preserve HG as number if numeric, otherwise as string (e.g. "1/2")
                 const hgRaw = document.querySelector("#edit-hg").value;
                 const hgNum = parseNumberOrNull(hgRaw);
                 creature.hg = (hgNum !== null) ? hgNum : (hgRaw === "" ? null : hgRaw);
-
                 creature.typ = document.querySelector("#edit-typ").value;
                 creature.traits = document.querySelector("#edit-traits").value.split(",").map(t => t.trim()).filter(t => t);
-                const epVal = parseNumberOrNull(document.querySelector("#edit-ep").value);
-                creature.ep = epVal !== null ? epVal : null;
+                creature.ep = parseNumberOrNull(document.querySelector("#edit-ep").value);
                 creature.beschreibung = document.querySelector("#edit-beschreibung").value;
-
-                const lpVal = parseNumberOrNull(document.querySelector("#edit-lp").value);
-                creature.lp = lpVal !== null ? lpVal : null;
+                creature.lp = parseNumberOrNull(document.querySelector("#edit-lp").value);
                 creature.bew = document.querySelector("#edit-bew").value;
-                const iniVal = parseNumberOrNull(document.querySelector("#edit-ini").value);
-                creature.ini = iniVal !== null ? iniVal : 0;
-
-                const paVal = parseNumberOrNull(document.querySelector("#edit-pa").value);
-                creature.pa = paVal !== null ? paVal : null;
-
-                // PA Bemerkung speichern
+                creature.ini = parseNumberOrNull(document.querySelector("#edit-ini").value);
+                creature.pa = parseNumberOrNull(document.querySelector("#edit-pa").value);
                 creature.pa_bemerkung = [];
                 const textPaBemerkung = document.querySelector("#edit-pa-bemerkung").value;
                 if (textPaBemerkung) {
@@ -997,51 +988,33 @@
                         if (note.trim()) creature.pa_bemerkung.push(note.trim());
                     });
                 }
-
                 const shieldValue = document.querySelector("#edit-pa-shield-value").value;
                 const shieldDesc = document.querySelector("#edit-pa-shield-desc").value;
                 if (shieldValue || shieldDesc) {
-                    creature.pa_bemerkung.push({
-                        icon: "shield",
-                        value: shieldValue,
-                        description: shieldDesc
-                    });
+                    creature.pa_bemerkung.push({ icon: "shield", value: shieldValue, description: shieldDesc });
                 }
-
-                const aswVal = parseNumberOrNull(document.querySelector("#edit-asw").value);
-                creature.asw = aswVal !== null ? aswVal : null;
+                creature.asw = parseNumberOrNull(document.querySelector("#edit-asw").value);
                 creature.asw_bemerkung = document.querySelector("#edit-asw-bemerkung").value;
-                const srVal = parseNumberOrNull(document.querySelector("#edit-sr").value);
-                creature.sr = srVal !== null ? srVal : null;
+                creature.sr = parseNumberOrNull(document.querySelector("#edit-sr").value);
                 creature.sr_bemerkung = document.querySelector("#edit-sr-bemerkung").value;
                 creature.rz = document.querySelector("#edit-rz").value;
                 creature.rr = document.querySelector("#edit-rr").value;
                 creature.rw = document.querySelector("#edit-rw").value;
-
-                // Angriffe speichern
                 creature.angriffe = [];
                 document.querySelectorAll("#edit-angriffe-container .dynamic-item").forEach(item => {
                     const isSpell = item.querySelector(".edit-attack-is-spell").checked;
-                    const attack = {
-                        name: item.querySelector(".edit-attack-name").value
-                    };
-
+                    const attack = { name: item.querySelector(".edit-attack-name").value };
                     if (isSpell) {
                         attack.isSpell = true;
                         const beschreibung = item.querySelector(".edit-attack-beschreibung");
                         if (beschreibung) attack.beschreibung = beschreibung.value;
                     } else {
                         const toHit = item.querySelector(".edit-attack-to-hit");
+                        if (toHit) attack.to_hit = parseNumberOrNull(toHit.value);
                         const schaden = item.querySelector(".edit-attack-schaden");
-                        if (toHit) {
-                            const th = parseNumberOrNull(toHit.value);
-                            attack.to_hit = th !== null ? th : null;
-                        }
                         if (schaden) attack.schaden = schaden.value || null;
-
                         const zusatz = item.querySelector(".edit-attack-zusatz");
                         if (zusatz && zusatz.value) attack.zusatz = zusatz.value;
-
                         const rwArt = item.querySelector(".edit-attack-rw-art");
                         if (rwArt && rwArt.value) {
                             attack.rettungswurf = {
@@ -1051,48 +1024,57 @@
                             };
                         }
                     }
-
                     const reichweite = item.querySelector(".edit-attack-reichweite").value;
                     if (reichweite) attack.reichweite = reichweite;
-
                     const anzahl = parseNumberOrNull(item.querySelector(".edit-attack-anzahl").value);
                     if (anzahl) attack.anzahl = anzahl;
-
                     creature.angriffe.push(attack);
                 });
-
-                // Besonderheiten speichern
                 creature.besonderheiten = [];
                 document.querySelectorAll("#edit-besonderheiten-container .dynamic-item").forEach(item => {
                     const text = item.querySelector(".edit-besonderheit-text").value;
                     if (text) creature.besonderheiten.push(text);
                 });
 
-                // Beute speichern
+                // NEUER TEIL FÜR BEUTE
                 creature.beute = [];
-                document.querySelectorAll("#edit-beute-container .dynamic-item").forEach(item => {
-                    const loot = {
-                        typ: item.querySelector(".edit-loot-typ").value
+                document.querySelectorAll("#edit-beute-container .loot-editor-item").forEach(item => {
+                    const lootRoll = {
+                        typ: item.querySelector(".edit-loot-typ").value,
+                        beschreibung: item.querySelector(".edit-loot-beschreibung").value,
+                        wurf: item.querySelector(".edit-loot-wurf").value
                     };
 
-                    const beschreibung = item.querySelector(".edit-loot-beschreibung").value;
-                    if (beschreibung) loot.beschreibung = beschreibung;
+                    const options = [];
+                    item.querySelectorAll(".dynamic-sub-item").forEach(optItem => {
+                        const option = {
+                            bedingung: optItem.querySelector(".edit-loot-opt-bedingung").value,
+                            name: optItem.querySelector(".edit-loot-opt-name").value,
+                            anzahl: parseNumberOrNull(optItem.querySelector(".edit-loot-opt-anzahl").value),
+                            wert: parseNumberOrNull(optItem.querySelector(".edit-loot-opt-wert").value)
+                        };
+                        // Nur valide Optionen hinzufügen
+                        if (option.name && option.bedingung) {
+                            options.push(option);
+                        }
+                    });
 
-                    const wurf = item.querySelector(".edit-loot-wurf").value;
-                    if (wurf) loot.wurf = wurf;
-
-                    const wert = parseNumberOrNull(item.querySelector(".edit-loot-wert").value);
-                    if (wert !== null) loot.wert = wert;
-
-                    const anzahl = parseNumberOrNull(item.querySelector(".edit-loot-anzahl").value);
-                    if (anzahl && anzahl > 1) loot.anzahl = anzahl;
-
-                    creature.beute.push(loot);
+                    if (options.length > 0) {
+                        lootRoll.optionen = options;
+                    } else {
+                        // Fallback für simple Drops ohne Optionen
+                        lootRoll.wert = parseNumberOrNull(item.querySelector(".edit-loot-wert").value);
+                        lootRoll.anzahl = parseNumberOrNull(item.querySelector(".edit-loot-anzahl").value);
+                    }
+                    
+                    // Nur valide Beute-Einträge hinzufügen
+                    if (lootRoll.beschreibung) {
+                       creature.beute.push(lootRoll);
+                    }
                 });
 
                 renderStatblock(creature);
                 toggleEditor();
-                // update filters/sidebar since some key fields might have changed
                 populateHgFilter();
                 filterAndPopulateSidebar();
             }
