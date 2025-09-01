@@ -542,14 +542,16 @@
 
             // ANPASSUNG 1 & 2: Verbessertes Attack-Line Rendering
              function naturalAttackLine(a) {
-                let namePart = `<b>${a.name || 'Unbenannte Fähigkeit'}</b>`;
+                let namePart = a.name || 'Unbenannte Fähigkeit';
                 
-                // Anzahl (falls vorhanden) direkt an den Anfang stellen
+                // Anzahl (falls vorhanden) VOR dem Namen hinzufügen
                 if (a.anzahl) {
                     namePart = `${a.anzahl}x ${namePart}`;
                 }
 
-                let line = namePart;
+                // Den gesamten Namensteil (inkl. Anzahl) in <b>-Tags einschließen
+                let line = `<b>${namePart}</b>`;
+                
                 const details = [];
 
                 // Fall 1: Klassischer Angriff (hat einen Angriffswurf)
