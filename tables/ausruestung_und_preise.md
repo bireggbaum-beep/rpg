@@ -71,26 +71,30 @@
 | Drachenauge      | 25000 GM  | 50000 GM  | 37500 GM       | Ein Schatz von königlichem Ausmaß      |
 
 
-### Rüstungen
+# Rüstungen
 
-| Name                     | SR | Kategorie | Preis  | Verfügbarkeit          |
-|--------------------------|----|-----------|--------|-----------------------|
-| Einfache Robe            | 1  | Leicht    | 30 GM  | Alle                  |
-| Lederweste               | 1  | Mittel    | 45 GM  | Alle außer Magier     |
-| Gepolsterte Rüstung      | 1  | Mittel    | 45 GM  | Alle außer Magier     |
-| Lederharnisch            | 1  | Mittel    | 45 GM  | Alle außer Magier     |
-| Beschlagene Leder-rüstung| 2  | Mittel    | 60 GM  | Alle außer Magier     |
-| Verzauberte Robe         | 2  | Leicht    | 80 GM  | Nur Magier            |
-| Kettenhemd               | 3  | Schwer    | 140 GM | Kleriker/Krieger      |
-| Ringpanzer               | 3  | Schwer    | 170 GM | Kleriker/Krieger      |
-| Schuppenpanzer           | 4  | Schwer    | 190 GM | Nur Krieger           |
-| Robe des Erzmagiers      | 3  | Leicht    | 180 GM | Nur Magier            |
-| Lederrüstung der Elben   | 4  | Mittel    | 180 GM | Nur Waldläufer        |
-| Mithril Kettenhemd       | 5  | Mittel    | 290 GM | Kleriker/Krieger      |
-| Plattenrüstung           | 4  | Schwer    | 290 GM | Nur Krieger           |
-| Mithrilrüstung           | 5  | Schwer    | 320 GM | Nur Krieger           |
-| Zwergenrüstung           | 6  | Schwer    | 370 GM | Nur Krieger           |
-| Drachenfeuerpanzer       | 7  | Schwer    | 920 GM | Nur Krieger           |
+| Name                      | SR | Kategorie | ASW-Malus | Preis  | Verfügbarkeit          |
+| :------------------------ | :- | :-------- | :-------- | :----- | :--------------------- |
+| Einfache Robe             | 1  | Leicht    | -         | 30 GM  | Alle                   |
+| Lederweste                | 1  | Mittel    | -         | 45 GM  | Alle außer Magier      |
+| Gepolsterte Rüstung       | 1  | Mittel    | -         | 45 GM  | Alle außer Magier      |
+| Lederharnisch             | 1  | Mittel    | -         | 45 GM  | Alle außer Magier      |
+| Beschlagene Leder-rüstung | 2  | Mittel    | -         | 60 GM  | Alle außer Magier      |
+| Verzauberte Robe          | 2  | Leicht    | -         | 80 GM  | Nur Magier             |
+| Kettenhemd                | 3  | Schwer    | -1        | 140 GM | Kleriker/Krieger       |
+| Ringpanzer                | 3  | Schwer    | -1        | 170 GM | Kleriker/Krieger       |
+| Schuppenpanzer            | 4  | Schwer    | -1        | 190 GM | Nur Krieger            |
+| Robe des Erzmagiers       | 3  | Leicht    | -         | 180 GM | Nur Magier             |
+| Lederrüstung der Elben    | 4  | Mittel    | -         | 180 GM | Nur Waldläufer         |
+| Mithril Kettenhemd        | 5  | Mittel    | -         | 290 GM | Kleriker/Krieger       |
+| Plattenrüstung            | 4  | Schwer    | -2        | 290 GM | Nur Krieger            |
+| Mithrilrüstung            | 5  | Schwer    | -         | 320 GM | Nur Krieger            |
+| Zwergenrüstung            | 6  | Schwer    | -2        | 370 GM | Nur Krieger            |
+| Drachenfeuerpanzer        | 7  | Schwer    | -2        | 920 GM | Nur Krieger            |
+
+
+
+
 
 ### Schilde
 
@@ -100,36 +104,45 @@
 | Metallschild   | +2       | 45 GM  | Kleriker/Krieger   |
 | Turmschild     | +3       | 85 GM  | Nur Krieger        |
 
-
-
 # Waffenliste
 
-| Waffe                 | Schaden   | Attribut | Preis  | Eigenschaften                                            |
-|-----------------------|-----------|----------|--------|----------------------------------------------------------|
-| Dolch                 | 2         | GES      | 15 GM  | Heimlich, Hinterhalt, Schnell, Stichwaffe                |
-| Kurzschwert           | 4         | STR      | 40 GM  | Stichwaffe                                               |
-| Langschwert           | 6         | STR      | 80 GM  | Hiebwaffe                                               |
-| Streitaxt             | 6         | STR      | 75 GM  | Schildbrechend (1), Hiebwaffe                            |
-| Streitkolben          | 5         | STR      | 50 GM  | Wuchtwaffe                                              |
-| Flegel                | 5         | STR      | 55 GM  | Schildumgehend, Wuchtwaffe                               |
-| Speer (einhändig)     | 3 (4)     | STR      | 25 GM  | Schnell, Langwaffe, Wurfwaffe (RW: Lang), Zurückdrängen, einhändig/zweihändig, Stichwaffe |
-| Kampfstab             | 3         | STR/GES  | 10 GM  | Zweihändig, Zurückdrängen, Wuchtwaffe                    |
-| Zweihänder            | 10        | STR      | 400 GM | Langsam, Mehrere Ziele, Stärke (5), Stufe (3+), Hiebwaffe|
-| Hellebarde            | 8         | STR      | 250 GM | Langsam, Langwaffe, Mehrere Ziele, Zurückdrängen, Stärke (3), Stufe (3+), Stichwaffe, Hiebwaffe |
-| Zweihändige Streitaxt | 12        | STR      | 600 GM | Langsam, Schildbrechend (2), Stärke (5), Stufe (5+), Hiebwaffe |
+## Nahkampfwaffen
+
+| Waffe | Schaden | Attribut | Preis | Eigenschaften / Tags |
+| :--- | :--- | :--- | :--- | :--- |
+| Knüppel (Leichte Keule) | 2 | STR | 1 GM | Wuchtwaffe |
+| Keule | 3 | STR | 5 GM | Wuchtwaffe |
+| Kampfstab | 3 | STR / GES | 10 GM | Zweihändig, Zurückdrängen, Wuchtwaffe |
+| Dolch | 2 | GES | 15 GM | Heimlich, Hinterhalt, Schnell, Stichwaffe |
+| Krummsäbel | 4 | STR | 20 GM | Hiebwaffe |
+| Speer (einhändig) | 3 (4) | STR | 25 GM | Schnell, Langwaffe, Wurfwaffe (RW: Lang), Zurückdrängen, einhändig/zweihändig, Stichwaffe |
+| Machete / Langmesser | 4 | STR | 25 GM | Hiebwaffe |
+| Morgenstern | 5 | STR | 30 GM | Wuchtwaffe |
+| Rapier | 3 | STR / GES | 35 GM | Stichwaffe |
+| Kurzschwert | 4 | STR / GES | 40 GM | Stichwaffe |
+| Streitkolben | 5 | STR | 50 GM | Wuchtwaffe |
+| Flegel | 5 | STR | 55 GM | Schildumgehend, Wuchtwaffe |
+| Schwert | 5 | STR / GES | 60 GM | Hiebwaffe |
+| Streitaxt | 6 | STR | 75 GM | Schildbrechend (1), Hiebwaffe |
+| Langschwert | 6 | STR | 80 GM | Hiebwaffe |
+| Hellebarde | 8 | STR | 250 GM | Langsam, Langwaffe, Mehrere Ziele, Zurückdrängen, Stärke (3), Stufe (3+), Stichwaffe, Hiebwaffe |
+| Zweihänder | 10 | STR | 400 GM | Langsam, Mehrere Ziele, Stärke (5), Stufe (3+), Hiebwaffe |
+| Zweihändige Streitaxt | 12 | STR | 600 GM | Langsam, Schildbrechend (2), Stärke (5), Stufe (5+), Hiebwaffe |
 
 ## Fernkampfwaffen
 
-| Waffe                | Schaden  | Attribut | Preis  | Eigenschaften                                  |
-|----------------------|----------|----------|--------|-----------------------------------------------|
-| Kurzbogen            | 3        | GES      | 35 GM  | Munition (Pfeile), Reichweite 2xLang          |
-| Bogen                | 5        | GES      | 65 GM  | Munition (Pfeile), Reichweite 3xLang          |
-| Leichte Armbrust     | 8        | GES      | 200 GM | Munition (Bolzen), Stärke (1), Stufe (1)      |
-| Armbrust             | 10       | GES      | 350 GM | Munition (Bolzen), Langsam, Panzerbrechend, Stärke (3), Stufe (3+) |
-| Schwere Armbrust     | 12       | GES      | 600 GM | Munition (Bolzen), Langsam, Panzerbrechend, Stärke (6), Stufe (5+) |
-| Wurfstern (10 Stk)   | 2 pro Ziel| GES      | 30 GM  | Max 3 Ziele, Lautlos                           |
-| Wurfaxt              | 3        | STR      | 25 GM  | Reichweite 1xLang                             |
-| Wurfdolch (3 Stk)    | 2        | GES      | 25 GM  | Lautlos, Reichweite 1xLang                     |
+| Waffe | Schaden | Attribut | Preis | Eigenschaften |
+| :--- | :--- | :--- | :--- | :--- |
+| Wurfdolch (3 Stk) | 2 | GES | 25 GM | Lautlos, Reichweite 1xLang, Stichwaffe |
+| Wurfaxt | 3 | STR | 25 GM | Reichweite 1xLang, Hiebwaffe |
+| Wurfstern (10 Stk) | 2 pro Ziel | GES | 30 GM | Max 3 Ziele, Lautlos, Stichwaffe |
+| Kurzbogen | 3 | GES | 35 GM | Munition (Pfeile), Reichweite 2xLang |
+| Bogen | 5 | GES | 65 GM | Munition (Pfeile), Reichweite 3xLang |
+| Leichte Armbrust | 8 | GES | 200 GM | Munition (Bolzen), Stärke (1), Stufe (1) |
+| Armbrust | 10 | GES | 350 GM | Munition (Bolzen), Langsam, Panzerbrechend, Stärke (3), Stufe (3+) |
+| Schwere Armbrust | 12 | GES | 600 GM | Munition (Bolzen), Langsam, Panzerbrechend, Stärke (6), Stufe (5+) |
+
+
 
 # Magiestäbe
 
