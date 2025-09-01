@@ -2,89 +2,84 @@
 import { txt, plusify } from './utils.js';
 
 export function naturalAttackLine(a) {
-  if (a.isSpell) {
-    let line = `<b>${a.name}</b>`;
-    if (a.anzahl) line += ` [${a.anzahl}x]`;
-    if (a.beschreibung) line += ` ${a.beschreibung}`;
+    const name = `<b>${a.name || 'Unbenannter Angriff'}</b>`;
+    const bits = [];
+
+    if (a.to_hit != null) {
+        bits.push(`${plusify(a.to_hit)} zum Treffen`);
+    }
+    if (a.schaden) {
+        bits.push(`${a.schaden} Schaden`);
+    }
     if (a.reichweite) {
-      if (/^\d+$/.test(a.reichweite)) {
-        line += `, RW: ${a.reichweite}`;
-      } else {
-        line += ` (${a.reichweite})`;
-      }
+        bits.push(`(${a.reichweite})`);
     }
+    if (a.zusatz && !a.rettungswurf) {
+        bits.push(`und ${a.zusatz}`);
+    }
+
+    let line = `${name} ${bits.join(', ')}`;
+
+    if (a.rettungswurf) {
+        const r = a.rettungswurf;
+        const effekt = r.bei_misserfolg || a.zusatz || 'Effekt';
+        line += ` (Rettungswurf ${r.art} ${txt(r.zw)} oder ${effekt})`;
+    }
+
+    if (a.anzahl) {
+        line += ` <span class="muted">[${a.anzahl}x pro Kampf]</span>`;
+    }
+
     return line;
-  }
-
-  const name = (a.name || 'Angriff');
-  const bits = [];
-  if (a.to_hit != null) bits.push(`${plusify(a.to_hit)} zum Treffen`);
-  if (a.schaden != null) bits.push(`${a.schaden} Schaden`);
-
-  if (a.reichweite) {
-    if (/^\d+$/.test(a.reichweite)) {
-      bits.push(`(RW: ${a.reichweite})`);
-    } else {
-      bits.push(`(${a.reichweite})`);
-    }
-  }
-
-  if (a.zusatz) bits.push(`und ${a.zusatz}`);
-
-  let line = `<b>${name}</b> ${bits.filter(Boolean).join(', ')}`;
-
-  if (a.rettungswurf) {
-    const r = a.rettungswurf;
-    const mis = r.bei_misserfolg || 'negative Wirkung';
-    line += ` (Rettungswurf ${r.art} ${txt(r.zw)} oder ${mis})`;
-  }
-
-  if (a.anzahl && !a.isSpell) line += ` [${a.anzahl}x]`;
-  return line;
 }
+
 
 export function renderLoot(beute) {
-  if (!beute || beute.length === 0) return '<span class="muted">Keine.</span>';
+    if (!beute || beute.length === 0) return '<span class="muted">Keine.</span>';
 
-  const schatz = beute.filter(b => b.typ === "Schatz");
-  const ausruestung = beute.filter(b => b.typ === "Ausrüstung");
-  const zutaten = beute.filter(b => b.typ === "Zutaten");
+    const lootGroups = beute.reduce((acc, item) => {
+        const typ = item.typ || 'Unbekannt';
+        if (!acc[typ]) acc[typ] = [];
+        acc[typ].push(item);
+        return acc;
+    }, {});
 
-  let html = "";
+    let html = "";
+    const categoryOrder = [
+        { key: 'Schatz', title: 'Schatz' },
+        { key: 'Ausrüstung', title: 'Ausrüstung' },
+        { key: 'Zutaten', title: 'Zutaten (erntbar)' }
+    ];
 
-  if (schatz.length > 0) {
-    html += `<div class="loot-category"><b>Schatz:</b></div>`;
-    schatz.forEach(item => {
-      let text = "";
-      if (item.wurf) text += item.wurf + " ";
-      if (item.beschreibung) text += item.beschreibung;
-      html += `<div class="loot-item">${text}</div>`;
+    categoryOrder.forEach(category => {
+        const items = lootGroups[category.key];
+        if (items && items.length > 0) {
+            html += `<div class="loot-category"><b>${category.title}:</b></div>`;
+            items.forEach(item => {
+                html += '<div class="loot-item">';
+                let mainLine = '';
+                if (item.wurf) mainLine += `<span class="muted">${item.wurf}</span> `;
+                mainLine += item.beschreibung || "Gegenstand";
+                html += `<div>${mainLine}</div>`;
+
+                if (Array.isArray(item.optionen) && item.optionen.length > 0) {
+                    html += '<div class="loot-options">';
+                    item.optionen.forEach(opt => {
+                        let optLine = `<span class="muted">(Bei ${opt.bedingung || '?'})</span> `;
+                        if (opt.anzahl && opt.anzahl > 1) optLine += `${opt.anzahl}x `;
+                        optLine += opt.name || 'Unbekannter Gegenstand';
+                        if (opt.wert) optLine += ` (Wert: ${opt.wert} GM)`;
+                        html += `<div class="loot-option-item">${optLine}</div>`;
+                    });
+                    html += '</div>';
+                } else if (item.wert) {
+                    html = html.slice(0, -6);
+                    html += ` (Wert: ${item.wert} GM)</div>`;
+                }
+                html += '</div>';
+            });
+        }
     });
-  }
-
-  if (ausruestung.length > 0) {
-    html += `<div class="loot-category"><b>Ausrüstung:</b></div>`;
-    ausruestung.forEach(item => {
-      let text = "";
-      if (item.wurf) text += `<span class="muted">${item.wurf}</span> `;
-      if (item.anzahl && item.anzahl > 1) text += `${item.anzahl}x `;
-      text += item.beschreibung || "Ausrüstung";
-      if (item.wert) text += ` (Wert: ${item.wert} GM)`;
-      html += `<div class="loot-item">${text}</div>`;
-    });
-  }
-
-  if (zutaten.length > 0) {
-    html += `<div class="loot-category"><b>Zutaten (erntbar):</b></div>`;
-    zutaten.forEach(item => {
-      let text = "";
-      if (item.wurf) text += `<span class="muted">${item.wurf}</span> `;
-      if (item.anzahl && item.anzahl > 1) text += `${item.anzahl}x `;
-      text += item.beschreibung || "Zutat";
-      if (item.wert) text += ` (Wert: ${item.wert} GM)`;
-      html += `<div class="loot-item">${text}</div>`;
-    });
-  }
-
-  return html || '<span class="muted">Keine.</span>';
+    return html || '<span class="muted">Keine.</span>';
 }
+
