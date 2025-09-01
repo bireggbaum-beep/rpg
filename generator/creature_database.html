@@ -542,40 +542,51 @@
 
             // ANPASSUNG 1 & 2: Verbessertes Attack-Line Rendering
              function naturalAttackLine(a) {
-                const name = `<b>${a.name || 'Unbenannter Angriff'}</b>`;
-                const bits = [];
+                const name = `<b>${a.name || 'Unbenannte Fähigkeit'}</b>`;
+                let line = name;
+                const details = [];
 
-                // Basisteile des Angriffs
+                // Fall 1: Klassischer Angriff (hat einen Angriffswurf)
                 if (a.to_hit != null) {
-                    bits.push(`${plusify(a.to_hit)} zum Treffen`);
-                }
-                if (a.schaden) {
-                    bits.push(`${a.schaden} Schaden`);
-                }
+                    details.push(`${plusify(a.to_hit)} zum Treffen`);
+                    if (a.schaden) {
+                        details.push(`${a.schaden} Schaden`);
+                    }
 
-                // Effekt-Teil intelligent zusammensetzen
-                const hasSave = a.rettungswurf && a.rettungswurf.art && a.rettungswurf.zw;
-                
-                if (a.zusatz) { // Wenn es einen Effekt-Namen gibt
-                    if (hasSave) {
-                        // Fall 1: Effekt mit Rettungswurf
+                    // Hängt einen optionalen Effekt mit Rettungswurf an
+                    if (a.zusatz && a.rettungswurf && a.rettungswurf.art && a.rettungswurf.zw) {
                         const r = a.rettungswurf;
                         const folge = r.bei_misserfolg || 'Effekt tritt ein';
-                        bits.push(`und ${a.zusatz} (Rettungswurf ${r.art} ${txt(r.zw)} oder ${folge})`);
-                    } else {
-                        // Fall 2: Einfacher Effekt ohne Rettungswurf
-                        bits.push(`und ${a.zusatz}`);
+                        details.push(`und ${a.zusatz} (Rettungswurf ${r.art} ${txt(r.zw)} oder ${folge})`);
+                    } else if (a.zusatz) {
+                        details.push(`und ${a.zusatz}`);
                     }
-                } else if (hasSave) {
-                    // Fall 3: Rettungswurf ohne expliziten Effekt-Namen (z.B. für Flächenschaden)
+                    line += ` ${details.join(', ')}`;
+                }
+                // Fall 2: Fähigkeit/Zauber ohne Angriffswurf, aber mit Rettungswurf
+                else if (a.rettungswurf && a.rettungswurf.art && a.rettungswurf.zw) {
                     const r = a.rettungswurf;
-                    const erfolg = r.bei_erfolg || 'halber Schaden';
-                    bits.push(`(Rettungswurf ${r.art} ${txt(r.zw)} für ${erfolg})`);
+                    if (a.schaden) {
+                        const erfolg = r.bei_erfolg || 'halber Schaden';
+                        details.push(`${a.schaden} Schaden (Rettungswurf ${r.art} ${txt(r.zw)} für ${erfolg})`);
+                    } else {
+                        const folge = r.bei_misserfolg || a.zusatz || 'Effekt tritt ein';
+                        details.push(`Rettungswurf ${r.art} ${txt(r.zw)} oder ${folge}`);
+                    }
+                    line += ` ${details.join(', ')}`;
+                }
+                // Fall 3: Einfache Fähigkeit/Zauber ohne Angriffswurf und ohne Rettungswurf
+                else {
+                    if (a.schaden) {
+                        details.push(`${a.schaden} Schaden`);
+                    }
+                    if (a.zusatz) {
+                        details.push(a.zusatz);
+                    }
+                    line += ` ${details.join(', ')}`;
                 }
 
-                let line = `${name} ${bits.join(', ')}`;
-
-                // Reichweite und Anzahl am Ende hinzufügen
+                // Reichweite und Anzahl werden immer am Ende hinzugefügt
                 if (a.reichweite) {
                     line += ` (${a.reichweite})`;
                 }
@@ -585,6 +596,7 @@
 
                 return line;
             }
+
 
 
 
