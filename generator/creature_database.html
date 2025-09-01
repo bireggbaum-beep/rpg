@@ -596,59 +596,65 @@
             function renderLoot(beute) {
                 if (!beute || beute.length === 0) return '<span class="muted">Keine.</span>';
 
-                const schatz = beute.filter(b => b.typ === "Schatz");
-                const ausruestung = beute.filter(b => b.typ === "Ausrüstung");
-                const zutaten = beute.filter(b => b.typ === "Zutaten");
+                // Gruppiere Beute-Einträge nach ihrem Typ
+                const lootGroups = beute.reduce((acc, item) => {
+                    const typ = item.typ || 'Unbekannt';
+                    if (!acc[typ]) {
+                        acc[typ] = [];
+                    }
+                    acc[typ].push(item);
+                    return acc;
+                }, {});
 
                 let html = "";
 
-                // Schatz
-                if (schatz.length > 0) {
-                    html += `<div class="loot-category"><b>Schatz:</b></div>`;
-                    schatz.forEach(item => {
-                        let text = "";
-                        if (item.wurf) text += item.wurf + " ";
-                        if (item.beschreibung) text += item.beschreibung;
-                        html += `<div class="loot-item">${text}</div>`;
-                    });
-                }
+                // Definiere die Reihenfolge und Titel der Kategorien
+                const categoryOrder = [
+                    { key: 'Schatz', title: 'Schatz' },
+                    { key: 'Ausrüstung', title: 'Ausrüstung' },
+                    { key: 'Zutaten', title: 'Zutaten (erntbar)' }
+                ];
 
-                // Ausrüstung
-                if (ausruestung.length > 0) {
-                    html += `<div class="loot-category"><b>Ausrüstung:</b></div>`;
-                    ausruestung.forEach(item => {
-                        let text = "";
-                        // ZUERST Würfelwurf
-                        if (item.wurf) text += `<span class="muted">${item.wurf}</span> `;
-                        // DANN Anzahl
-                        if (item.anzahl && item.anzahl > 1) text += `${item.anzahl}x `;
-                        // DANN Beschreibung
-                        text += item.beschreibung || "Ausrüstung";
-                        // DANN Wert
-                        if (item.wert) text += ` (Wert: ${item.wert} GM)`;
-                        html += `<div class="loot-item">${text}</div>`;
-                    });
-                }
+                categoryOrder.forEach(category => {
+                    const items = lootGroups[category.key];
+                    if (items && items.length > 0) {
+                        html += `<div class="loot-category"><b>${category.title}:</b></div>`;
+                        
+                        items.forEach(item => {
+                            // Jeder 'item' ist ein Wurf
+                            html += '<div class="loot-item">';
+                            
+                            // Hauptzeile für den Wurf
+                            let mainLine = '';
+                            if (item.wurf) mainLine += `<span class="muted">${item.wurf}</span> `;
+                            mainLine += item.beschreibung || "Gegenstand";
+                            html += `<div>${mainLine}</div>`;
 
-                // Zutaten (erntbar)
-                if (zutaten.length > 0) {
-                    html += `<div class="loot-category"><b>Zutaten (erntbar):</b></div>`;
-                    zutaten.forEach(item => {
-                        let text = "";
-                        // ZUERST Würfelwurf
-                        if (item.wurf) text += `<span class="muted">${item.wurf}</span> `;
-                        // DANN Anzahl
-                        if (item.anzahl && item.anzahl > 1) text += `${item.anzahl}x `;
-                        // DANN Beschreibung
-                        text += item.beschreibung || "Zutat";
-                        // DANN Wert
-                        if (item.wert) text += ` (Wert: ${item.wert} GM)`;
-                        html += `<div class="loot-item">${text}</div>`;
-                    });
-                }
+                            // Prüfe auf 'optionen' und rendere sie, falls vorhanden
+                            if (Array.isArray(item.optionen) && item.optionen.length > 0) {
+                                html += '<div class="loot-options">';
+                                item.optionen.forEach(opt => {
+                                    let optLine = `<span class="muted">(Bei ${opt.bedingung || '?'})</span> `;
+                                    if (opt.anzahl && opt.anzahl > 1) optLine += `${opt.anzahl}x `;
+                                    optLine += opt.name || 'Unbekannter Gegenstand';
+                                    if (opt.wert) optLine += ` (Wert: ${opt.wert} GM)`;
+                                    html += `<div class="loot-option-item">${optLine}</div>`;
+                                });
+                                html += '</div>';
+                            } else if (item.wert) {
+                                // Fallback für einfache Items ohne 'optionen', aber mit Wert
+                                html = html.slice(0, -6); // entferne letztes </div>
+                                html += ` (Wert: ${item.wert} GM)</div>`;
+                            }
+                            
+                            html += '</div>';
+                        });
+                    }
+                });
 
                 return html || '<span class="muted">Keine.</span>';
             }
+
 
             function renderStatblock(d) {
                 const res = parseRes(d.besonderheiten || []);
