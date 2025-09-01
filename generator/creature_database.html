@@ -541,56 +541,40 @@
             }
 
             // ANPASSUNG 1 & 2: Verbessertes Attack-Line Rendering
-            function naturalAttackLine(a) {
-                // Zauber/Spezialfähigkeiten (keine Trefferbonus/Schaden)
-                if (a.isSpell) {
-                    let line = `<b>${a.name}</b>`;
-                    if (a.anzahl) line += ` [${a.anzahl}x]`;
-                    if (a.beschreibung) line += ` ${a.beschreibung}`;
-                    if (a.reichweite) {
-                        // Wenn Reichweite nur eine Zahl ist, als RW formatieren
-                        if (/^\d+$/.test(a.reichweite)) {
-                            line += `, RW: ${a.reichweite}`;
-                        } else {
-                            line += ` (${a.reichweite})`;
-                        }
-                    }
-                    return line;
-                }
-
-                // Normale Angriffe
-                const name = (a.name || 'Angriff');
+              function naturalAttackLine(a) {
+                const name = `<b>${a.name || 'Unbenannter Angriff'}</b>`;
                 const bits = [];
 
-                if (a.to_hit != null) bits.push(`${plusify(a.to_hit)} zum Treffen`);
-                if (a.schaden != null) bits.push(`${a.schaden} Schaden`);
-
-                // ANPASSUNG 1: Reichweite richtig formatieren
+                // Wenn es einen Angriffswurf gibt, ist es ein klassischer Angriff
+                if (a.to_hit != null) {
+                    bits.push(`${plusify(a.to_hit)} zum Treffen`);
+                }
+                if (a.schaden) {
+                    bits.push(`${a.schaden} Schaden`);
+                }
                 if (a.reichweite) {
-                    if (/^\d+$/.test(a.reichweite)) {
-                        // Wenn nur eine Zahl, als RW formatieren (für Fernkampf)
-                        bits.push(`(RW: ${a.reichweite})`);
-                    } else {
-                        // Sonst wie angegeben (z.B. "3xLang")
-                        bits.push(`(${a.reichweite})`);
-                    }
+                    bits.push(`(${a.reichweite})`);
+                }
+                if (a.zusatz && !a.rettungswurf) { // Zusatz nur anzeigen, wenn er nicht durch den Rettungswurf erklärt wird
+                    bits.push(`und ${a.zusatz}`);
                 }
 
-                if (a.zusatz) bits.push(`und ${a.zusatz}`);
+                let line = `${name} ${bits.join(', ')}`;
 
-                let line = `<b>${name}</b> ${bits.filter(Boolean).join(', ')}`;
-
-                // Rettungswurf anhängen
+                // Rettungswurf immer anhängen, falls vorhanden
                 if (a.rettungswurf) {
                     const r = a.rettungswurf;
-                    const mis = r.bei_misserfolg || 'negative Wirkung';
-                    line += ` (Rettungswurf ${r.art} ${txt(r.zw)} oder ${mis})`;
+                    const effekt = r.bei_misserfolg || a.zusatz || 'Effekt';
+                    line += ` (Rettungswurf ${r.art} ${txt(r.zw)} oder ${effekt})`;
                 }
 
-                if (a.anzahl && !a.isSpell) line += ` [${a.anzahl}x]`;
+                if (a.anzahl) {
+                    line += ` <span class="muted">[${a.anzahl}x pro Kampf]</span>`;
+                }
 
                 return line;
             }
+
 
             // ANPASSUNG 3: Verbessertes Beute-Rendering
             function renderLoot(beute) {
@@ -823,56 +807,46 @@
                 }
             }
 
-            function addAttackField(attack = {}) {
+             function addAttackField(attack = {}) {
                 const container = document.querySelector("#edit-angriffe-container");
                 const div = document.createElement("div");
-                div.classList.add("dynamic-item");
+                div.classList.add("dynamic-item", "attack-editor-item");
 
-                const isSpell = attack.isSpell || false;
+                // Wir entfernen die verwirrende "isSpell"-Checkbox Logik aus dem HTML-Aufbau.
+                // Alle Felder sind nun potenziell verfügbar.
 
                 div.innerHTML = `
-                    <div class="attack-type-toggle" style="width:100%;">
-                        <input type="checkbox" class="edit-attack-is-spell" ${isSpell ? 'checked' : ''}>
-                        <label>Zauber/Fähigkeit (kein Treffer/Schaden)</label>
+                    <div class="form-row" style="width:100%;">
+                        <div class="form-group large"><label>Name des Angriffs / Fähigkeit</label><input type="text" class="edit-attack-name" value="${attack.name || ""}"></div>
+                        <div class="form-group medium"><label>Reichweite</label><input type="text" class="edit-attack-reichweite" value="${attack.reichweite || ""}" placeholder="z.B. 2xLang"></div>
+                        <div class="form-group small"><label>Anzahl</label><input type="number" class="edit-attack-anzahl" value="${attack.anzahl || ""}" placeholder="pro Kampf"></div>
                     </div>
-                    <div class="form-group large"><label>Name</label><input type="text" class="edit-attack-name" value="${attack.name || ""}"></div>
-                    ${!isSpell ? `
-                        <div class="form-group small"><label>Treffen</label><input type="number" class="edit-attack-to-hit" value="${attack.to_hit || ""}"></div>
-                        <div class="form-group medium"><label>Schaden</label><input type="text" class="edit-attack-schaden" value="${attack.schaden || ""}"></div>
-                    ` : `
-                        <div class="form-group full"><label>Beschreibung</label><input type="text" class="edit-attack-beschreibung" value="${attack.beschreibung || ""}"></div>
-                    `}
-                    <div class="form-group medium"><label>Reichweite/RW</label><input type="text" class="edit-attack-reichweite" value="${attack.reichweite || ""}" placeholder="8 oder 3xLang"></div>
-                    <div class="form-group small"><label>Anzahl</label><input type="number" class="edit-attack-anzahl" value="${attack.anzahl || ""}"></div>
-                    ${!isSpell ? `
-                        <div class="form-group full"><label>Zusatz</label><input type="text" class="edit-attack-zusatz" value="${attack.zusatz || ""}" placeholder="z.B. Niederschlagen"></div>
-                        <div class="rettungswurf-group" style="width:100%;">
-                            <h5>Rettungswurf (optional)</h5>
-                            <div class="form-row">
-                                <div class="form-group small">
-                                    <label>Art</label>
-                                    <select class="edit-attack-rw-art">
-                                        <option value="">Keine</option>
-                                        <option value="RZ" ${attack.rettungswurf?.art === "RZ" ? "selected" : ""}>RZ (Zähigkeit)</option>
-                                        <option value="RR" ${attack.rettungswurf?.art === "RR" ? "selected" : ""}>RR (Reflexe)</option>
-                                        <option value="RW" ${attack.rettungswurf?.art === "RW" ? "selected" : ""}>RW (Willenskraft)</option>
-                                    </select>
-                                </div>
-                                <div class="form-group small"><label>ZW</label><input type="number" class="edit-attack-rw-zw" value="${attack.rettungswurf?.zw || ""}"></div>
-                                <div class="form-group full"><label>Bei Misserfolg</label><input type="text" class="edit-attack-rw-misserfolg" value="${attack.rettungswurf?.bei_misserfolg || ""}"></div>
-                            </div>
-                        </div>
-                    ` : ''}
-                    <button class="remove-btn">×</button>
-                `;
+                    
+                    <div class="form-row" style="width:100%;">
+                        <div class="form-group small"><label>Angriffsbonus</label><input type="number" class="edit-attack-to-hit" value="${attack.to_hit || ''}" placeholder="+X"></div>
+                        <div class="form-group medium"><label>Schaden</label><input type="text" class="edit-attack-schaden" value="${attack.schaden || ''}" placeholder="z.B. 8 (2W6+1)"></div>
+                        <div class="form-group full"><label>Zusatz / Effekt-Beschreibung</label><input type="text" class="edit-attack-zusatz" value="${attack.zusatz || ''}" placeholder="z.B. Ziel wird furchtsam"></div>
+                    </div>
 
-                // Toggle zwischen Zauber und normalem Angriff
-                const checkbox = div.querySelector(".edit-attack-is-spell");
-                checkbox.addEventListener("change", () => {
-                    const newAttack = { ...attack, isSpell: checkbox.checked };
-                    div.remove();
-                    addAttackField(newAttack);
-                });
+                    <div class="rettungswurf-group" style="width:100%;">
+                        <h5>Rettungswurf (falls zutreffend)</h5>
+                        <div class="form-row">
+                            <div class="form-group small">
+                                <label>Art</label>
+                                <select class="edit-attack-rw-art">
+                                    <option value="">Keine</option>
+                                    <option value="RZ" ${attack.rettungswurf?.art === "RZ" ? "selected" : ""}>RZ (Zähigkeit)</option>
+                                    <option value="RR" ${attack.rettungswurf?.art === "RR" ? "selected" : ""}>RR (Reflexe)</option>
+                                    <option value="RW" ${attack.rettungswurf?.art === "RW" ? "selected" : ""}>RW (Willenskraft)</option>
+                                </select>
+                            </div>
+                            <div class="form-group small"><label>Zielwert (ZW)</label><input type="number" class="edit-attack-rw-zw" value="${attack.rettungswurf?.zw || ""}"></div>
+                            <div class="form-group medium"><label>Bei Erfolg</label><input type="text" class="edit-attack-rw-erfolg" value="${attack.rettungswurf?.bei_erfolg || 'halber Schaden'}" placeholder="z.B. halber Schaden"></div>
+                            <div class="form-group medium"><label>Bei Misserfolg</label><input type="text" class="edit-attack-rw-misserfolg" value="${attack.rettungswurf?.bei_misserfolg || ''}" placeholder="z.B. voller Schaden"></div>
+                        </div>
+                    </div>
+                    <button type="button" class="remove-btn">×</button>
+                `;
 
                 div.querySelector(".remove-btn").addEventListener("click", () => div.remove());
                 container.appendChild(div);
@@ -964,15 +938,14 @@
             }
 
 
-             function saveCreature() {
+            function saveCreature() {
                 const creature = creatureData[currentCreatureIndex];
                 if (!creature) return;
 
-                // Alle anderen Felder bleiben gleich...
+                // Allgemein, Grundwerte, Verteidigung (bleibt gleich)
                 creature.name = document.querySelector("#edit-name").value;
                 const hgRaw = document.querySelector("#edit-hg").value;
-                const hgNum = parseNumberOrNull(hgRaw);
-                creature.hg = (hgNum !== null) ? hgNum : (hgRaw === "" ? null : hgRaw);
+                creature.hg = isNaN(parseFloat(hgRaw)) ? hgRaw : parseFloat(hgRaw);
                 creature.typ = document.querySelector("#edit-typ").value;
                 creature.traits = document.querySelector("#edit-traits").value.split(",").map(t => t.trim()).filter(t => t);
                 creature.ep = parseNumberOrNull(document.querySelector("#edit-ep").value);
@@ -1000,43 +973,42 @@
                 creature.rz = document.querySelector("#edit-rz").value;
                 creature.rr = document.querySelector("#edit-rr").value;
                 creature.rw = document.querySelector("#edit-rw").value;
+                creature.besonderheiten = Array.from(document.querySelectorAll("#edit-besonderheiten-container .edit-besonderheit-text")).map(el => el.value).filter(Boolean);
+
+                // Angriffe speichern (NEUE LOGIK)
                 creature.angriffe = [];
                 document.querySelectorAll("#edit-angriffe-container .dynamic-item").forEach(item => {
-                    const isSpell = item.querySelector(".edit-attack-is-spell").checked;
-                    const attack = { name: item.querySelector(".edit-attack-name").value };
-                    if (isSpell) {
-                        attack.isSpell = true;
-                        const beschreibung = item.querySelector(".edit-attack-beschreibung");
-                        if (beschreibung) attack.beschreibung = beschreibung.value;
-                    } else {
-                        const toHit = item.querySelector(".edit-attack-to-hit");
-                        if (toHit) attack.to_hit = parseNumberOrNull(toHit.value);
-                        const schaden = item.querySelector(".edit-attack-schaden");
-                        if (schaden) attack.schaden = schaden.value || null;
-                        const zusatz = item.querySelector(".edit-attack-zusatz");
-                        if (zusatz && zusatz.value) attack.zusatz = zusatz.value;
-                        const rwArt = item.querySelector(".edit-attack-rw-art");
-                        if (rwArt && rwArt.value) {
-                            attack.rettungswurf = {
-                                art: rwArt.value,
-                                zw: parseNumberOrNull(item.querySelector(".edit-attack-rw-zw").value),
-                                bei_misserfolg: item.querySelector(".edit-attack-rw-misserfolg").value || null
-                            };
-                        }
+                    const attack = {
+                        name: item.querySelector(".edit-attack-name").value,
+                        to_hit: parseNumberOrNull(item.querySelector(".edit-attack-to-hit").value),
+                        schaden: item.querySelector(".edit-attack-schaden").value || null,
+                        reichweite: item.querySelector(".edit-attack-reichweite").value || null,
+                        anzahl: parseNumberOrNull(item.querySelector(".edit-attack-anzahl").value),
+                        zusatz: item.querySelector(".edit-attack-zusatz").value || null,
+                    };
+
+                    // Leere Felder aus dem Objekt entfernen für sauberes JSON
+                    Object.keys(attack).forEach(key => (attack[key] === null || attack[key] === '') && delete attack[key]);
+
+                    const rwArt = item.querySelector(".edit-attack-rw-art").value;
+                    if (rwArt) {
+                        attack.rettungswurf = {
+                            art: rwArt,
+                            zw: parseNumberOrNull(item.querySelector(".edit-attack-rw-zw").value),
+                            bei_erfolg: item.querySelector(".edit-attack-rw-erfolg").value || null,
+                            bei_misserfolg: item.querySelector(".edit-attack-rw-misserfolg").value || null
+                        };
+                        // Leere Felder aus dem Rettungswurf-Objekt entfernen
+                        Object.keys(attack.rettungswurf).forEach(key => (attack.rettungswurf[key] === null) && delete attack.rettungswurf[key]);
                     }
-                    const reichweite = item.querySelector(".edit-attack-reichweite").value;
-                    if (reichweite) attack.reichweite = reichweite;
-                    const anzahl = parseNumberOrNull(item.querySelector(".edit-attack-anzahl").value);
-                    if (anzahl) attack.anzahl = anzahl;
-                    creature.angriffe.push(attack);
-                });
-                creature.besonderheiten = [];
-                document.querySelectorAll("#edit-besonderheiten-container .dynamic-item").forEach(item => {
-                    const text = item.querySelector(".edit-besonderheit-text").value;
-                    if (text) creature.besonderheiten.push(text);
+                    
+                    // Nur Angriffe mit einem Namen hinzufügen
+                    if (attack.name) {
+                        creature.angriffe.push(attack);
+                    }
                 });
 
-                // NEUER TEIL FÜR BEUTE
+                // Beute speichern (bleibt wie zuletzt besprochen)
                 creature.beute = [];
                 document.querySelectorAll("#edit-beute-container .loot-editor-item").forEach(item => {
                     const lootRoll = {
@@ -1044,7 +1016,6 @@
                         beschreibung: item.querySelector(".edit-loot-beschreibung").value,
                         wurf: item.querySelector(".edit-loot-wurf").value
                     };
-
                     const options = [];
                     item.querySelectorAll(".dynamic-sub-item").forEach(optItem => {
                         const option = {
@@ -1053,21 +1024,16 @@
                             anzahl: parseNumberOrNull(optItem.querySelector(".edit-loot-opt-anzahl").value),
                             wert: parseNumberOrNull(optItem.querySelector(".edit-loot-opt-wert").value)
                         };
-                        // Nur valide Optionen hinzufügen
                         if (option.name && option.bedingung) {
                             options.push(option);
                         }
                     });
-
                     if (options.length > 0) {
                         lootRoll.optionen = options;
                     } else {
-                        // Fallback für simple Drops ohne Optionen
                         lootRoll.wert = parseNumberOrNull(item.querySelector(".edit-loot-wert").value);
                         lootRoll.anzahl = parseNumberOrNull(item.querySelector(".edit-loot-anzahl").value);
                     }
-                    
-                    // Nur valide Beute-Einträge hinzufügen
                     if (lootRoll.beschreibung) {
                        creature.beute.push(lootRoll);
                     }
@@ -1078,6 +1044,7 @@
                 populateHgFilter();
                 filterAndPopulateSidebar();
             }
+
 
             function renderEditorForm(creature) {
                 return `
