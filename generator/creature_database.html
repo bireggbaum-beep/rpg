@@ -894,25 +894,75 @@
             function addLootField(loot = {}) {
                 const container = document.querySelector("#edit-beute-container");
                 const div = document.createElement("div");
-                div.classList.add("dynamic-item");
+                div.classList.add("dynamic-item", "loot-editor-item");
+                
+                let optionsHTML = '';
+                if (Array.isArray(loot.optionen)) {
+                    loot.optionen.forEach(opt => {
+                        optionsHTML += `
+                            <div class="dynamic-sub-item">
+                                <input type="text" class="edit-loot-opt-bedingung" placeholder="Bedingung (z.B. 1-2)" value="${opt.bedingung || ''}">
+                                <input type="text" class="edit-loot-opt-name" placeholder="Item-Name" value="${opt.name || ''}">
+                                <input type="number" class="edit-loot-opt-anzahl" placeholder="Anz." value="${opt.anzahl || ''}">
+                                <input type="number" class="edit-loot-opt-wert" placeholder="Wert" value="${opt.wert || ''}">
+                                <button type="button" class="remove-btn sub-remove-btn">×</button>
+                            </div>
+                        `;
+                    });
+                }
+
                 div.innerHTML = `
-                    <div class="form-group medium">
-                        <label>Typ</label>
-                        <select class="edit-loot-typ">
-                            <option value="Schatz" ${loot.typ === "Schatz" ? "selected" : ""}>Schatz</option>
-                            <option value="Ausrüstung" ${loot.typ === "Ausrüstung" ? "selected" : ""}>Ausrüstung</option>
-                            <option value="Zutaten" ${loot.typ === "Zutaten" ? "selected" : ""}>Zutaten (erntbar)</option>
-                        </select>
+                    <div class="form-row" style="width:100%;">
+                        <div class="form-group medium">
+                            <label>Typ</label>
+                            <select class="edit-loot-typ">
+                                <option value="Schatz" ${loot.typ === "Schatz" ? "selected" : ""}>Schatz</option>
+                                <option value="Ausrüstung" ${loot.typ === "Ausrüstung" ? "selected" : ""}>Ausrüstung</option>
+                                <option value="Zutaten" ${loot.typ === "Zutaten" ? "selected" : ""}>Zutaten (erntbar)</option>
+                            </select>
+                        </div>
+                        <div class="form-group full"><label>Beschreibung des Wurfs</label><input type="text" class="edit-loot-beschreibung" value="${loot.beschreibung || ""}" placeholder="z.B. Waffen, Goldmünzen"></div>
+                        <div class="form-group medium"><label>Würfelwurf</label><input type="text" class="edit-loot-wurf" value="${loot.wurf || ""}" placeholder="z.B. (W6|1-4)"></div>
                     </div>
-                    <div class="form-group full"><label>Beschreibung</label><input type="text" class="edit-loot-beschreibung" value="${loot.beschreibung || ""}" placeholder="z.B. Goldmünzen, Schwert, Giftzahn"></div>
-                    <div class="form-group medium"><label>Würfelwurf</label><input type="text" class="edit-loot-wurf" value="${loot.wurf || ""}" placeholder="2W8, 1W4"></div>
-                    <div class="form-group small"><label>Wert (GM)</label><input type="number" class="edit-loot-wert" value="${loot.wert || ""}"></div>
-                    <div class="form-group small"><label>Anzahl</label><input type="number" class="edit-loot-anzahl" value="${loot.anzahl || ""}"></div>
-                    <button class="remove-btn">×</button>
+                    <div class="form-row" style="width:100%;">
+                        <div class="form-group small"><label>Wert (einfach)</label><input type="number" class="edit-loot-wert" value="${loot.wert || ''}" placeholder="Nur für simple Drops"></div>
+                        <div class="form-group small"><label>Anzahl (einfach)</label><input type="number" class="edit-loot-anzahl" value="${loot.anzahl || ''}" placeholder="Nur für simple Drops"></div>
+                    </div>
+                    <div class="loot-options-editor" style="width:100%; margin-top: 8px;">
+                        <label style="font-weight:bold; font-size:11px; color:var(--muted);">Optionen (für 'oder'-Beute)</label>
+                        <div class="loot-options-container">${optionsHTML}</div>
+                        <button type="button" class="add-btn add-option-btn">+ Option hinzufügen</button>
+                    </div>
+                    <button type="button" class="remove-btn loot-remove-btn">×</button>
                 `;
-                div.querySelector(".remove-btn").addEventListener("click", () => div.remove());
+
+                // Event Listener für den Haupt-Löschen-Button
+                div.querySelector(".loot-remove-btn").addEventListener("click", () => div.remove());
+
+                // Event Listener für den "+ Option"-Button
+                div.querySelector(".add-option-btn").addEventListener("click", (e) => {
+                    const optionsContainer = e.target.previousElementSibling;
+                    const subItem = document.createElement('div');
+                    subItem.className = 'dynamic-sub-item';
+                    subItem.innerHTML = `
+                        <input type="text" class="edit-loot-opt-bedingung" placeholder="Bedingung (z.B. 1-2)">
+                        <input type="text" class="edit-loot-opt-name" placeholder="Item-Name">
+                        <input type="number" class="edit-loot-opt-anzahl" placeholder="Anz.">
+                        <input type="number" class="edit-loot-opt-wert" placeholder="Wert">
+                        <button type="button" class="remove-btn sub-remove-btn">×</button>
+                    `;
+                    subItem.querySelector('.sub-remove-btn').addEventListener('click', () => subItem.remove());
+                    optionsContainer.appendChild(subItem);
+                });
+
+                // Event Listener für bereits existierende Sub-Item-Löschen-Buttons
+                div.querySelectorAll('.sub-remove-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => e.target.parentElement.remove());
+                });
+
                 container.appendChild(div);
             }
+
 
             function saveCreature() {
                 const creature = creatureData[currentCreatureIndex];
