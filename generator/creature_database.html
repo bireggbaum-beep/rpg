@@ -541,67 +541,65 @@
             }
 
             // ANPASSUNG 1 & 2: Verbessertes Attack-Line Rendering
-     function naturalAttackLine(a) {
+function naturalAttackLine(a) {
     let namePart = a.name || 'Unbenannte Fähigkeit';
     
-    // Anzahl (falls vorhanden) VOR dem Namen hinzufügen
     if (a.anzahl) {
         namePart = `${a.anzahl}x ${namePart}`;
     }
 
-    // Den gesamten Namensteil (inkl. Anzahl) in <b>-Tags einschließen
     let line = `<b>${namePart}</b>`;
-    
     const details = [];
 
-    // Fall 1: Klassischer Angriff (hat einen Angriffswurf)
+    // Schritt 1: Schaden immer zuerst hinzufügen, falls vorhanden.
+    if (a.schaden) {
+        details.push(`${a.schaden} Schaden`);
+    }
+
+    // Schritt 2: Angriffswurf hinzufügen, falls vorhanden.
     if (a.to_hit != null) {
-        details.push(`${plusify(a.to_hit)} zum Treffen`);
-        if (a.schaden) {
-            details.push(`${a.schaden} Schaden`);
-        }
-        if (a.zusatz && a.rettungswurf && a.rettungswurf.art && a.rettungswurf.zw) {
-            const r = a.rettungswurf;
-            const folge = r.bei_misserfolg || 'Effekt tritt ein';
-            details.push(`und ${a.zusatz} (Rettungswurf ${r.art} ${txt(r.zw)} oder ${folge})`);
-        } else if (a.zusatz) {
-            details.push(`und ${a.zusatz}`);
-        }
+        details.unshift(`${plusify(a.to_hit)} zum Treffen`); // unshift stellt es an den Anfang
     }
-    // Fall 2: Fähigkeit/Zauber ohne Angriffswurf, aber mit Rettungswurf
-    else if (a.rettungswurf && a.rettungswurf.art && a.rettungswurf.zw) {
+
+    // Schritt 3: Rettungswurf und Zusatzeffekte intelligent kombinieren.
+    const hasSave = a.rettungswurf && a.rettungswurf.art && a.rettungswurf.zw;
+    
+    if (hasSave) {
         const r = a.rettungswurf;
-        if (a.schaden) {
-            const erfolg = r.bei_erfolg || 'halber Schaden';
-            details.push(`${a.schaden} Schaden (Rettungswurf ${r.art} ${txt(r.zw)} für ${erfolg})`);
-        } else {
-            const folge = r.bei_misserfolg || a.zusatz || 'Effekt tritt ein';
-            details.push(`Rettungswurf ${r.art} ${txt(r.zw)} oder ${folge}`);
-        }
-    }
-    // Fall 3: Einfache Fähigkeit/Zauber ohne Angriffswurf und ohne Rettungswurf
-    else {
-        if (a.schaden) {
-            // KORREKTUR HIER: Das Wort "Schaden" wird hinzugefügt.
-            details.push(`${a.schaden} Schaden`);
-        }
+        let saveText = `(Rettungswurf ${r.art} ${txt(r.zw)}`;
+
+        // Wenn es einen Zusatzeffekt gibt (z.B. "Niederschlagen")
         if (a.zusatz) {
-            details.push(a.zusatz);
+            const folge = r.bei_misserfolg || a.zusatz;
+            saveText += ` oder ${folge})`;
+        } 
+        // Wenn es nur um Schaden geht (z.B. "halber Schaden")
+        else if (a.schaden) {
+            const erfolg = r.bei_erfolg || 'halber Schaden';
+            saveText += ` für ${erfolg})`;
+        } 
+        // Allgemeiner Fall
+        else {
+            saveText += ` oder Effekt tritt ein)`;
         }
+        details.push(saveText);
+    } 
+    // Wenn es keinen Rettungswurf gibt, aber einen Zusatzeffekt
+    else if (a.zusatz) {
+        details.push(a.zusatz);
     }
 
     if (details.length > 0) {
         line += ` ${details.join(', ')}`;
     }
 
-    // Reichweite immer am Ende und mit klarem Label hinzufügen
+    // Schritt 4: Reichweite immer am Ende hinzufügen.
     if (a.reichweite) {
         line += ` (Reichweite: ${a.reichweite})`;
     }
 
     return line;
 }
-
 
 
             // ANPASSUNG 3: Verbessertes Beute-Rendering
