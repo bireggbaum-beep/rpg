@@ -1,4 +1,4 @@
-Statblock Spezifikation – Auto-Creatur v1.3.1
+Statblock Spezifikation – Auto-Creatur v1.3.5
 =============================================
 
 Zweck
@@ -38,6 +38,49 @@ Jede Kreatur besitzt idealerweise einen, maximal zwei Sekundär-Traits. Diese mo
 - **[Instinktiv]**: Motto: "..." (keine höhere Gedankenebene) Verhalten: Handelt ohne Plan oder Intelligenz. Greift immer das nächstgelegene erreichbare Ziel auf dem direktesten Weg an. Typisch für Tiere, Schleime und niedere Untote.
 - **[Territorial]**: Motto: "Raus aus meinem Revier!" Verhalten: Verteidigt einen klar definierten Bereich (Nest, Höhle, Ruine). Greift nur an, wenn Eindringlinge diesen Bereich betreten, und verfolgt sie nicht oder nur bis zur Grenze des Territoriums.
 - **[Leibwächter]**: Motto: "Für meinen Meister!" Verhalten: Fokussiert alle Aktionen auf den Schutz eines bestimmten "Schutzziels" (meist eine andere Kreatur). Bleibt immer in der Nähe des Schutzziels, fängt Angriffe ab und ignoriert andere Bedrohungen, solange das Schutzziel nicht in Gefahr ist.
+
+Addendum: Basis-Herausforderungsgrade (HG) für Standard-Kreaturen
+======================================================================
+Zweck: Dieses Addendum legt einen Standard-Herausforderungsgrad für gängige Kreaturentypen fest. Dies dient als verbindliche Grundlinie für die Generierung, um die Konsistenz der Spielwelt zu gewährleisten. Abweichungen von diesem Basis-HG sind erlaubt und erwünscht, müssen aber durch das Konzept der Kreatur gerechtfertigt sein (z.B. durch Titel wie "Anführer", "Champion", "Jüngling" oder "krank/geschwächt").
+
+---
+**Humanoide (Zivilisiert & Goblinoid)**
+| Kreaturentyp      | Basis-HG | Anmerkungen                               |
+|-------------------|----------|-------------------------------------------|
+| Goblin            | 1/4      | Schwach, aber in Gruppen gefährlich.      |
+| Kobold            | 1/8      | Sehr schwach, verlässt sich auf Fallen.   |
+| Mensch (Bürger)   | 1/8      | Untrainiert, keine Bedrohung.             |
+| Mensch (Wache)    | 1/2      | Grundlegendes Training und Ausrüstung.    |
+| Mensch (Soldat)   | 1        | Gut trainiert und ausgerüstet.            |
+| Ork               | 1        | Physisch stark und brutal.                |
+| Gnoll             | 1        | Wild und chaotisch.                       |
+| Hobgoblin         | 2        | Militärisch, diszipliniert und stark.     |
+| Oger              | 3        | Groß, dumm und extrem stark.              |
+
+---
+**Tiere & Bestien**
+| Kreaturentyp      | Basis-HG | Anmerkungen                               |
+|-------------------|----------|-------------------------------------------|
+| Riesenratte       | 1/8      | Lästig, in Schwärmen gefährlich.          |
+| Wolf              | 1/4      | Rudeljäger, nutzt Taktiken.               |
+| Riesenspinne      | 1        | Nutzt Gift und Netze.                     |
+| Bär               | 2        | Hohe Stärke und Zähigkeit.                |
+| Greif             | 3        | Mächtiger fliegender Jäger.               |
+| Wyvern            | 5        | Große, giftige Drachenverwandte.          |
+
+---
+**Untote**
+| Kreaturentyp      | Basis-HG | Anmerkungen                               |
+|-------------------|----------|-------------------------------------------|
+| Skelett           | 1/4      | Einfacher, geistloser Diener.             |
+| Zombie            | 1/4      | Langsam, aber schwer zu töten.            |
+| Ghul              | 1        | Agil, mit lähmender Berührung.            |
+| Geist             | 2        | Körperlos, kann durch Wände gehen.        |
+| Vampir-Brut       | 3        | Schwächere Version eines echten Vampirs.  |
+
+---
+Anweisung für die Generierung:
+Wenn eine Kreatur ohne spezifischen Rang (z.B. "Ork-Späher") erstellt wird, MUSS der hier definierte Basis-HG als Grundlage verwendet werden. Die EP und alle abgeleiteten Werte (LP, SR, Boni etc.) müssen diesem HG entsprechen.
 
 
 Globale Erklärpflicht (explizit)
