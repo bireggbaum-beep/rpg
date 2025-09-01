@@ -542,8 +542,14 @@
 
             // ANPASSUNG 1 & 2: Verbessertes Attack-Line Rendering
              function naturalAttackLine(a) {
-                const name = `<b>${a.name || 'Unbenannte Fähigkeit'}</b>`;
-                let line = name;
+                let namePart = `<b>${a.name || 'Unbenannte Fähigkeit'}</b>`;
+                
+                // Anzahl (falls vorhanden) direkt an den Anfang stellen
+                if (a.anzahl) {
+                    namePart = `${a.anzahl}x ${namePart}`;
+                }
+
+                let line = namePart;
                 const details = [];
 
                 // Fall 1: Klassischer Angriff (hat einen Angriffswurf)
@@ -552,8 +558,6 @@
                     if (a.schaden) {
                         details.push(`${a.schaden} Schaden`);
                     }
-
-                    // Hängt einen optionalen Effekt mit Rettungswurf an
                     if (a.zusatz && a.rettungswurf && a.rettungswurf.art && a.rettungswurf.zw) {
                         const r = a.rettungswurf;
                         const folge = r.bei_misserfolg || 'Effekt tritt ein';
@@ -561,7 +565,6 @@
                     } else if (a.zusatz) {
                         details.push(`und ${a.zusatz}`);
                     }
-                    line += ` ${details.join(', ')}`;
                 }
                 // Fall 2: Fähigkeit/Zauber ohne Angriffswurf, aber mit Rettungswurf
                 else if (a.rettungswurf && a.rettungswurf.art && a.rettungswurf.zw) {
@@ -573,31 +576,28 @@
                         const folge = r.bei_misserfolg || a.zusatz || 'Effekt tritt ein';
                         details.push(`Rettungswurf ${r.art} ${txt(r.zw)} oder ${folge}`);
                     }
-                    line += ` ${details.join(', ')}`;
                 }
                 // Fall 3: Einfache Fähigkeit/Zauber ohne Angriffswurf und ohne Rettungswurf
                 else {
                     if (a.schaden) {
-                        details.push(`${a.schaden} Schaden`);
+                        details.push(a.schaden);
                     }
                     if (a.zusatz) {
                         details.push(a.zusatz);
                     }
+                }
+
+                if (details.length > 0) {
                     line += ` ${details.join(', ')}`;
                 }
 
-                // Reichweite und Anzahl werden immer am Ende hinzugefügt
+                // Reichweite immer am Ende und mit klarem Label hinzufügen
                 if (a.reichweite) {
-                    line += ` (${a.reichweite})`;
-                }
-                if (a.anzahl) {
-                    line += ` <span class="muted">[${a.anzahl}x pro Kampf]</span>`;
+                    line += ` (Reichweite: ${a.reichweite})`;
                 }
 
                 return line;
             }
-
-
 
 
             // ANPASSUNG 3: Verbessertes Beute-Rendering
