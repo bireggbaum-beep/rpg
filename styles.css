@@ -75,6 +75,12 @@
   .editor-header h3{margin:0;font:700 16px/1 "Roboto Condensed";color:var(--pf-red);}
   .editor-body{padding:16px;}
   .editor-footer{padding:12px 16px;border-top:1px solid var(--rule);background:var(--bg);display:flex;justify-content:flex-end;gap:8px;}
+  .loot-editor-item .remove-btn { align-self: flex-start; margin-top: 0; }
+  .dynamic-sub-item { display: flex; gap: 8px; align-items: center; margin-bottom: 4px; }
+  .dynamic-sub-item input { flex: 1; }
+  .dynamic-sub-item .sub-remove-btn { flex-shrink: 0; height: 28px; width: 28px; margin: 0; }
+  .loot-options-editor { border-top: 1px solid var(--rule); padding-top: 8px; }
+
   
   /* Sortier-Controls */
 .sidebar-header {
