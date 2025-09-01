@@ -15,6 +15,30 @@ Die folgende URL verweist auf die maßgebliche Liste für Standardausrüstung, P
 - Bei der Verwendung von Standardgegenständen (z.B. "Holzschild", "Pfeile" ) müssen die Werte (Preis, Boni, etc.) mit dieser Referenzdatei übereinstimmen.
 - Neue oder einzigartige Gegenstände müssen in ihrem Design und Wert in einem logischen Verhältnis zu den Gegenständen in der Referenzdatei stehen.
 
+Verhaltens-Traits (System)
+=============================================
+Jede Kreatur wird durch eine Kombination aus Primär- und Sekundär-Traits charakterisiert, die ihr grundlegendes Verhalten im Kampf steuern. Dies hilft dem Spielleiter, die Kreatur konsistent und glaubwürdig zu führen.
+
+### Primär-Traits
+Jede Kreatur besitzt genau einen Primär-Trait. Dieser Trait bestimmt das grundlegende Set an Aktionen und das Flowchart, dem die Kreatur im Kampf folgt.
+
+- **[Nahkämpfer]**: Sucht aktiv den direkten Kampf. Nutzt Waffen wie Schwerter, Äxte, Klauen oder Fäuste. Das primäre Ziel ist es, an einen Gegner heranzukommen und dort zu bleiben.
+- **[Fernkämpfer]**: Versucht, auf Distanz zu bleiben und von dort anzugreifen. Nutzt Bögen, Armbrüste, Schleudern oder geworfene Waffen. Versucht aktiv, den Nahkampf zu vermeiden.
+- **[Hybrid]**: Wechselt flexibel zwischen Nah- und Fernkampf, um sich an die Situation anzupassen. Kann den Kampf auf Distanz eröffnen und in den Nahkampf übergehen oder umgekehrt.
+- **[Magier X]**: Nutzt Magie als primäre Kampfressource. Die Stufe "X" definiert die Macht und die verfügbaren Ressourcen des Magiers (z.B. Anzahl und Grad der Zauber). Folgt einem speziellen Magie-Flowchart.
+
+
+### Sekundär-Traits
+Jede Kreatur besitzt idealerweise einen, maximal zwei Sekundär-Traits. Diese modifizieren das Verhalten innerhalb des vom Primär-Trait vorgegebenen Flowcharts und definieren die Prioritäten und die Persönlichkeit der Kreatur.
+
+- **[Offensiv]**: Motto: "Angriff ist die beste Verteidigung." Verhalten: Sucht proaktiv den Kampf und versucht, Gegner so schnell wie möglich auszuschalten. Fokussiert sich auf maximalen Schaden.
+- **[Defensiv]**: Motto: "Ich warte, bis du einen Fehler machst." Verhalten: Reagiert auf die Aktionen der Gegner, anstatt den Kampf zu initiieren. Hält Positionen, nutzt Deckung und wartet auf eine günstige Gelegenheit zum Gegenschlag.
+- **[Taktiker]**: Motto: "Kämpfe klug, nicht hart." Verhalten: Nutzt das Schlachtfeld zu seinem Vorteil. Flankiert Gegner, konzentriert das Feuer mit Verbündeten auf ein einzelnes Ziel, nutzt Deckung und versucht, die Schwächen der Gegner auszunutzen.
+- **[Wild]**: Motto: "WUT!" Verhalten: Handelt unvorhersehbar und instinktgetrieben, aber nicht gänzlich ohne Verstand. Greift oft das Ziel an, das die größte Bedrohung darstellt oder ihm zuletzt Schaden zugefügt hat. Kämpft oft bis zum Tod.
+- **[Instinktiv]**: Motto: "..." (keine höhere Gedankenebene) Verhalten: Handelt ohne Plan oder Intelligenz. Greift immer das nächstgelegene erreichbare Ziel auf dem direktesten Weg an. Typisch für Tiere, Schleime und niedere Untote.
+- **[Territorial]**: Motto: "Raus aus meinem Revier!" Verhalten: Verteidigt einen klar definierten Bereich (Nest, Höhle, Ruine). Greift nur an, wenn Eindringlinge diesen Bereich betreten, und verfolgt sie nicht oder nur bis zur Grenze des Territoriums.
+- **[Leibwächter]**: Motto: "Für meinen Meister!" Verhalten: Fokussiert alle Aktionen auf den Schutz eines bestimmten "Schutzziels" (meist eine andere Kreatur). Bleibt immer in der Nähe des Schutzziels, fängt Angriffe ab und ignoriert andere Bedrohungen, solange das Schutzziel nicht in Gefahr ist.
+
 
 Globale Erklärpflicht (explizit)
 --------------------------------
@@ -70,7 +94,14 @@ Pflichtfelder je Angriff:
   - Der feste Wert ist maßgeblich. Die Klammer ist nur optional für Tische, die würfeln wollen.
   - Empfehlung zur Klammer: Erwartungswert XWY+Z → X·(Y+1)/2 + Z; .5 wird aufgerundet; ±1 Abweichung toleriert.
 - rz, rr, rw: Rettungswürfe der Kreatur. dieser Wert muss mit W20 erreicht oder überwürfelt werden. Niedriger ist besser. Profil muss zur Kreatur passen.
-- traits: klassifiziert die Kreatur noch eine Ebene weiter. Array von 1-2 traits; Beispiele: typ: untot, traits: skelett; typ: humanoid, traits: goblin; Kreatur: Beschwörer-Initiant; typ: humanoid; traits: mensch, magier. Konvention: Mensch, Ork, Goblin, Kobold, Ratte, Magier, Vampier. Keine -oid-Endungen ausser bei Humanoid (nur bei typ). Keine zu tiefe Untergliederung.
+- traits: Array von Strings. Dieses Feld enthält alle relevanten Klassifizierungen und Verhaltens-Traits der Kreatur. Es MUSS eine Kombination aus den folgenden Kategorien enthalten:
+  - **Herkunft/Spezies (1+):** Beschreibt, was die Kreatur *ist* (z.B. "Mensch", "Ork", "Skelett", "Reptil").
+  - **Primär-Trait (genau 1):** Beschreibt das grundlegende Kampf-Flowchart (z.B. "Nahkämpfer", "Instinktiv").
+  - **Sekundär-Trait (0-2):** Modifiziert das Verhalten (z.B. "Offensiv", "Territorial").
+  - **Beispiel 1 (Ork-Wache):** ["Ork", "Nahkämpfer", "Territorial"]
+  - **Beispiel 2 (Chaos-Hexer):** ["Mensch", "Magier 5", "Offensiv", "Wild"]
+  - **Beispiel 3 (Höhlenmolch):** ["Amphibie", "Instinktiv"]
+
 
 
 Optionale Felder:
