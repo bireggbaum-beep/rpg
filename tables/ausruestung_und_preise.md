@@ -142,6 +142,10 @@
 | Armbrust | 10 | GES | 350 GM | Munition (Bolzen), Langsam, Panzerbrechend, Stärke (3), Stufe (3+) |
 | Schwere Armbrust | 12 | GES | 600 GM | Munition (Bolzen), Langsam, Panzerbrechend, Stärke (6), Stufe (5+) |
 
+## Beschreibung der Waffentags
+Panzerbrechend: Bei einer geraden Zahl auf dem Angriffswürfel wird SR des Ziels halbiert. Ignoriert leichte Rüstung
+
+
 
 
 # Magiestäbe
