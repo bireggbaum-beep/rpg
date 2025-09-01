@@ -541,39 +541,51 @@
             }
 
             // ANPASSUNG 1 & 2: Verbessertes Attack-Line Rendering
-              function naturalAttackLine(a) {
+             function naturalAttackLine(a) {
                 const name = `<b>${a.name || 'Unbenannter Angriff'}</b>`;
                 const bits = [];
 
-                // Wenn es einen Angriffswurf gibt, ist es ein klassischer Angriff
+                // Basisteile des Angriffs
                 if (a.to_hit != null) {
                     bits.push(`${plusify(a.to_hit)} zum Treffen`);
                 }
                 if (a.schaden) {
                     bits.push(`${a.schaden} Schaden`);
                 }
-                if (a.reichweite) {
-                    bits.push(`(${a.reichweite})`);
-                }
-                if (a.zusatz && !a.rettungswurf) { // Zusatz nur anzeigen, wenn er nicht durch den Rettungswurf erklärt wird
-                    bits.push(`und ${a.zusatz}`);
+
+                // Effekt-Teil intelligent zusammensetzen
+                const hasSave = a.rettungswurf && a.rettungswurf.art && a.rettungswurf.zw;
+                
+                if (a.zusatz) { // Wenn es einen Effekt-Namen gibt
+                    if (hasSave) {
+                        // Fall 1: Effekt mit Rettungswurf
+                        const r = a.rettungswurf;
+                        const folge = r.bei_misserfolg || 'Effekt tritt ein';
+                        bits.push(`und ${a.zusatz} (Rettungswurf ${r.art} ${txt(r.zw)} oder ${folge})`);
+                    } else {
+                        // Fall 2: Einfacher Effekt ohne Rettungswurf
+                        bits.push(`und ${a.zusatz}`);
+                    }
+                } else if (hasSave) {
+                    // Fall 3: Rettungswurf ohne expliziten Effekt-Namen (z.B. für Flächenschaden)
+                    const r = a.rettungswurf;
+                    const erfolg = r.bei_erfolg || 'halber Schaden';
+                    bits.push(`(Rettungswurf ${r.art} ${txt(r.zw)} für ${erfolg})`);
                 }
 
                 let line = `${name} ${bits.join(', ')}`;
 
-                // Rettungswurf immer anhängen, falls vorhanden
-                if (a.rettungswurf) {
-                    const r = a.rettungswurf;
-                    const effekt = r.bei_misserfolg || a.zusatz || 'Effekt';
-                    line += ` (Rettungswurf ${r.art} ${txt(r.zw)} oder ${effekt})`;
+                // Reichweite und Anzahl am Ende hinzufügen
+                if (a.reichweite) {
+                    line += ` (${a.reichweite})`;
                 }
-
                 if (a.anzahl) {
                     line += ` <span class="muted">[${a.anzahl}x pro Kampf]</span>`;
                 }
 
                 return line;
             }
+
 
 
             // ANPASSUNG 3: Verbessertes Beute-Rendering
@@ -807,13 +819,10 @@
                 }
             }
 
-             function addAttackField(attack = {}) {
+              function addAttackField(attack = {}) {
                 const container = document.querySelector("#edit-angriffe-container");
                 const div = document.createElement("div");
                 div.classList.add("dynamic-item", "attack-editor-item");
-
-                // Wir entfernen die verwirrende "isSpell"-Checkbox Logik aus dem HTML-Aufbau.
-                // Alle Felder sind nun potenziell verfügbar.
 
                 div.innerHTML = `
                     <div class="form-row" style="width:100%;">
@@ -823,9 +832,9 @@
                     </div>
                     
                     <div class="form-row" style="width:100%;">
-                        <div class="form-group small"><label>Angriffsbonus</label><input type="number" class="edit-attack-to-hit" value="${attack.to_hit || ''}" placeholder="+X"></div>
+                        <div class="form-group small"><label>Angriffsbonus</label><input type="number" class="edit-attack-to-hit" value="${attack.to_hit ?? ''}" placeholder="+X"></div>
                         <div class="form-group medium"><label>Schaden</label><input type="text" class="edit-attack-schaden" value="${attack.schaden || ''}" placeholder="z.B. 8 (2W6+1)"></div>
-                        <div class="form-group full"><label>Zusatz / Effekt-Beschreibung</label><input type="text" class="edit-attack-zusatz" value="${attack.zusatz || ''}" placeholder="z.B. Ziel wird furchtsam"></div>
+                        <div class="form-group full"><label>Effekt-Name</label><input type="text" class="edit-attack-zusatz" value="${attack.zusatz || ''}" placeholder="z.B. Niederschlagen, Gift"></div>
                     </div>
 
                     <div class="rettungswurf-group" style="width:100%;">
@@ -842,7 +851,7 @@
                             </div>
                             <div class="form-group small"><label>Zielwert (ZW)</label><input type="number" class="edit-attack-rw-zw" value="${attack.rettungswurf?.zw || ""}"></div>
                             <div class="form-group medium"><label>Bei Erfolg</label><input type="text" class="edit-attack-rw-erfolg" value="${attack.rettungswurf?.bei_erfolg || 'halber Schaden'}" placeholder="z.B. halber Schaden"></div>
-                            <div class="form-group medium"><label>Bei Misserfolg</label><input type="text" class="edit-attack-rw-misserfolg" value="${attack.rettungswurf?.bei_misserfolg || ''}" placeholder="z.B. voller Schaden"></div>
+                            <div class="form-group medium"><label>Folge bei Misserfolg</label><input type="text" class="edit-attack-rw-misserfolg" value="${attack.rettungswurf?.bei_misserfolg || ''}" placeholder="z.B. Ziel geht zu Boden"></div>
                         </div>
                     </div>
                     <button type="button" class="remove-btn">×</button>
@@ -851,6 +860,7 @@
                 div.querySelector(".remove-btn").addEventListener("click", () => div.remove());
                 container.appendChild(div);
             }
+
 
             function addBesonderheitField(besonderheit = "") {
                 const container = document.querySelector("#edit-besonderheiten-container");
