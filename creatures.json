@@ -1,0 +1,169 @@
+[
+  {
+    "name": "Ork-Plünderer",
+    "typ": "Humanoid",
+    "traits": [
+      "Ork"
+    ],
+    "hg": 1,
+    "ep": 150,
+    "lp": 22,
+    "sr": 3,
+    "sr_bemerkung": "Felle und rostige Metallplatten",
+    "bew": "5",
+    "pa": 14,
+    "asw": 13,
+    "ini": 1,
+    "rz": 12,
+    "rr": 11,
+    "rw": 10,
+    "pa_bemerkung": [
+      {
+        "icon": "shield",
+        "value": "+1",
+        "description": "Holzschild"
+      }
+    ],
+    "asw_bemerkung": "",
+    "angriffe": [
+      {
+        "name": "Grobes Kriegsbeil",
+        "to_hit": 4,
+        "schaden": "7 (1W8+3)",
+        "zusatz": "Niederschlagen"
+      }
+    ],
+    "besonderheiten": [
+      "Aggressiv: Bewegt sich in seiner Runde immer auf den nächsten Feind zu, wenn möglich."
+    ],
+    "beute": [
+      {
+        "typ": "Schatz",
+        "wurf": "2W8",
+        "beschreibung": "Goldmünzen"
+      },
+      {
+        "typ": "Ausrüstung",
+        "beschreibung": "Grobes Kriegsbeil",
+        "wert": 10
+      },
+      {
+        "typ": "Ausrüstung",
+        "beschreibung": "Holzschild",
+        "wert": 5
+      }
+    ],
+    "beschreibung": "Dieser grimmige, grün-häutige Humanoid starrt dich mit blutunterlaufenen Augen an und entblößt seine hauerartigen Zähne."
+  },
+  {
+    "name": "Sumpf-Schleicher",
+    "typ": "Tier",
+    "traits": [
+      "Reptil"
+    ],
+    "hg": 2,
+    "ep": 200,
+    "lp": 28,
+    "sr": 2,
+    "sr_bemerkung": "Schuppige Haut",
+    "bew": "4 (Schwimmen 6)",
+    "pa": 14,
+    "asw": 14,
+    "ini": 3,
+    "rz": 13,
+    "rr": 14,
+    "rw": 11,
+    "angriffe": [
+      {
+        "name": "Biss",
+        "to_hit": 5,
+        "schaden": "6 (1W8+2)"
+      },
+      {
+        "name": "Giftspucke",
+        "to_hit": 5,
+        "schaden": "3 (1W4+1)",
+        "reichweite": "3xLang",
+        "anzahl": 2,
+        "zusatz": "Ziel wird verlangsamt",
+        "rettungswurf": {
+          "art": "RZ",
+          "zw": 13,
+          "bei_misserfolg": "1 Runde verlangsamt"
+        }
+      }
+    ],
+    "besonderheiten": [
+      "Sumpftarnung: Hat einen Vorteil bei Verstecken-Proben in Sumpfgebieten."
+    ],
+    "beute": [
+      {
+        "typ": "Schatz",
+        "wurf": "3W6",
+        "beschreibung": "Goldmünzen"
+      },
+      {
+        "typ": "Zutaten",
+        "beschreibung": "Giftzahn",
+        "wert": 25
+      },
+      {
+        "typ": "Zutaten",
+        "beschreibung": "Schuppenhaut (1W4 Stück)",
+        "wert": 10
+      }
+    ],
+    "beschreibung": "Diese große, echsenartige Kreatur hat eine schlammverkrustete, moosgrüne Haut."
+  },
+  {
+    "name": "Gruftschrecken",
+    "typ": "Untot",
+    "traits": [
+      "Geist",
+      "Körperlos"
+    ],
+    "hg": 3,
+    "ep": 350,
+    "lp": 35,
+    "sr": 4,
+    "sr_bemerkung": "Körperlos",
+    "bew": "0 (Flug 6)",
+    "pa": 15,
+    "asw": 15,
+    "ini": 2,
+    "rz": "immun",
+    "rr": 13,
+    "rw": "immun",
+    "angriffe": [
+      {
+        "name": "Berührung der Verzweiflung",
+        "to_hit": 5,
+        "schaden": "7 (2W6)",
+        "zusatz": "Ziel wird furchtsam",
+        "rettungswurf": {
+          "art": "RW",
+          "zw": 14,
+          "bei_misserfolg": "Ziel wird furchtsam für 1W4 Runden"
+        }
+      },
+      {
+        "name": "Dunkle Stärkung",
+        "isSpell": true,
+        "reichweite": "8",
+        "anzahl": 2,
+        "beschreibung": "Verbündeter erhält +2 auf Angriff und Schaden für 3 Runden"
+      }
+    ],
+    "besonderheiten": [
+      "Körperlos: Kann sich durch Kreaturen und Objekte bewegen."
+    ],
+    "beute": [
+      {
+        "typ": "Zutaten",
+        "beschreibung": "Ektoplasma-Rest",
+        "wert": 40
+      }
+    ],
+    "beschreibung": "Ein kalter Hauch erfüllt den Raum, kurz bevor diese durchscheinende Gestalt erscheint."
+  }
+]
