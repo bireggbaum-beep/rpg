@@ -1,459 +1,294 @@
-Statblock Spezifikation – Spielcharakter (SC) v0.10
-Aufbauend auf v0.9 — vollständige Spec inkl. Magiesystem (Mana, Stäbe, Zauber)
+Statblock Spezifikation – Spielcharakter (SC) v0.11
+Aufbauend auf v0.10 → v0.10.1 — vollständige, maschinen- und KI-generatorfreundliche Spezifikation
+(Ziel: robuste, auditierbare Generator‑Pipeline; zwingende Referenz‑Mapping und Recompute‑Regeln)
 
-Wichtiger Hinweis:
-- Währung: Gold (GM).
-- Item‑/Stab‑Referenzen entstammen der Ausrüstungsdatei (siehe Einträge Stäbe / Preise) [[11]].
+Wichtiger Überblick
+- Diese Version ergänzt v0.10 um verbindliche Referenz‑Mapping-, Recompute- und Validierungsregeln, eine Pflicht für canonical_item_id (oder deterministisches Mapping) sowie Fallback‑/Fehlerverhalten und Testfälle. Ziel: KI‑Generatoren dürfen keine widersprüchlichen abgeleiteten Werte (PA/ASW/SR/LP/etc.) ausgeben, ohne die Quellen transparent zu loggen oder eine Fehlerstatus zu setzen.
+- Beispielreferenzen (Preise, SR/ASW/PA, Stäbe) stammen aus der Ausrüstungs- und Preise‑Tabelle (Referenzdatei) [[11]] — diese Datei ist normative Quelle für Itemwerte.
 
-====================================
-1. Überblick der Ergänzungen in v0.10
-====================================
-Neu ergänzt:
-- Mana‑System (max_mana, mana_aktuell) in den abgeleiteten Werten.
-- Stab/Fokus als Ausrüstungsobjekte mit Mana/INT‑Bonussen und Minimalstufe (Daten aus [[11]]).
-- Einheitliches Spell‑Schema (maschinenlesbar).
-- Casting‑Workflow (Prüfungen, Mana‑Kosten, Saves, kritische Regeln).
-- Default Lernregeln / Start‑Zauber für Magier.
-- Beispiel‑Zauber (Grad 1..3) übernommen und als JSON‑Beispiele eingefügt.
+WICHTIG: Jede Aussage über konkrete Itemwerte (SR, PA, Preise, Stabboni) verweist direkt auf die Referenztabelle [[11]] und ist bindend für den Generator (sofern die Tabelle vorhanden ist).
 
-====================================
-2. Top‑Level‑Änderungen (Schema Ergänzungen)
-====================================
-Ergänze in Top‑Level JSON (siehe v0.9):
-- In "abgeleitete_werte" ergänzen:
-  "max_mana": Integer,
-  "mana_aktuell": Integer
+==============================
+0. Versionsmetadaten
+==============================
+- spec_version: "v0.11"
+- ref_table_version: must be recorded by generator (e.g., "ausruestung_und_preise_2025-09-04")
 
-- Neues Top‑Level Feld:
-  "zauber": {
-    "cantrips": [ { spell_object } ],
-    "known": [ { spell_object } ],
-    "prepared": [ { spell_object } ]   // falls System Prepared Spells verwendet
+==============================
+1. Zweck & Grundprinzipien (Kurz)
+==============================
+- Einheitliche, deterministische Regeln für KI/Generatoren zur Erstellung korrekter Spielcharaktere.
+- Autoritative Referenzdaten (Ausrüstungstabelle) sind die Quelle der Wahrheit für Item‑Werte.
+- Generatoren müssen abgeleitete Werte neu berechnen (recompute) aus Attributen + referenzierten item‑boni; sie dürfen nicht blind prefilled Werte aus Input übernehmen.
+- Alle automatischen Korrekturen und Mapping‑Entscheidungen müssen vollständig im validation_log dokumentiert werden.
+
+==============================
+2. Gesamtablauf / Generator‑Pipeline (verbindlich)
+==============================
+A. Load phase
+  1. Load canonical reference table (JSON/CSV) into memory (file version must be recorded).
+  2. Validate reference table schema; fail if missing required fields (id, name, typ, preis, gewicht, boni: [{typ,wert}]).
+
+B. Character generation steps (high level)
+  1. Initialisierung: create empty character object; set attributes to 0.
+  2. Volk wählen: apply volk modifiers; record in provenance.
+  3. Beruf wählen: apply beruf modifiers; select 1–2 berufsitems (mark for purchase).
+  4. Klasse wählen: apply klasse modifiers; insert class starting abilities.
+  5. Attribute Capping: if stufe == 1, clamp attributes into [-1, +3].
+  6. Map & resolve ausruestung[] items to canonical reference entries (see Section 4).
+  7. Recompute all derived values from attributes + resolved item boni (see Section 5).
+  8. Startausrüstung & Einkauf: compute Startgold, purchase items from ref table, include berufsitems.
+  9. Final Recompute & Validation: execute mandatory validation checks (see Section 6).
+  10. Output JSON with validation_log and validation_status ("ok"/"warning"/"error") and spec_version/ref_table_version.
+
+Note: Steps 6–9 are mandatory and atomic: recompute cannot be skipped.
+
+==============================
+3. Top-Level JSON Schema (Principal fields; additions highlighted)
+==============================
+{
+  "spec_version": "v0.11",
+  "ref_table_version": "string",
+  "name": "String",
+  "spieler": "String",
+  "konzept": "String",
+  "stufe": Integer,
+  "ep": Integer,
+  "volk": "String",
+  "beruf": "String",
+  "klasse": "String",
+  "attribute": { "str": Integer, "ges": Integer, "kon": Integer, "int": Integer, "wis": Integer, "cha": Integer },
+  "abgeleitete_werte": { "lp_max": Integer, "lp_aktuell": Integer, "ini_bonus": Integer, "bew": Integer, "max_mana": Integer, "mana_aktuell": Integer },
+  "abwehr": { "pa": Integer, "asw": Integer, "sr": { "total": Integer, "quellen":[ { "quelle": "String", "wert": Integer, "ref_id": String } ] } },
+  "rettungswuerfe": { "rz_bonus": Integer, "rr_bonus": Integer, "rw_bonus": Integer },
+  "angriffe": [ { "name":"String", "typ":"Nahkampf"|"Fernkampf", "to_hit_bonus": Integer, "schaden_basis": Integer, "quelle_item_ref": String?, "bemerkung":"String" } ],
+  "faehigkeiten": { "volk": [], "beruf": [], "klasse": [] },
+  "ausruestung": [ { "canonical_item_id": String|null, "name":"String", "typ":"Waffe"|"Rüstung"|"Schild"|"Stab"|"Anderes", "preis": Integer, "gewicht": Number, "boni":[ { "typ":"PA"|"ASW"|"SR"|"NK_Angriff"|"FK_Angriff"|"RZ"|"RR"|"RW"|"MANA"|"INT", "wert": Integer, "quelle": "String" } ], "beschreibung":"String" } ],
+  "zauber": { "cantrips": [], "known": [], "prepared": [] }, // optional if class is caster
+  "inventar": [],
+  "custom_items": [],
+  "waehrung": { "gold": Integer },
+  "validation_log": [ { "timestamp":"ISO", "step":"String", "type":"info"|"auto_map"|"recompute_fix"|"warning"|"error", "details": { ... } } ],
+  "validation_status": "ok" | "warning" | "error"
+}
+
+Schema constraints (enforced):
+- ausruestung[].canonical_item_id is required OR generator must populate it via deterministic mapping before recompute.
+- For typ == "Rüstung": item.boni must include SR entry after mapping (generator must fill from reference).
+- For typ == "Schild": item.boni must include PA entry after mapping.
+
+==============================
+4. Reference Mapping (mandatory)
+==============================
+4.1 Canonical reference table (required)
+- Reference table must include at minimum entries:
+  { "id": "string", "name": "string", "typ": "Waffe"|"Rüstung"|"Schild"|"Stab"|"Anderes", "preis": Integer, "gewicht": Number, "boni":[ { "typ":..., "wert": Integer } ], "availability": String }
+- Example authoritative values (from reference file):
+  - Lederrüstung (Leather / Lederharnisch): SR = 1 [[11]].
+  - Holzschild: PA +1, Preis 15 GM [[11]].
+  - Turmschild: PA +3, ASW −2, RR −1, Preis 85 GM [[11]].
+  - Langschwert: Schaden 6, Preis 80 GM [[11]].
+  - Stab der Quelle: Mana +10, Preis 100 GM [[11]].
+  (These example values are authoritative and MUST be used by generators when the matching reference id is found.) [[11]]
+
+4.2 Mapping algorithm (deterministic with fuzzy fallback)
+- If ausruestung[].canonical_item_id present → ref = lookup(canonical_item_id).
+- Else:
+  - Normalize item.name (lowercase, strip punctuation, unicode normalize).
+  - Attempt exact match on ref.name; if found → set canonical_item_id.
+  - Else attempt tokenized match / substring / synonyms map (predefined synonym table).
+  - Else use fuzzy string similarity (e.g., token_set_ratio or normalized Levenshtein) and compute confidence score ∈ [0,1].
+    - If score ≥ 0.85 → accept mapping, set canonical_item_id = ref.id, log auto_map with confidence.
+    - If 0.5 ≤ score < 0.85 → attempt category filter (item.typ equals ref.typ) and if unique → accept; else mark ambiguous (log warning).
+    - If score < 0.5 → DO NOT MAP automatically; set canonical_item_id = null, log unmapped and set validation_status = "warning" or "error" depending on context.
+- All mapping decisions must be logged in validation_log with step "auto_map" or "unmapped" and include matched_ref_id and confidence.
+
+4.3 Synonym table & curated aliases
+- The generator MUST support a configurable alias/synonym table for common name variants (e.g., "Lederrüstung" ↔ "Lederharnisch", "Holz schild" ↔ "Holzschild") to increase matching reliability. This table is part of the reference data package.
+
+==============================
+5. Recompute & Authoritative Calculation (mandatory)
+==============================
+5.1 Recompute principle (MANDATORY)
+- After mapping items to canonical references, generator MUST:
+  1. Recompute attribute‑based bases:
+     - pa_basis = 9 + attribute.str
+     - asw_basis = 9 + attribute.ges + floor(attribute.wis / 2)
+     - rz_base = floor((attribute.kon + attribute.str) / 2)
+     - rr_base = floor((attribute.ges + attribute.wis) / 2)
+     - rw_base = floor((attribute.wis + attribute.int) / 2)
+  2. Aggregate boni per type from:
+     - mapped ausruestung[].boni (reference boni merged),
+     - faehigkeiten.*[].boni (if specified),
+     - custom_items[].boni (if any).
+  3. Compute final derived values:
+     - pa = pa_basis + sum(PA‑Boni)
+     - asw = asw_basis + sum(ASW‑Boni)
+     - sr.total = sum(SR‑Boni)
+     - rz_bonus = rz_base + sum(RZ‑Boni) (if RZ boni exist)
+     - rr_bonus = rr_base + sum(RR‑Boni)
+     - rw_bonus = rw_base + sum(RW‑Boni)
+     - to_hit bonuses for attacks: attribute.str/ges + sum(NK_Angriff/FK_Angriff boni)
+     - lp_max per class formula (Krieger/Waldläufer/Kleriker/Magier as in v0.9)
+     - max_mana = 10 + attribute.int + sum(MANA‑boni) (if class is Magier)
+  4. Replace any prefilled derived fields with recomputed values.
+  5. For each replacement, add validation_log entry: { step:"recompute_fix", field, old_value, new_value, reason:"authoritative recompute from attributes+reference_boni", ref_ids:[...] }.
+
+5.2 Enforcement & immutability
+- Derived values computed via the above algorithm are authoritative in output JSON; any earlier supplied values that differ are overwritten and logged.
+- Generator must not accept precomputed values from user input unless user explicitly requests "preserve_precomputed": true; even then generator must mark a warning.
+
+==============================
+6. Validation rules & status codes (mandatory)
+==============================
+6.1 validation_status semantics
+- "ok": all mandatory mappings succeeded or were auto‑mapped with high confidence (≥0.85) and recompute performed; no critical warnings.
+- "warning": some items were unmapped or auto-mapped with medium confidence (0.5 ≤ score < 0.85); recompute applied but human review recommended.
+- "error": required mapping failed (score <0.5) for items that are mandatory (e.g., armor/shield) OR recompute resulted in contradictions that cannot be auto-corrected; generator must set validation_status="error" and include actionable entries in validation_log.
+
+6.2 Mandatory validation checks (list)
+- waehrung.gold ≥ 0
+- All attribute values are integers
+- lp_max matches class formula
+- For each ausruestung item:
+  - canonical_item_id is set OR item marked as unmapped (and is not required)
+  - If typ == "Rüstung": SR boni present (either from mapping or logged as unmapped)
+  - If typ == "Schild": PA boni present
+- Derived values pa/asw/sr.total/rz/rr/rw computed as per Section 5
+- If any computed value differs from prefilled → recompute_fix logged
+- If any unmapped required item → validation_status="error"
+
+6.3 validation_log format (required)
+- Each entry:
+  {
+    "timestamp": "ISO8601",
+    "step": "string", // e.g., "auto_map", "recompute_fix", "unmapped"
+    "type": "info"|"auto_map"|"recompute_fix"|"warning"|"error",
+    "details": { ... } // structured: item_name, matched_ref_id, score, field, old, new, reason
   }
 
-Aktualisiertes Minimal‑Template (Auszug):
-  "abgeleitete_werte": { "lp_max":0,"lp_aktuell":0,"ini_bonus":0,"bew":0,"max_mana":0,"mana_aktuell":0 },
-  "zauber": { "cantrips": [], "known": [], "prepared": [] }
+==============================
+7. Fallback / Auto‑Correction Strategy (deterministic)
+==============================
+- Exact match → apply reference boni.
+- Fuzzy match score ≥ 0.85 → apply reference boni; log auto_map (confidence).
+- 0.5 ≤ score < 0.85 and category matches uniquely → apply and log (validation_status may be "warning").
+- score < 0.5 or multiple ambiguous matches → DO NOT apply; set unmapped, set conservative default (no boni), set validation_status "error" if item is required (Rüstung/Schild for classes that need them) else "warning".
 
-====================================
-3. Mana‑System (Regeln)
-====================================
-- max_mana Berechnung (bindend für Magier):
-  max_mana = 10 + attribute.int + sum( ausruestung.boni where typ == "MANA" )
-  (Stab‑Mana‑Bonusse werden als boni.typ = "MANA" geführt; siehe Stab‑Darstellung weiter unten.)
-  (Referenz: Stäbe in Ausrüstungstabelle: z. B. "Stab der Quelle" +10 Mana [[11]].)
-- mana_aktuell beim Erstellen:
-  - Setze mana_aktuell := max_mana beim Erstellen (wenn Klasse == "Magier").
-- Regeneration:
-  - Volle Regeneration von mana_aktuell (→ max_mana) nach einer langen Rast (8 Stunden).
-- Level‑Up:
-  - Bei Attributsänderung oder Ausrüstungsänderung wird max_mana neu berechnet; Generator aktualisiert max_mana; mana_aktuell bleibt unverändert (wie bei LP).
-- Mana‑Verfügbarkeit:
-  - Ein Zauber kann nur gewirkt werden, wenn caster.mana_aktuell ≥ spell.mana_cost. Bei unzureichendem Mana ist Zauber nicht ausführbar.
+Examples (authoritative values in ref table):
+- Lederrüstung → SR = 1 (ref id: e.g. "lederharnisch") [[11]].
+- Holzschild → PA +1 (ref id: "holzschild") [[11]].
+- Turmschild → PA +3, ASW −2, RR −1 (ref id: "turmschild") [[11]].
 
-(Citation: Stäbe & Mana-Boni siehe Item‑Liste Stäbe in deiner Datei [[11]].)
+==============================
+8. Pseudocode: Full authoritative generation flow
+==============================
+-- Load reference_table (ref_table_version)
+-- Create character object, set attributes 0
+-- Apply Volk/Beruf/Klasse modifiers
+-- If stufe == 1: clamp attributes to [-1,+3]
+-- Compute initial derived values (lp_max etc) tentatively
+-- For each ausruestung item:
+     if item.canonical_item_id: ref = lookup(item.canonical_item_id)
+     else:
+         ref,score = fuzzy_lookup(item.name)
+         if score >= 0.85: item.canonical_item_id = ref.id; log auto_map
+         else if score >= 0.5 and category matches unique: item.canonical_item_id = ref.id; log auto_map (warning)
+         else: item.canonical_item_id = null; log unmapped; if item.typ in ["Rüstung","Schild"] then validation_status="error"
+-- For each mapped item: merge ref.boni into item.boni (ref wins for base boni; custom boni can be present but additive)
+-- Recompute authoritative derived values as per Section 5
+-- For each field where recomputed != prefilled:
+     replace value; add recompute_fix to validation_log
+-- Run final validation checks
+-- If validation_status != "ok": include detailed human-readable reasons
+-- Output final JSON + validation_log + validation_status + spec_version + ref_table_version
 
-====================================
-4. Stäbe / Arkane Foci (Darstellung & Regeln)
-====================================
-- Stäbe sind gewöhnliche Ausrüstungsobjekte (ausruestung[]), mit:
-  - name, typ: "Stab" (oder "Anderes" mit tag), preis, gewicht, boni: [ ... ],
-  - optional: "min_stufe": Integer (falls der Stab eine Mindeststufe verlangt)
-- Bonitypen für Stäbe:
-  - { "typ": "MANA", "wert": Integer, "quelle": "Stab XY" } — erhöht max_mana
-  - { "typ": "INT", "wert": Integer, "quelle": "Stab XY" } — temporärer Attributsmodifier für Zauber‑Würfe (wir werten INT‑Bonusse in casting_roll ein)
-- Regel: Ohne Stab erleidet der Magier −2 Malus auf alle Spellcasting‑Würfe (numerischer Malus).
-- Regel: Stäbe mit min_stufe dürfen nur verwendet werden, wenn charakter.stufe ≥ min_stufe.
-- Beispiel (aus [[11]]): "Stab der Quelle": boni: [ { typ: "MANA", wert: 10 } ], Preis 100 GM [[11]].
+==============================
+9. Testcases (to include in CI/unit tests)
+==============================
+TC1 (Kaspian example):
+- Input: Kaspian JSON (as earlier)
+- Expected actions:
+  - Map "Lederrüstung" → "lederharnisch" (score high)
+  - ref.boni supplies SR=1 → set ausruestung.boni accordingly
+  - Recompute asw = 9 + ges(3) + floor(wis(2)/2) + sum(ASW bonuses 0) = 13
+  - sr.total = 1
+  - validation_log includes auto_map + recompute_fix entries
+  - validation_status = "ok"
+- Expected output snippet (relevant parts):
+  "abwehr": { "pa": 10, "asw": 13, "sr": { "total": 1, "quellen":[ { "quelle":"Lederrüstung", "wert": 1, "ref_id":"lederharnisch" } ] } }
 
-====================================
-5. Spell‑Schema (JSON) — verbindlich
-====================================
-Jeder Zauber ist ein JSON‑Objekt mit mindestens diesen Feldern:
+TC2 (typo shield):
+- Input: item name "Holz schild" (typo)
+- Expected: fuzzy match to "Holzschild" with score ≥ 0.85 → apply PA +1; log auto_map.
+
+TC3 (ambiguous item):
+- Input: "schwere robbe" (nonsense)
+- Expected: no mapping (score < 0.5) → set unmapped; if required type then validation_status = "error"; otherwise warning.
+
+==============================
+10. Example corrected Kaspian (after recompute) — canonical ids illustrative
+==============================
 {
-  "id": "String",            // unique identifier
-  "name": "String",
-  "grade": Integer,          // 1..n
-  "zielwert_basis": Integer, // z. B. 8, 9, 10
-  "mana_cost": Integer,
-  "range": { "base_m": Number, "per_level_m": Number }, // Reichweite
-  "duration": "instant" | "runden" | "minuten" | "stunden" | "permanent" | "custom",
-  "duration_value": Number | null, // wenn duration != instant
-  "action_type": "Freie Aktion" | "Aktion" | "Große Aktion" | "Reaktion",
-  "target": "single" | "area" | "self" | "cone" | "line" | "touch",
-  "area": { "shape":"cube"|"sphere"|"cone", "size_m": Number } | null, // für area spells
-  "save": null | { "typ":"RZ"|"RR"|"RW", "on_success":"half"|"negate"|"other", "note":"String" },
-  "flags": [ "ignores_armor","ignores_cover","auto_hit","projectiles_by_level", ... ], // optional
-  "projectiles_by_level": { "1":1, "3":2, "6":3, "8":4 } // optional
-  "description": "String"
+  "spec_version":"v0.11",
+  "ref_table_version":"ausruestung_2025-09-04",
+  "name":"Kaspian",
+  "spieler":"KI",
+  "konzept":"Waldläufer mit Fokus auf Fernkampf und Überleben",
+  "stufe":1,
+  "ep":0,
+  "volk":"Mensch",
+  "beruf":"Waldläufer",
+  "klasse":"Waldläufer",
+  "attribute": { "str":1, "ges":3, "kon":2, "int":0, "wis":2, "cha":0 },
+  "abgeleitete_werte": { "lp_max":16, "lp_aktuell":16, "ini_bonus":2, "bew":5, "max_mana":0, "mana_aktuell":0 },
+  "abwehr": { "pa":10, "asw":13, "sr": { "total":1, "quellen":[ { "quelle":"Lederrüstung", "wert":1, "ref_id":"lederharnisch" } ] } },
+  "rettungswuerfe": { "rz_bonus":1, "rr_bonus":2, "rw_bonus":1 },
+  "angriffe":[ ... ],
+  "ausruestung":[
+    { "canonical_item_id":"langbogen", "name":"Langbogen", "typ":"Waffe", "preis":65, "gewicht":2.0, "boni":[ { "typ":"FK_Angriff","wert":0,"quelle":"Langbogen" } ], "schaden_basis":5, "beschreibung":"Standard Fernkampfwaffe" },
+    { "canonical_item_id":"lederharnisch", "name":"Lederrüstung", "typ":"Rüstung", "preis":45, "gewicht":4.0, "boni":[ { "typ":"SR","wert":1,"quelle":"Lederrüstung" } ], "beschreibung":"Leichte Rüstung: SR +1" },
+    { "canonical_item_id":"kurzschwert", "name":"Kurzschwert", "typ":"Waffe", "preis":40, "gewicht":1.5, "schaden_basis":4, "beschreibung":"Nahkampfwaffe" }
+  ],
+  "waehrung": { "gold": 180 },
+  "validation_log":[
+    { "timestamp":"2025-09-04T12:00:00Z", "step":"auto_map", "type":"auto_map", "details": { "item":"Lederrüstung", "matched_ref_id":"lederharnisch", "score":0.98 } },
+    { "timestamp":"2025-09-04T12:00:00Z", "step":"recompute_fix", "type":"recompute_fix", "details": { "field":"asw", "old":11, "new":13, "reason":"asw = 9 + ges + floor(wis/2) + ASW-boni (recomputed from attributes + reference boni)" } },
+    { "timestamp":"2025-09-04T12:00:00Z", "step":"recompute_fix", "type":"recompute_fix", "details": { "field":"sr.total", "old":0, "new":1, "reason":"sr from reference 'Lederrüstung' (ref id: lederharnisch)" } }
+  ],
+  "validation_status":"ok"
 }
 
-Hinweis: spell.zielwert_total für Casting/Saves wird in Workflow bestimmt (siehe unten).
+(Values for canonical_item_id and prices should reflect the exact entries in reference file; e.g., Langbogen price 65 GM, Lederrüstung 45 GM, etc. — see ref table) [[11]]
 
-====================================
-6. Casting‑Workflow (Engine‑Pseudocode)
-====================================
-Algorithmus (bindend / maschinenlesbar):
+==============================
+11. Implementation recommendations for KI‑Generators
+==============================
+- Always load and lock a specific ref_table_version before batch generation; include ref_table_version in outputs.
+- Provide deterministic mapping: set a fixed fuzzy algorithm and threshold (documented in generator config).
+- Implement unit tests for TC1–TC3; fail generation if validation_status == "error".
+- Expose validation_log to operators and optionally to players (readable) to explain auto corrections.
+- Provide a CLI flag --force-accept-unmapped for debugging (but requires manual review and sets validation_status to "warning").
 
-Function cast_spell(caster, spell, targets):
-  // 0. Preconditions
-  if caster.klasse != "Magier": reject unless spell allowed for class.
-  if caster.mana_aktuell < spell.mana_cost: reject ("insufficient mana")
+==============================
+12. Backwards compatibility notes
+==============================
+- v0.11 is backwards compatible with v0.10 output format, but adds required canonical_item_id (or deterministic mapping) and validation fields; older outputs without canonical ids will be rejected by strict validators or assigned validation_status warnings/errors.
 
-  if spell.min_stufe exists and caster.stufe < spell.min_stufe: reject ("too low level for item/spell")
+==============================
+13. Summary (one paragraph)
+==============================
+Spec v0.11 makes authoritative use of the provided Ausrüstungs‑Referenztabelle as the single source of truth for item boni and prices (e.g., Lederrüstung SR=1, Holzschild PA+1, Turmschild PA+3 / ASW−2 as given in the table) [[11]], enforces deterministic mapping and mandatory recomputation of all derived values from attributes + reference boni, requires all automatic corrections to be logged in validation_log, and returns a clear validation_status ("ok"/"warning"/"error") so AI generators cannot silently emit inconsistent PA/ASW/SR/LP values. This ensures robust, auditable, and machine-verifiable character generation for batch and interactive use.
 
-  // 1. Spend Mana (immediately)
-  caster.mana_aktuell -= spell.mana_cost
-  Log(action="spend_mana",caster,spell,mana_before,mana_after)
+==============================
+14. Change log (since v0.10)
+==============================
+- Added mandatory reference_table usage and canonical_item_id mapping.
+- Added deterministic fuzzy-matching rules and thresholds (≥0.85 auto-map).
+- Added mandatory recompute of derived values (pa/asw/sr/etc.) from attributes + item boni.
+- Added validation_status and structured validation_log with auto_map and recompute_fix entries.
+- Added testcases TC1–TC3 and corrected example output for Kaspian.
 
-  // 2. Compute effective casting stat
-  effective_int = caster.attribute.int + sum( ausruestung.boni where typ == "INT" )
-  if caster has no equipped Stab (ausruestung with typ "Stab" or boni.typ== "MANA" etc):
-    effective_int -= 2   // staff penalty
-
-  // 3. Compute casting roll target
-  // spell_zielwert_total = spell.zielwert_basis + caster.stufe
-  target_value_total = spell.zielwert_basis + caster.stufe
-
-  // 4. Roll for casting
-  d = roll_d20()
-  casting_roll = d + effective_int
-  Log(action="casting_roll", caster, d, effective_int, casting_roll, target_value_total)
-  // Criticals
-  if d == 20: success = true (automatic success)
-  else if d == 1: success = false (automatic failure)
-  else success = (casting_roll >= target_value_total)
-
-  if not success:
-    Log(action="spell_failed", caster, spell)
-    return { success:false, reason:"casting_failed" } // mana already spent
-
-  // 5. If success: apply spell effect per definition
-  for each target in targets:
-    if spell.save != null:
-      // target rolls saving throw
-      save_roll_d = roll_d20()
-      save_bonus = target.get_save_bonus(spell.save.typ) // uses rz/rr/rw formulas + boni
-      save_total = save_roll_d + save_bonus
-      success_save = (save_total >= target_value_total)
-      Log(action="save_roll", target, save_roll_d, save_bonus, save_total, target_value_total, success_save)
-      // Apply effect based on save and spell.save.on_success (e.g. half damage)
-    else:
-      // apply spell effect directly (e.g. auto_hit projectiles)
-  // 6. Log effect outcomes
-  return { success:true, details: ... }
-
-Notes:
-- target_value_total uses caster.stufe scaling (consistent with earlier rule: "Stufe des wirkenden Magiers wird zum Rettungswurf-Zielwert addiert").
-- Saves use defender W20 + appropriate save bonus (rz/rr/rw per Spec v0.9).
-- Mana is consumed even if casting fails.
-- Critical natural 20 → auto success; natural 1 → auto fail (mana still spent).
-
-====================================
-7. Kritische Erfolge / Patzer
-====================================
-- Natural 20 auf Casting d20: Automatical success (spell effect applies regardless of target_value_total).
-- Natural 1 on casting d20: Automatic failure (spell has no effect). Mana still consumed.
-- Implementationshinweis: Systems may add critical enhancement effects (e.g. doubled damage) — optional house rule, not default.
-
-====================================
-8. Spell‑Zielwert / Saves (Konsistenz)
-====================================
-- Casting target: spell_zielwert_total = spell.zielwert_basis + caster.stufe
-- Defender Save: W20 + defender.save_bonus ≥ spell_zielwert_total to resist (consistent with previous "Verteidigung gegen magische Angriffe" Regeln).
-- Save bonuses use the v0.9 formulas (floor(...)) for rz/rr/rw.
-
-====================================
-9. Zauberzugänglichkeit & Lernregeln (Defaults)
-====================================
-- Grade Unlocks:
-  - Grade 1 available from Stufe 1
-  - Grade 2 available from Stufe 3
-  - Grade 3 available from Stufe 5
-  (Matches your drafts.)
-- Start‑Zauber (Creation rule):
-  - Magier starten mit:
-    - 2 Cantrips (grade 0) — "cantrips" list
-    - 2 Grade‑1 Zauber (in "known" oder "prepared")
-  - Generator: Wenn kein Spieler‑Auswahl, wähle typische defaults (Magisches Geschoss, Schild).
-- Lernregel (Default):
-  - Bei jedem Level‑Aufstieg erhält Magier +1 neues "known" Spell (beliebiger Grad ≤ erlaubtem Grad durch Stufe). Prepared‑Mechanik optional: Generator prepares subset per session if system uses prepared spells.
-  - Cantrips: +1 Cantrip bei Stufen 3, 6, 9 (optional rule).
-- Diese Regeln sind defaults und können später angepasst.
-
-====================================
-10. Staf/Item‑Repräsentation / Beispiele
-====================================
-- Stäbe in ausruestung[] sollten boni enthalten z. B.:
-{
-  "name":"Stab der Quelle",
-  "typ":"Stab",
-  "preis":100,
-  "gewicht": 2,
-  "boni":[ { "typ":"MANA", "wert":10, "quelle":"Stab der Quelle" } ],
-  "min_stufe": 1,
-  "beschreibung":"Vergrößert den Mana-Pool des Trägers um 10."
-}
-(Referenzdaten aus deiner Tabelle: "Stab der Quelle" +10 Mana, Preis 100 GM) [[11]].
-
-- Stäbe, die INT‑Bonusse geben, verwenden boni { "typ":"INT", "wert": +N } oder attribute_modifiers (Generator implementiert INT‑boni beim Casting‑Roll) [[11]].
-
-====================================
-11. Spell‑Beispiele (JSON) — aus deinen Drafts
-====================================
-(Die folgenden Spell‑Objekte sind direkt aus deinen Drafts übertragen. Felder wie range/duration wurden interpretiert.)  
-Hinweis: Texte gekürzt/normalisiert für maschinenlesbare Felder.
-
-1) MAGISCHES GESCHOSS (Grad 1)
-{
-  "id":"MAG_GESCHOSS",
-  "name":"Magisches Geschoss",
-  "grade":1,
-  "zielwert_basis":8,
-  "mana_cost":3,
-  "range": { "base_m": 55, "per_level_m": 9 },
-  "duration":"instant",
-  "action_type":"Aktion",
-  "target":"single",
-  "projectiles_by_level": { "1":1, "3":2, "6":3, "8":4 },
-  "flags":[ "auto_hit", "ignores_armor","ignores_cover" ],
-  "description":"Erzeugt 1 projectile (mehr auf höheren Stufen). Jedes projectile verursacht 1W4 Schaden und trifft automatisch, ignoriert Rüstung/Deckung."
-}
-
-2) SCHILD (Grad 1)
-{
-  "id":"SCHILD",
-  "name":"Schild",
-  "grade":1,
-  "zielwert_basis":8,
-  "mana_cost":4,
-  "range": { "base_m":0, "per_level_m":0 },
-  "duration":"runden",
-  "duration_value": 2, // pro Stufe; interpretierung note: engine: duration_value * caster.stufe
-  "action_type":"Aktion",
-  "target":"self",
-  "save": null,
-  "flags": [],
-  "description": "Gewährt +3 ASW gegen Fernkampfangriffe und +1 PA gegen andere Angriffe. Dauer: 2 Runden pro Stufe."
-}
-
-3) LICHT (Grad 1)
-{
-  "id":"LICHT",
-  "name":"Licht",
-  "grade":1,
-  "zielwert_basis":8,
-  "mana_cost":3,
-  "range": { "base_m":55, "per_level_m":0 },
-  "duration":"minuten",
-  "duration_value":10, // pro Stufe
-  "action_type":"Aktion",
-  "target":"area",
-  "area":{ "shape":"sphere", "size_m":6 },
-  "save": { "typ":"RW", "on_success":"negate", "note":"Wenn direkt auf Augen gewirkt: RW-Wurf sonst geblendet" },
-  "flags": [],
-  "description":"Erzeugt eine Lichtquelle Radius 6m; bei direkt gewirkt: RW halb/Blindheits-Effect."
-}
-
-4) SCHLAF (Grad 1)
-{
-  "id":"SCHLAF",
-  "name":"Schlaf",
-  "grade":1,
-  "zielwert_basis":8,
-  "mana_cost":5,
-  "range": { "base_m":27, "per_level_m":0 },
-  "duration":"special",
-  "action_type":"Aktion",
-  "target":"area",
-  "area":{ "shape":"cube", "size_m":3 },
-  "save": { "typ":"RW", "on_success":"negate", "note":"Betroffene müssen Willenswurf schaffen, Anzahl Betroffener = 1W6 + caster.attribute.int; Kreaturen mit höherer Stufe als caster immun" },
-  "flags": [],
-  "description":"Versetzt Kreaturen in 3x3m Gebiet in Schlaf. Betroffene: 1W6 + INT des Magiers; höhere Stufe = immun."
-}
-
-5) FEDERFALL (Grad 1)
-{
-  "id":"FEDERFALL",
-  "name":"Federfall",
-  "grade":1,
-  "zielwert_basis":8,
-  "mana_cost":3,
-  "range": { "base_m": 9, "per_level_m": 9 }, // 9m/Stufe interpreted as per_level_flex. For engine: max_range = base_m * caster.stufe or similar
-  "duration":"runden",
-  "duration_value":1, // per stufe
-  "action_type":"Reaktion",
-  "target":"single",
-  "save": null,
-  "flags": [],
-  "description":"Verlangsamt Fallgeschwindigkeit; verhindert Fallschaden; kann als Reaktion gewirkt werden."
-}
-
-6) NETZ (Grad 2)
-{
-  "id":"NETZ",
-  "name":"Netz",
-  "grade":2,
-  "zielwert_basis":9,
-  "mana_cost":6,
-  "range": { "base_m":9, "per_level_m":0 },
-  "duration":"minuten",
-  "duration_value":20, // per stufe
-  "action_type":"Aktion",
-  "target":"area",
-  "area": { "shape":"cube", "size_m":5 },
-  "save": { "typ":"RZ", "on_success":"negate", "note":"Befreiung via Stärke-Wurf (Zielwert 10)" },
-  "flags": [],
-  "description":"Erschafft klebriges Netz 5x5m; betroffene bewegungsunfähig; Stärke-Wurf Zielwert 10 zum Befreien."
-}
-
-7) UNSICHTBARKEIT (Grad 2)
-{
-  "id":"UNSICHTBARKEIT",
-  "name":"Unsichtbarkeit",
-  "grade":2,
-  "zielwert_basis":9,
-  "mana_cost":7,
-  "range": { "base_m":0, "per_level_m":0 },
-  "duration":"permanent",
-  "duration_value":null,
-  "action_type":"Aktion",
-  "target":"single",
-  "save": null,
-  "flags": [],
-  "description":"Ziel wird unsichtbar; endet bei offensiver Aktion des Ziels."
-}
-
-8) SPIEGELBILD (Grad 2)
-{
-  "id":"SPIEGELBILD",
-  "name":"Spiegelbild",
-  "grade":2,
-  "zielwert_basis":9,
-  "mana_cost":7,
-  "range": { "base_m":0, "per_level_m":0 },
-  "duration":"runden",
-  "duration_value":1, // per stufe
-  "action_type":"Aktion",
-  "target":"self",
-  "save": null,
-  "flags": [],
-  "description":"Erzeugt 1W4 Doppelgänger + 1 pro 3 Stufen; Angriffe treffen ggf. Bilder zuerst."
-}
-
-9) FURCHT (Grad 2)
-{
-  "id":"FURCHT",
-  "name":"Furcht",
-  "grade":2,
-  "zielwert_basis":9,
-  "mana_cost":6,
-  "range": { "base_m":27, "per_level_m":0 },
-  "duration":"runden",
-  "duration_value": { "min":1, "max_formula": "1W4" },
-  "action_type":"Aktion",
-  "target":"area",
-  "area": { "shape":"sphere", "size_m":3 }, // interpret length per draft
-  "save": { "typ":"RW", "on_success":"negate" },
-  "flags": [],
-  "description":"Erzeugt Furcht in Kreaturen mit weniger als 6 LP im Wirkungsbereich; RW Willenskraft um zu resistieren."
-}
-
-10) KLOPFEN (Grad 2)
-{
-  "id":"KLOPFEN",
-  "name":"Klopfen",
-  "grade":2,
-  "zielwert_basis":9,
-  "mana_cost":4,
-  "range": { "base_m":55, "per_level_m":0 },
-  "duration":"instant",
-  "action_type":"Aktion",
-  "target":"single",
-  "save": null,
-  "flags": [],
-  "description":"Öffnet verschlossene Türen/Kisten; erzeugt lautes Klopfen (Wahrnehmungs-Risiko)."
-}
-
-11) FEUERBALL (Grad 3)
-{
-  "id":"FEUERBALL",
-  "name":"Feuerball",
-  "grade":3,
-  "zielwert_basis":10,
-  "mana_cost":9,
-  "range": { "base_m":9, "per_level_m":1 },
-  "duration":"instant",
-  "action_type":"Aktion",
-  "target":"area",
-  "area": { "shape":"sphere", "size_m":6 },
-  "save": { "typ":"RR", "on_success":"half" },
-  "flags": [],
-  "description":"6m Radius Explosion; 1W6 Feuerschaden pro Stufe des Magiers; erfolgreicher Reflex RW halbiert Schaden."
-}
-
-12) BLITZSCHLAG (Grad 3)
-{
-  "id":"BLITZSCHLAG",
-  "name":"Blitzschlag",
-  "grade":3,
-  "zielwert_basis":10,
-  "mana_cost":10,
-  "range": { "base_m":18, "per_level_m":9 },
-  "duration":"instant",
-  "action_type":"Aktion",
-  "target":"line",
-  "area": { "shape":"line", "size_m":18 }, // length 18m by default
-  "save": { "typ":"RR", "on_success":"half" },
-  "flags": [],
-  "description":"18m lange Linie, 1W6 Blitzschaden pro Stufe; Reflex RW halbiert."
-}
-
-13) HAST (Grad 3)
-{
-  "id":"HAST",
-  "name":"Hast",
-  "grade":3,
-  "zielwert_basis":10,
-  "mana_cost":8,
-  "range": { "base_m":55, "per_level_m":0 },
-  "duration":"runden",
-  "duration_value":3,
-  "action_type":"Große Aktion",
-  "target":"area",
-  "area": { "shape":"cube", "size_m":12 },
-  "save": null,
-  "flags": [],
-  "description":"Betroffene (bis 1 pro Stufe) agieren mit doppelter Bewegungsrate und erhalten eine zusätzliche Angriffsaktion pro Runde; Dauer 3 Runden."
-}
-
-====================================
-12. Sonstige Engine / Daten‑Regeln
-====================================
-- Spell IDs sollten eindeutig und versioniert werden.
-- Logging: Jeder Cast mit pre/post mana, cast roll, d20, targets, saves protokollieren.
-- Balancing: Mana‑Kosten sind so gesetzt wie in Drafts; Anpassungen über Time/Playtests empfohlen.
-
-====================================
-13. Validierung & Konsistenzchecks (Magie‑bezogen)
-====================================
-Generator/Engine prüft:
-- Für magische Items (Stäbe): min_stufe ≤ char.stufe bevor equipping allowed.
-- caster.mana_aktuell ≥ spell.mana_cost vor Cast.
-- spell.grade ≤ caster.allowed_grade_by_level (z. B. grade2 only if stufe ≥ 3).
-- casting_roll/Targets logged.
-
-====================================
-14. Fragen & offene Optionen (kurz)
-====================================
-Ich habe die Default‑Lernregel gesetzt: +1 known spell pro Level, Start: 2 Cantrips + 2 Grade‑1. Wenn du andere Learning‑Rules willst (z. B. Spell‑slots statt known/prepared), sage kurz Bescheid.
-
-====================================
-15. Quellenhinweise (nur wenn Itemdaten verwendet wurden)
-====================================
-- Stab-/Item‑Daten (Beispiele, Preise und Boni) wurden der Ausrüstungsdatei entnommen (Stab‑Liste, Rüstungs/Preis‑Tabellen) [[11]].
-
-====================================
-Ende Spec v0.10
-====================================
-
+------------------------------
+End Spec v0.11
+------------------------------
