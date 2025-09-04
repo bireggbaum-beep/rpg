@@ -1,4 +1,4 @@
-# Statblock Spezifikation – Spielcharakter (SC) v0.3
+# Statblock Spezifikation – Spielcharakter (SC) v0.5
 =============================================
 
 ## Zweck
@@ -15,14 +15,17 @@ Einheitliche Regeln und eine feste Datenstruktur für die **Generierung** von Sp
 Ein Generator MUSS die folgenden Schritte in exakter Reihenfolge ausführen, um einen Stufe-1-Charakter zu erstellen.
 
 *   **Schritt 1: Initialisierung:** Erstelle ein leeres Charakter-Objekt. Setze alle sechs Kernattribute (`str`, `ges`, `kon`, `int`, `wis`, `cha`) auf `0`.
-*   **Schritt 2: Volk wählen:** Wähle ein Volk. Addiere die Attributsmodifikatoren des Volks zu den Kernattributen. Trage die Volks-Fähigkeiten in das `faehigkeiten.volk` Array ein.
-*   **Schritt 3: Beruf wählen:** Wähle einen Beruf aus der Referenztabelle (Sektion 8). Addiere die Attributsmodifikatoren des Berufs zu den Kernattributen. Trage die Berufs-Fähigkeiten in das `faehigkeiten.beruf` Array ein.
-*   **Schritt 4: Klasse wählen:** Wähle eine Klasse aus der Referenztabelle (Sektion 9). Addiere die Attributsmodifikatoren der Klasse zu den Kernattributen. Trage die Stufe-1-Fähigkeit der Klasse in das `faehigkeiten.klasse` Array ein.
+*   **Schritt 2: Volk wählen:** Wähle ein Volk aus der Referenztabelle (Sektion 8).
+    *   **Für alle Völker außer Menschen:** Addiere die Attributsmodifikatoren des Volks zu den Kernattributen.
+    *   **Sonderregel für Menschen:** Führe die "Fokuswahl" (Sektion 8.1) aus, um die Attributsmodifikatoren zu bestimmen und zu addieren.
+    *   Trage die Volkseigenschaften in das `faehigkeiten.volk` Array ein.
+*   **Schritt 3: Beruf wählen:** Wähle einen Beruf aus der Referenztabelle (Sektion 9). Addiere die Attributsmodifikatoren des Berufs zu den Kernattributen. Trage die Berufs-Fähigkeiten in das `faehigkeiten.beruf` Array ein.
+*   **Schritt 4: Klasse wählen:** Wähle eine Klasse aus der Referenztabelle (Sektion 10). Addiere die Attributsmodifikatoren der Klasse zu den Kernattributen. Trage die Stufe-1-Fähigkeit der Klasse in das `faehigkeiten.klasse` Array ein.
 *   **Schritt 5: Attributs-Capping (Deckelung):** Überprüfe jedes der sechs Kernattribute.
     *   Wenn ein Attribut größer als `+3` ist, setze es auf `+3`.
     *   Wenn ein Attribut kleiner als `-1` ist, setze es auf `-1`.
     *   Dies sind die finalen Attribute des Charakters.
-*   **Schritt 6: Abgeleitete Werte berechnen:** Berechne alle Werte in `abgeleitete_werte`, `abwehr` und `rettungswuerfe` unter Verwendung der finalen Attribute und der verbindlichen Formeln (Sektion 3, 4, 5).
+*   **Schritt 6: Abgeleitete Werte berechnen:** Berechne alle Werte in `abgeleitete_werte`, `abwehr` und `rettungswuerfe` unter Verwendung der finalen Attribute und der verbindlichen Formeln (Sektion 3, 4, 5, 6).
 *   **Schritt 7: Finale Ausgabe:** Fülle das gesamte JSON-Objekt mit den finalen, berechneten Werten.
 
 ---
@@ -43,7 +46,7 @@ Das finale JSON-Objekt MUSS dieser Struktur folgen.
 - `abwehr`: Objekt (Siehe Sektion 5)
 - `rettungswuerfe`: Objekt (Siehe Sektion 6)
 - `angriffe`: Array von Objekten (Siehe Sektion 7)
-- `faehigkeiten`: Objekt (Siehe Sektion 8)
+- `faehigkeiten`: Objekt
 - `ausruestung`: Array von Objekten
 - `inventar`: Array von Objekten
 - `waehrung`: Objekt
@@ -100,7 +103,28 @@ Die finalen, gekappten Kernattribute des Charakters.
 
 ---
 
-### 8. Berufe (Referenz für Charaktererstellung)
+### 8. Völker (Referenz für Charaktererstellung)
+| Volk      | Attributsmodifikatoren         | Volkseigenschaften                                                                                                                              |
+|-----------|--------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------|
+| Menschen  | Siehe Regel "Fokuswahl" (8.1)  | Glück: 1x pro Spielsitzung einen beliebigen Würfelwurf wiederholen.                                                                               |
+| Zwerge    | STR+1, KON+2, WIS-1            | Dunkelsicht (18m); Resistenz gegen Gift (Vorteil bei Rettungswürfen gegen Gift).                                                                |
+| Elben     | GES+2, KON+1, INT+1, CHA+1     | Scharfe Sinne (+2 auf Bemerkenproben); Immunität gegen Schlafeffekte.                                                                             |
+| Halblinge | GES+1, WIS+1, CHA+2            | Resistenz gegen Furcht (Vorteil bei Rettungswürfen); Glück (1x pro Spielsitzung einen beliebigen Würfelwurf wiederholen).                          |
+| Drakonier | STR+3, KON+2, INT+1            | Schuppenhaut (SR +1); Drachenerbe (1x/Tag, 1W6 Feuer, 5m Kegel, RR ZW 11 für 1/2 Schaden).                                                        |
+| Khajit    | GES+3, CHA+2, KON+1            | Scharfe Sinne (+2 auf Bemerkenproben); Überlegenes Abfangen (kein Fallschaden bis 8m); Klettern +2; Balancieren +2.                               |
+
+#### 8.1 Spezialregel für Menschen: "Fokuswahl"
+Ein Generator, der einen Menschen erstellt, MUSS die folgenden Schritte ausführen:
+1.  Setze alle sechs Attribute auf `+1`.
+2.  Wähle zufällig eine der drei folgenden Optionen:
+    *   **Option A (Fokus Stärke):** Wende einen Malus von `-2` auf `INT` an. (Finaler Startwert für INT ist -1).
+    *   **Option B (Fokus Geschicklichkeit):** Wende einen Malus von `-2` auf `WIS` an. (Finaler Startwert für WIS ist -1).
+    *   **Option C (Fokus Konstitution):** Wende einen Malus von `-2` auf `CHA` an. (Finaler Startwert für CHA ist -1).
+3.  Die resultierenden sechs Werte sind die finalen Attributsmodifikatoren für das Volk "Mensch".
+
+---
+
+### 9. Berufe (Referenz für Charaktererstellung)
 | Beruf         | Attributsmodifikatoren     | Erlernte Fähigkeiten                               |
 |---------------|----------------------------|---------------------------------------------------|
 | Söldner       | STR +2, KON +1, INT -1     | Umgang mit improvisierten Waffen                  |
@@ -117,7 +141,7 @@ Die finalen, gekappten Kernattribute des Charakters.
 
 ---
 
-### 9. Klassen (Referenz für Charaktererstellung)
+### 10. Klassen (Referenz für Charaktererstellung)
 | Klasse     | Attributsmodifikatoren     | Fähigkeiten nach Stufe                                 |
 |------------|----------------------------|-------------------------------------------------------|
 | Krieger    | STR+1, KON+1, INT-1, WIS-1 | Stufe 1: Kampf-Fokus                                  |
@@ -127,10 +151,76 @@ Die finalen, gekappten Kernattribute des Charakters.
 
 ---
 
-### 10. Beschreibungen der Fähigkeiten (Referenz)
-(Die Liste der Fähigkeitsbeschreibungen bleibt unverändert und wird hier der Kürze halber nicht wiederholt.)
+### 11. Erfahrungspunkte (EP) für Stufenanstiege
+Diese Tabelle definiert die Gesamt-EP, die zum Erreichen einer bestimmten Stufe benötigt werden.
+
+| Ziel-Stufe | Benötigte Gesamt-EP | EP-Kosten pro Stufe |
+|:-----------|:--------------------|:--------------------|
+| 1          | 0                   | -                   |
+| 2          | 600                 | 600                 |
+| 3          | 1.400               | 800                 |
+| 4          | 2.800               | 1.400               |
+| 5          | 5.000               | 2.200               |
+| 6          | 8.500               | 3.500               |
+| 7          | 14.000              | 5.500               |
+| 8          | 23.000              | 9.000               |
+| 9          | 36.000              | 13.000              |
+| 10         | 55.000              | 19.000              |
+| 11         | 80.000              | 25.000              |
+| 12         | 120.000             | 40.000              |
+
+---
+
+### 12. Beschreibungen der Fähigkeiten (Referenz)
+Dies ist die maßgebliche Liste der Fähigkeitsbeschreibungen.
+
+- **Auge des Wucherers:** Der Charakter kann den Wert von Schätzen (Edelsteine, Kunstgegenstände) sofort und präzise einschätzen. Er findet zudem bei Schatztruhen oder besiegten Gegnern 10% mehr Gold.
+- **Beschützerinstinkt:** 1x pro Kampf: Wenn ein Gegner einen Angriff gegen einen Verbündeten direkt neben dir ausführt, kannst du deine Reaktion nutzen, um dem Angreifer einen Malus von -2 auf diesen Angriffswurf aufzuerlegen.
+- **Gegenstand identifizieren:** 1x pro Tag: Du kannst eine INT-Probe gegen den SG des Gegenstandes ablegen, um dessen Art, Nutzen und eventuelle Flüche zu erfahren.
+- **Geistheilung:** 3x pro Tag: Als Aktion (kostet 2 Aktionspunkte) kannst du eine WIS-Probe (ZW 11) ablegen. Bei Erfolg heilst du 1W4+WIS Lebenspunkte bei einer Kreatur in Berührungsreichweite.
+- **Glaubensstärke:** Du hast Vorteil bei allen Rettungswürfen gegen Flüche, Verhexungen und geistige Beeinflussung.
+- **Hexenbann:** 1x pro Tag: Du kannst versuchen, einen Zauber zu bannen. Lege dazu eine WIS-Probe gegen ZW 10 + Grad des Zaubers ab. Bei Erfolg wird der Zauber neutralisiert.
+- **Kampf-Fokus:** 1x pro Begegnung: Als freie Aktion kannst du deinen nächsten Nahkampfangriffswurf mit Vorteil ausführen.
+- **Krankheit heilen:** Während einer langen Rast kannst du eine WIS-Probe gegen den SG der Krankheit ablegen, um diese zu heilen.
+- **Leichte Wunden versorgen:** 3x pro Tag: Als Aktion (kostet 2 Aktionspunkte) kannst du 1W4+WIS Lebenspunkte bei einer Kreatur heilen. Benötigt Kräuter.
+- **Lied des Mutes:** 1x pro Kampf: Als Aktion kannst du allen Verbündeten in Hörweite einen Bonus auf alle Rettungswürfe für 10 Minuten geben.
+- **Monsterkunde:** 1x pro Begegnung: Als Aktion kannst du eine INT-Probe (SG 8 + HG der Kreatur) ablegen, um eine relevante Schwäche oder Resistenz zu erfahren.
+- **Resistenz gegen Gifte und Krankheiten:** Du erhältst einen Bonus von +2 auf Rettungswürfe gegen Gifte und Krankheiten.
+- **Spuren lesen:** Du erhältst einen Bonus von +2 auf Proben zum Spurenlesen.
+- **Taktischer Rückzug (Reaktion):** Wenn du im Nahkampf angegriffen wirst, kannst du deine Reaktion nutzen, um dich sofort bis zu deiner halben Bewegungsrate wegzubewegen. Provoziert keine Gelegenheitsangriffe.
+- **Umgang mit improvisierten Waffen:** Du erhältst einen Bonus von +1 auf Angriffswürfe mit improvisierten Waffen.
+- **Untote vertreiben:** 1x pro Tag: Als Aktion müssen alle untoten Kreaturen in Sichtweite einen Willenskraft-Rettungswurf (ZW 12) bestehen oder für 1W6 Runden fliehen.
+- **Wartung:** Du erhältst einen Bonus von +1 auf Würfe, die den Zustand deiner Rüstung betreffen.
+- **Zielen:** Wenn du deine Aktion zum Zielen mit einer Fernkampfwaffe nutzt, erhältst du +1 auf den Angriffswurf in deinem nächsten Zug. Kumulativ bis max. +3. Bonus verfällt bei Bewegung (>1 Feld) oder anderer Aktion.
 
 ---
 
 ### Minimal-Template (zum Ausfüllen durch die KI)
-(Das Template bleibt unverändert.)
+```json
+{
+  "name": "",
+  "spieler": "KI",
+  "konzept": "",
+  "stufe": 1,
+  "ep": 0,
+  "volk": "",
+  "beruf": "",
+  "klasse": "",
+  "attribute": { "str": 0, "ges": 0, "kon": 0, "int": 0, "wis": 0, "cha": 0 },
+  "abgeleitete_werte": { "lp_max": 0, "lp_aktuell": 0, "ini_bonus": 0, "bew": 0 },
+  "abwehr": {
+    "pa": 0,
+    "asw": 0,
+    "sr": { "total": 0, "quellen": [] }
+  },
+  "rettungswuerfe": { "rz_bonus": 0, "rr_bonus": 0, "rw_bonus": 0 },
+  "angriffe": [],
+  "faehigkeiten": {
+    "volk": [],
+    "beruf": [],
+    "klasse": []
+  },
+  "ausruestung": [],
+  "inventar": [],
+  "waehrung": { "gold": 0, "silber": 0, "kupfer": 0 }
+}
