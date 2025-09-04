@@ -83,17 +83,17 @@ function renderStatblock(creature) {
       <div class="head">
         <h1 class="name">${txt(creature.name)}</h1>
         <!-- Bild-Container -->
-<div class="creature-image-container ${creature.image ? 'has-image' : ''}" onclick="document.getElementById('image-upload-${currentIndex}').click()">
-  <img class="creature-image" src="${creature.image ? getImageUrl(creature.image) : ''}" alt="${creature.name || 'Kreatur'}">
-  <div class="image-placeholder">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-      <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zm-5-7l-3 3.72L9 13l-3 4h12l-4-5z"/>
-    </svg>
-    <div class="image-placeholder-text">Bild hinzufügen</div>
+        <!-- Bild-Container (Platzhalter) -->
+         <div class="creature-image-container ${creature.image ? 'has-image' : ''}">
+          ${creature.image ? `<img class="creature-image" src="${creature.image}" alt="${creature.name || 'Kreatur'}">` : ''}
+         <div class="image-placeholder">
+         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+         <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zm-5-7l-3 3.72L9 13l-3 4h12l-4-5z"/>
+         </svg>
+       <div class="image-placeholder-text">Bild-Platzhalter</div>
+    </div>
   </div>
-  <button class="image-remove-btn" onclick="event.stopPropagation(); removeCreatureImage(${currentIndex})">×</button>
-  <div class="image-upload-status"></div>
-</div>
+
 <input type="file" id="image-upload-${currentIndex}" style="display:none" accept="image/*" onchange="handleImageUpload(event, ${currentIndex})">
 
         <div class="line">
