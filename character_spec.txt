@@ -26,7 +26,16 @@ Ein Generator MUSS die folgenden Schritte in exakter Reihenfolge ausführen, um 
     *   Wenn ein Attribut kleiner als `-1` ist, setze es auf `-1`.
     *   Dies sind die finalen Attribute des Charakters.
 *   **Schritt 6: Abgeleitete Werte berechnen:** Berechne alle Werte in `abgeleitete_werte`, `abwehr` und `rettungswuerfe` unter Verwendung der finalen Attribute und der verbindlichen Formeln (Sektion 3, 4, 5, 6).
-*   **Schritt 7: Finale Ausgabe:** Fülle das gesamte JSON-Objekt mit den finalen, berechneten Werten.
+*   **Schritt 7: Startausrüstung generieren:**
+      - Bestimme Startgeld basierend auf Klasse:
+        - Krieger/Waldläufer: 3W6 x 10 Gold
+        - Kleriker: 2W6 x 10 Gold  
+        - Magier: 2W6 x 10 Gold
+      - Füge berufsspezifische Gegenstände hinzu (siehe Sektion 9.1)
+      - Generator kauft automatisch sinnvolle Ausrüstung aus der Ausrüstungstabelle
+      - Restgeld wird in `waehrung.gold` eingetragen
+
+*   **Schritt 8: Finale Ausgabe:** Fülle das gesamte JSON-Objekt mit den finalen, berechneten Werten.
 
 ---
 
@@ -138,6 +147,25 @@ Ein Generator, der einen Menschen erstellt, MUSS die folgenden Schritte ausführ
 | Händler       | CHA +2, INT +1, STR -1     | Auge des Wucherers                                |
 | Dorfheiler    | INT +1, WIS +2, STR -1     | Leichte Wunden versorgen, Krankheit heilen        |
 | Hexenjäger    | WIS +2, STR +1, INT -1     | Glaubensstärke, Hexenbann                         |
+
+#### 9.1 - Berufsspezifische Startgegenstände:
+Der Generator hat eine gewisse kreative Freiheit. Das heisst, es müssen nicht exakt diese Beispiel-Items verwendet werden. 
+Die Start-Items sollen zum Beruf passen.
+
+Beispiele für Startausrüstung nach Beruf
+Söldner: Wetzstein, Schlafsack
+Jäger: 20 Pfeile, Jagdfalle
+Schmied: Hammer, Eisenbarren
+Stadtwache: Signalpfeife, Fesseln
+Seefahrer: 15m Seil, Kompass
+Geistlicher: Heiliges Symbol, Weihwasser
+Bibliothekar: Tinte & Feder, Pergament (3)
+Barde: Musikinstrument (Laute)
+Händler: Waage, Handelswaren (20 Silber Wert)
+Dorfheiler: Heilkräuter (3), Verbandszeug
+Hexenjäger: Silberdolch, Heiliges Symbol
+
+
 
 ---
 
