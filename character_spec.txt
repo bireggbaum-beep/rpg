@@ -1,4 +1,4 @@
-# Statblock Spezifikation – Spielcharakter (SC) v0.5
+# Statblock Spezifikation – Spielcharakter (SC) v0.5.1
 =============================================
 
 ## Zweck
@@ -28,14 +28,22 @@ Ein Generator MUSS die folgenden Schritte in exakter Reihenfolge ausführen, um 
 *   **Schritt 6: Abgeleitete Werte berechnen:** Berechne alle Werte in `abgeleitete_werte`, `abwehr` und `rettungswuerfe` unter Verwendung der finalen Attribute und der verbindlichen Formeln (Sektion 3, 4, 5, 6).
 *   **Schritt 7: Startausrüstung generieren:**
       - Bestimme Startgeld basierend auf Klasse:
-        - Krieger/Waldläufer: 3W6 x 10 Gold
-        - Kleriker: 2W6 x 10 Gold  
+        - Krieger/Waldläufer: 150 + 3W6 x 10 Gold
+        - Kleriker: 120 + 3W6 x 10 Gold  
         - Magier: 2W6 x 10 Gold
       - Füge berufsspezifische Gegenstände hinzu (siehe Sektion 9.1)
       - Generator kauft automatisch sinnvolle Ausrüstung aus der Ausrüstungstabelle
       - Restgeld wird in `waehrung.gold` eingetragen
 
 *   **Schritt 8: Finale Ausgabe:** Fülle das gesamte JSON-Objekt mit den finalen, berechneten Werten.
+
+**Schritt 7: Startausrüstung generieren:**
+- Bestimme Startgeld basierend auf Klasse:
+  - Krieger: 150 + 3W6 x 10 Gold
+  - Waldläufer: 120 + 3W6 x 10 Gold  
+  - Kleriker: 100 + 2W6 x 10 Gold
+  - Magier: 80 + 2W6 x 10 Gold
+
 
 ---
 
