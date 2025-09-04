@@ -250,5 +250,5 @@ Dies ist die maßgebliche Liste der Fähigkeitsbeschreibungen.
   },
   "ausruestung": [],
   "inventar": [],
-  "waehrung": { "gold": 0, "silber": 0, "kupfer": 0 }
+  "waehrung": { "gold": 0}
 }
