@@ -1,169 +1,581 @@
 [
   {
-    "name": "Ork-Pl�nderer",
+    "name": "Gnomischer Uhrmacher (Meister)",
     "typ": "Humanoid",
     "traits": [
-      "Ork"
+      "Gnom"
     ],
-    "hg": 1,
-    "ep": 150,
-    "lp": 22,
-    "sr": 3,
-    "sr_bemerkung": "Felle und rostige Metallplatten",
-    "bew": "5",
-    "pa": 14,
-    "asw": 13,
-    "ini": 1,
-    "rz": 12,
+    "hg": "3",
+    "ep": 350,
+    "lp": 30,
+    "sr": 2,
+    "sr_bemerkung": "Lederweste und Werkzeuggürtel",
+    "bew": "4",
+    "pa": 13,
+    "asw": 15,
+    "ini": 4,
+    "rz": 10,
     "rr": 11,
-    "rw": 10,
+    "rw": 12,
+    "pa_bemerkung": [],
+    "asw_bemerkung": "Klein und flink",
+    "angriffe": [
+      {
+        "name": "Verbesserter Schraubenschlüssel",
+        "to_hit": 5,
+        "schaden": "6 (1W6+2)"
+      },
+      {
+        "name": "Explosiver Aufzieh-Gnom (Fernkampf)",
+        "to_hit": 5,
+        "schaden": "6 (1W6+2)",
+        "reichweite": "1xKurz",
+        "zusatz": "Explodiert"
+      }
+    ],
+    "besonderheiten": [
+      "Explosiver Aufzieh-Gnom: Der Uhrmacher kann einen verbesserten Aufzieh-Gnom werfen, der bei Aufprall explodiert und 6 (1W6+2) Wuchtschaden in einem 2m Radius verursacht (1/Begegnung).",
+      "Mechanische Falle: Kann als Aktion eine komplexe mechanische Falle (z.B. eine Bärenfalle) in 1 Runde errichten (1/Begegnung).",
+      "Reparatur: Kann als Aktion einen beschädigten mechanischen Gegenstand reparieren."
+    ],
+    "beute": [
+      {
+        "typ": "Schatz",
+        "wurf": "2W10",
+        "beschreibung": "Goldmünzen"
+      },
+      {
+        "typ": "Ausrüstung",
+        "beschreibung": "Feinmechaniker-Werkzeug",
+        "wurf": "(W6|1)",
+        "wert": 50
+      },
+      {
+        "typ": "Ausrüstung",
+        "beschreibung": "Betäubungsgift",
+        "wurf": "(W6|2)",
+        "wert": 50
+      },
+      {
+        "typ": "Ausrüstung",
+        "beschreibung": "Rauchbombe",
+        "wurf": "(W6|3)",
+        "wert": 20
+      }
+    ],
+    "beschreibung": "Ein kleiner, aber äußerst geschickter Gnom mit einer Schutzbrille und einem Gürtel voller komplizierter Werkzeuge. Gnomische Uhrmacher-Meister sind geniale Erfinder, die sich auf komplexe mechanische Geräte und explosive Mixturen verlassen. Sie sind gefährliche Gegner, die ihre Umgebung in ein Minenfeld verwandeln können."
+  },
+  {
+    "name": "Sumpfhexe (Meisterin)",
+    "typ": "Humanoid",
+    "traits": [
+      "Mensch",
+      "Magier"
+    ],
+    "hg": "5",
+    "ep": 900,
+    "lp": 50,
+    "sr": 1,
+    "sr_bemerkung": "Lumpen",
+    "bew": "4",
+    "pa": 13,
+    "asw": 14,
+    "ini": 2,
+    "rz": 11,
+    "rr": 12,
+    "rw": 9,
+    "pa_bemerkung": [],
+    "asw_bemerkung": "",
+    "angriffe": [
+      {
+        "name": "Verrottender Stab",
+        "to_hit": 4,
+        "schaden": "5 (1W6+1)"
+      },
+      {
+        "name": "Fluch der Verwesung",
+        "to_hit": 0,
+        "auto": true,
+        "schaden": "0",
+        "reichweite": "1xMittel",
+        "anzahl": 1,
+        "zusatz": "Verwesung",
+        "rettungswurf": {
+          "art": "RZ",
+          "zw": 14,
+          "bei_misserfolg": "Ziel ist mit einer Krankheit infiziert und erleidet 1W4 LP Schaden pro Runde.",
+          "bei_erfolg": "Keine Wirkung.",
+          "dauer": "Bis geheilt"
+        }
+      }
+    ],
+    "besonderheiten": [
+      "Sumpf-Tarnung: In Sumpfgebieten ist die Hexe schwer zu entdecken (Wahrnehmung ZW 15).",
+      "Trankbrauen: Kann während eines Kampfes als Aktion einen Heiltrank (mittel) für sich selbst brauen (1/Begegnung).",
+      "Naturmagie: Kann einfache Naturzauber wirken (z.B. Pflanzen wachsen lassen, mit Tieren sprechen)."
+    ],
+    "beute": [
+      {
+        "typ": "Schatz",
+        "wurf": "3W10",
+        "beschreibung": "Goldmünzen"
+      },
+      {
+        "typ": "Ausrüstung",
+        "beschreibung": "Heiltrank (mittel)",
+        "wurf": "(W6|1-2)",
+        "wert": 60
+      },
+      {
+        "typ": "Zutaten",
+        "beschreibung": "Sumpfkraut (selten)",
+        "wurf": "(W6|3-4)",
+        "wert": 20
+      }
+    ],
+    "beschreibung": "Eine alte, zerlumpte Frau mit wirrem Haar und einem bösartigen Lächeln, die in den feuchten Tiefen des Sumpfes haust. Sumpfhexen-Meisterinnen sind mächtige Zauberinnen, die ihre Feinde mit Krankheiten und Verwesung belegen. Sie meiden den direkten Kampf und ziehen es vor, ihre Opfer langsam zu zermürben."
+  },
+  {
+    "name": "Riesenfledermaus (Blutsauger)",
+    "typ": "Tier",
+    "traits": [],
+    "hg": "1",
+    "ep": 150,
+    "lp": 20,
+    "sr": 0,
+    "sr_bemerkung": "",
+    "bew": "2 (Flug 6)",
+    "pa": 13,
+    "asw": 15,
+    "ini": 4,
+    "rz": 12,
+    "rr": 10,
+    "rw": 12,
+    "pa_bemerkung": [],
+    "asw_bemerkung": "Fliegend",
+    "angriffe": [
+      {
+        "name": "Biss",
+        "to_hit": 5,
+        "schaden": "5 (1W6+2)"
+      }
+    ],
+    "besonderheiten": [
+      "Echolokation: Die Riesenfledermaus kann auch in völliger Dunkelheit sehen.",
+      "Blutsauger: Wenn die Fledermaus Schaden verursacht, heilt sie sich um die Hälfte des verursachten Schadens."
+    ],
+    "beute": [
+      {
+        "typ": "Zutaten",
+        "beschreibung": "Fledermausflügel",
+        "wurf": "(W6|1-2)",
+        "wert": 10
+      },
+      {
+        "typ": "Zutaten",
+        "beschreibung": "Fledermausblut (1 Dosis)",
+        "wurf": "(W6|3)",
+        "wert": 20
+      }
+    ],
+    "beschreibung": "Eine riesige Fledermaus mit lederartigen Flügeln und scharfen Zähnen. Riesenfledermäuse leben in dunklen Höhlen und sind nachtaktive Jäger. Sie greifen ihre Beute aus der Luft an und versuchen, Blut zu saugen, um sich zu heilen. Sie sind schnell und schwer zu treffen."
+  },
+  {
+    "name": "Ghul-Fürst",
+    "typ": "Untot",
+    "traits": [
+      "Fleisch"
+    ],
+    "hg": "5",
+    "ep": 900,
+    "lp": 60,
+    "sr": 4,
+    "sr_bemerkung": "Zähe Haut",
+    "bew": "5",
+    "pa": 16,
+    "asw": 15,
+    "ini": 3,
+    "rz": 9,
+    "rr": 11,
+    "rw": "immun",
+    "pa_bemerkung": [],
+    "asw_bemerkung": "",
+    "angriffe": [
+      {
+        "name": "Klaue",
+        "to_hit": 8,
+        "schaden": "8 (1W8+3)",
+        "zusatz": "Paralyse"
+      },
+      {
+        "name": "Biss",
+        "to_hit": 8,
+        "schaden": "7 (1W6+3)"
+      }
+    ],
+    "besonderheiten": [
+      "Paralysierende Klaue: Eine Kreatur, die von der Klaue des Ghul-Fürsten getroffen wird, muss einen Zähigkeits-Rettungswurf (ZW 15) bestehen oder ist für 1 Runde paralysiert.",
+      "Untot: Immun gegen Gift, Krankheit, Furcht, Schlaf, Betäubung, geistesbeeinflussende Effekte. Benötigt keine Luft, Nahrung oder Schlaf.",
+      "Anführer: Alle Ghule im Umkreis von 10m erhalten einen Bonus von +1 auf Angriffs- und Schadenswürfe, solange der Ghul-Fürst lebt."
+    ],
+    "beute": [
+      {
+        "typ": "Schatz",
+        "wurf": "2W10",
+        "beschreibung": "Goldmünzen"
+      },
+      {
+        "typ": "Ausrüstung",
+        "beschreibung": "Amulett des Schutzes",
+        "wurf": "(W6|1)",
+        "wert": 250
+      },
+      {
+        "typ": "Zutaten",
+        "beschreibung": "Ghul-Herz (versteinert)",
+        "wurf": "(W6|2)",
+        "wert": 100
+      }
+    ],
+    "beschreibung": "Ein riesiger, verwesender Humanoid mit scharfen Klauen und einem unstillbaren Hunger nach Fleisch. Ghul-Fürsten sind mächtige untote Kreaturen, die ganze Horden von Ghulen anführen. Sie sind extrem gefährlich im Nahkampf und können ihre Opfer mit ihren paralysierenden Klauen außer Gefecht setzen."
+  },
+  {
+    "name": "Schleim-Bestie",
+    "typ": "Schleimwesen",
+    "traits": [],
+    "hg": "4",
+    "ep": 550,
+    "lp": 55,
+    "sr": 3,
+    "sr_bemerkung": "Gallertartige Masse",
+    "bew": "3",
+    "pa": 10,
+    "asw": 10,
+    "ini": -2,
+    "rz": 12,
+    "rr": 15,
+    "rw": "immun",
+    "pa_bemerkung": "Kann nicht parieren",
+    "asw_bemerkung": "Kann nicht ausweichen",
+    "angriffe": [
+      {
+        "name": "Säure-Tentakel",
+        "to_hit": 6,
+        "schaden": "7 (1W8+2)",
+        "zusatz": "Säureschaden"
+      },
+      {
+        "name": "Verschlingen",
+        "to_hit": 6,
+        "schaden": "0",
+        "zusatz": "Ziel wird verschlungen",
+        "rettungswurf": {
+          "art": "RR",
+          "zw": 15,
+          "bei_misserfolg": "Ziel ist verschlungen, festgesetzt und erleidet pro Runde 7 (1W10) Säureschaden.",
+          "bei_erfolg": "Ziel wird zur Seite gestoßen.",
+          "dauer": "Bis Ziel entkommt (Stärke-Probe ZW 15) oder die Bestie stirbt.",
+          "wiederholung": "Ende jeder eigenen Runde"
+        }
+      }
+    ],
+    "besonderheiten": [
+      "Immunität (Willenskraft): Als geistloses Wesen ist der Schleim immun gegen geistesbeeinflussende Effekte.",
+      "Amorph: Der Schleim kann sich durch Öffnungen zwängen, die nur wenige Zentimeter breit sind.",
+      "Säure: Metall- und Holzausrüstung, die vom Schleim getroffen wird oder eine Runde in ihm verbringt, kann beschädigt werden.",
+      "Immunität: Säure, Blitze, Hiebschaden."
+    ],
+    "beute": [
+      {
+        "typ": "Schatz",
+        "beschreibung": "Teilweise verdaute Münzen und Edelsteine",
+        "wurf": "(W6|1-4)",
+        "wert": 50
+      }
+    ],
+    "beschreibung": "Eine riesige, amorphe Masse aus gallertartiger Substanz, die sich langsam über den Boden wälzt. Schleim-Bestien sind größere und gefährlichere Verwandte der Schleimkubusse. Sie sind gedankenlose Fresser, die alles auf ihrem Weg absorbieren und ihre Opfer mit ihren ätzenden Säure-Tentakeln angreifen."
+  },
+  {
+    "name": "Skelett-Krieger (Schwert)",
+    "typ": "Untot",
+    "traits": [
+      "Knochen"
+    ],
+    "hg": "1/2",
+    "ep": 100,
+    "lp": 13,
+    "sr": 3,
+    "sr_bemerkung": "Verrostete Rüstung",
+    "bew": "4",
+    "pa": 14,
+    "asw": 12,
+    "ini": 0,
+    "rz": 10,
+    "rr": 14,
+    "rw": "immun",
     "pa_bemerkung": [
       {
         "icon": "shield",
         "value": "+1",
-        "description": "Holzschild"
+        "description": "Kleiner Schild"
       }
     ],
     "asw_bemerkung": "",
     "angriffe": [
       {
-        "name": "Grobes Kriegsbeil",
-        "to_hit": 4,
-        "schaden": "7 (1W8+3)",
-        "zusatz": "Niederschlagen"
+        "name": "Verrostetes Kurzschwert",
+        "to_hit": 3,
+        "schaden": "4 (1W6+1)"
       }
     ],
     "besonderheiten": [
-      "Aggressiv: Bewegt sich in seiner Runde immer auf den n�chsten Feind zu, wenn m�glich."
+      "Untot: Immun gegen Gift, Krankheit, Furcht, Schlaf, Betäubung, geistesbeeinflussende Effekte. Benötigt keine Luft, Nahrung oder Schlaf.",
+      "Knochenhaufen: Wenn das Skelett besiegt wird, zerfällt es in einen Haufen Knochen. Es kann wiederbelebt werden, wenn die Knochen innerhalb einer Stunde gesammelt werden."
     ],
     "beute": [
       {
-        "typ": "Schatz",
-        "wurf": "2W8",
-        "beschreibung": "Goldm�nzen"
+        "typ": "Ausrüstung",
+        "beschreibung": "Verrostetes Kurzschwert",
+        "wurf": "(W6|1-3)",
+        "wert": 5
       },
       {
-        "typ": "Ausr�stung",
-        "beschreibung": "Grobes Kriegsbeil",
-        "wert": 10
-      },
-      {
-        "typ": "Ausr�stung",
-        "beschreibung": "Holzschild",
+        "typ": "Ausrüstung",
+        "beschreibung": "Kleiner Schild",
+        "wurf": "(W6|4)",
         "wert": 5
       }
     ],
-    "beschreibung": "Dieser grimmige, gr�n-h�utige Humanoid starrt dich mit blutunterlaufenen Augen an und entbl��t seine hauerartigen Z�hne."
+    "beschreibung": "Ein klapperndes Gerippe, das in Fetzen alter Rüstung steckt und ein verrostetes Kurzschwert schwingt. Skelett-Krieger sind die einfachen Fußsoldaten untoter Armeen, die ohne Furcht oder Zögern angreifen, bis sie zu Staub zerfallen. Sie sind zäh und schwer zu besiegen, da sie keine Schmerzen empfinden."
   },
   {
-    "name": "Sumpf-Schleicher",
-    "typ": "Tier",
+    "name": "Kobold-Fallensteller (Meister)",
+    "typ": "Humanoid",
     "traits": [
-      "Reptil"
+      "Kobold"
     ],
-    "hg": 2,
-    "ep": 200,
-    "lp": 28,
+    "hg": "1",
+    "ep": 150,
+    "lp": 15,
     "sr": 2,
-    "sr_bemerkung": "Schuppige Haut",
-    "bew": "4 (Schwimmen 6)",
-    "pa": 14,
-    "asw": 14,
-    "ini": 3,
-    "rz": 13,
-    "rr": 14,
-    "rw": 11,
+    "sr_bemerkung": "Lederfetzen",
+    "bew": "4",
+    "pa": 13,
+    "asw": 15,
+    "ini": 4,
+    "rz": 12,
+    "rr": 10,
+    "rw": 14,
+    "pa_bemerkung": [],
+    "asw_bemerkung": "Klein und flink",
     "angriffe": [
       {
-        "name": "Biss",
-        "to_hit": 5,
-        "schaden": "6 (1W8+2)"
+        "name": "Vergifteter Dolch",
+        "to_hit": 3,
+        "schaden": "4 (1W4+1)",
+        "zusatz": "Gift"
       },
       {
-        "name": "Giftspucke",
-        "to_hit": 5,
-        "schaden": "3 (1W4+1)",
-        "reichweite": "3xLang",
-        "anzahl": 2,
-        "zusatz": "Ziel wird verlangsamt",
-        "rettungswurf": {
-          "art": "RZ",
-          "zw": 13,
-          "bei_misserfolg": "1 Runde verlangsamt"
-        }
+        "name": "Schleuder",
+        "to_hit": 4,
+        "schaden": "3 (1W4)",
+        "reichweite": "1xKurz"
       }
     ],
     "besonderheiten": [
-      "Sumpftarnung: Hat einen Vorteil bei Verstecken-Proben in Sumpfgebieten."
+      "Fallen stellen: Der Kobold-Fallensteller kann komplexe mechanische Fallen (z.B. Stachelgruben, Giftgasfallen) in 10 Minuten errichten. Die Entdeckung und Entschärfung erfordert eine Wahrnehmungs- oder Diebeswerkzeug-Probe (ZW 15).",
+      "Hinterhältig: Wenn der Kobold aus dem Verborgenen angreift, verursacht sein erster Angriff doppelten Schaden."
     ],
     "beute": [
       {
         "typ": "Schatz",
-        "wurf": "3W6",
-        "beschreibung": "Goldm�nzen"
+        "wurf": "1W8",
+        "beschreibung": "Goldmünzen"
       },
       {
-        "typ": "Zutaten",
-        "beschreibung": "Giftzahn",
-        "wert": 25
+        "typ": "Ausrüstung",
+        "beschreibung": "Diebeswerkzeug",
+        "wurf": "(W6|1)",
+        "wert": 35
       },
       {
-        "typ": "Zutaten",
-        "beschreibung": "Schuppenhaut (1W4 St�ck)",
-        "wert": 10
+        "typ": "Ausrüstung",
+        "beschreibung": "Gift (1 Dosis)",
+        "wurf": "(W6|2)",
+        "wert": 50
       }
     ],
-    "beschreibung": "Diese gro�e, echsenartige Kreatur hat eine schlammverkrustete, moosgr�ne Haut."
+    "beschreibung": "Ein kleiner, reptilienartiger Humanoid mit listigen Augen, der ständig über seine Schulter blickt. Kobold-Fallensteller-Meister sind gerissene und erfahrene Fallensteller, die ihre Gegner mit tödlichen Fallen und hinterhältigen Angriffen überraschen. Sie arbeiten am liebsten in Gruppen und überwältigen ihre Gegner durch zahlenmäßige Überlegenheit und fiese Tricks."
   },
   {
-    "name": "Gruftschrecken",
-    "typ": "Untot",
+    "name": "Gargoyle (Flug) ",
+    "typ": "Konstrukt",
     "traits": [
-      "Geist",
-      "K�rperlos"
+      "Stein"
     ],
-    "hg": 3,
+    "hg": "3",
     "ep": 350,
-    "lp": 35,
-    "sr": 4,
-    "sr_bemerkung": "K�rperlos",
-    "bew": "0 (Flug 6)",
-    "pa": 15,
-    "asw": 15,
-    "ini": 2,
-    "rz": "immun",
+    "lp": 40,
+    "sr": 6,
+    "sr_bemerkung": "Steinerne Haut",
+    "bew": "4 (Flug 6)",
+    "pa": 16,
+    "asw": 12,
+    "ini": 1,
+    "rz": 10,
     "rr": 13,
-    "rw": "immun",
+    "rw": 11,
+    "pa_bemerkung": [],
+    "asw_bemerkung": "Schwerfällig",
     "angriffe": [
       {
-        "name": "Ber�hrung der Verzweiflung",
-        "to_hit": 5,
-        "schaden": "7 (2W6)",
-        "zusatz": "Ziel wird furchtsam",
-        "rettungswurf": {
-          "art": "RW",
-          "zw": 14,
-          "bei_misserfolg": "Ziel wird furchtsam f�r 1W4 Runden"
-        }
+        "name": "Klaue",
+        "to_hit": 6,
+        "schaden": "7 (1W8+3)"
       },
       {
-        "name": "Dunkle St�rkung",
-        "isSpell": true,
-        "reichweite": "8",
-        "anzahl": 2,
-        "beschreibung": "Verb�ndeter erh�lt +2 auf Angriff und Schaden f�r 3 Runden"
+        "name": "Biss",
+        "to_hit": 6,
+        "schaden": "6 (1W6+3)"
       }
     ],
     "besonderheiten": [
-      "K�rperlos: Kann sich durch Kreaturen und Objekte bewegen."
+      "Steinerne Tarnung: Wenn der Gargoyle sich nicht bewegt, ist er von normalem Gestein nicht zu unterscheiden (Wahrnehmung ZW 15).",
+      "Immunität: Gift, Krankheit, Furcht, Schlaf, Betäubung."
     ],
     "beute": [
       {
         "typ": "Zutaten",
-        "beschreibung": "Ektoplasma-Rest",
-        "wert": 40
+        "beschreibung": "Gargoyle-Herz (versteinert)",
+        "wurf": "(W6|1)",
+        "wert": 100
+      },
+      {
+        "typ": "Zutaten",
+        "beschreibung": "Gargoyle-Klaue",
+        "wurf": "(W6|2-3)",
+        "wert": 50
       }
     ],
-    "beschreibung": "Ein kalter Hauch erf�llt den Raum, kurz bevor diese durchscheinende Gestalt erscheint."
+    "beschreibung": "Eine groteske Statue aus dunklem Stein, die plötzlich zum Leben erwacht. Gargoyles sind stumme, unermüdliche Wächter, die oft an alten Gebäuden oder in Verliesen lauern. Sie sind unglaublich widerstandsfähig und greifen mit ihren scharfen Klauen und Zähnen an, um Eindringlinge zu zerfleischen."
+  },
+  {
+    "name": "Waldgeist (Nebel)",
+    "typ": "Geist",
+    "traits": [
+      "Natur"
+    ],
+    "hg": "2",
+    "ep": 200,
+    "lp": 20,
+    "sr": 0,
+    "sr_bemerkung": "Körperlos",
+    "bew": "4 (Flug 4)",
+    "pa": 14,
+    "asw": 14,
+    "ini": 3,
+    "rz": 12,
+    "rr": 11,
+    "rw": 9,
+    "pa_bemerkung": [],
+    "asw_bemerkung": "Ätherisch",
+    "angriffe": [
+      {
+        "name": "Berührung des Waldes",
+        "to_hit": 5,
+        "schaden": "4 (1W6+1)",
+        "zusatz": "Naturmagie"
+      },
+      {
+        "name": "Nebelwand",
+        "to_hit": 0,
+        "auto": true,
+        "schaden": "0",
+        "reichweite": "1xKurz",
+        "anzahl": 1,
+        "zusatz": "Sichtbehinderung",
+        "rettungswurf": {
+          "art": "RW",
+          "zw": 13,
+          "bei_misserfolg": "Ziel ist für 1 Runde geblendet.",
+          "bei_erfolg": "Keine Wirkung.",
+          "dauer": "1 Runde"
+        }
+      }
+    ],
+    "besonderheiten": [
+      "Körperlos: Kann sich durch feste Objekte bewegen. Immun gegen nicht-magischen Hieb-, Stich- und Wuchtschaden.",
+      "Naturverbunden: Erhält einen Bonus von +2 auf alle Rettungswürfe, solange er sich in einem natürlichen Waldgebiet befindet."
+    ],
+    "beute": [
+      {
+        "typ": "Zutaten",
+        "beschreibung": "Waldgeist-Essenz",
+        "wurf": "(W6|1)",
+        "wert": 75
+      },
+      {
+        "typ": "Zutaten",
+        "beschreibung": "Seltene Waldblume",
+        "wurf": "(W6|2-3)",
+        "wert": 25
+      }
+    ],
+    "beschreibung": "Ein schwebender, durchscheinender Geist, der aus Blättern, Moos und Nebel zu bestehen scheint. Waldgeister sind die Hüter alter Wälder und greifen Eindringlinge an, die ihre heiligen Haine stören. Sie verwirren ihre Gegner mit magischen Sporen und entziehen ihnen langsam die Lebensenergie."
+  },
+  {
+    "name": "Skelett-Magier",
+    "typ": "Untot",
+    "traits": [
+      "Knochen",
+      "Magier"
+    ],
+    "hg": "2",
+    "ep": 200,
+    "lp": 18,
+    "sr": 1,
+    "sr_bemerkung": "Zerfetzte Roben",
+    "bew": "4",
+    "pa": 11,
+    "asw": 13,
+    "ini": 1,
+    "rz": 10,
+    "rr": 14,
+    "rw": "immun",
+    "pa_bemerkung": [],
+    "asw_bemerkung": "",
+    "angriffe": [
+      {
+        "name": "Knochenhand",
+        "to_hit": 2,
+        "schaden": "3 (1W4)"
+      },
+      {
+        "name": "Todesstrahl",
+        "to_hit": 4,
+        "schaden": "5 (1W8)",
+        "reichweite": "1xMittel",
+        "zusatz": "Nekrotischer Schaden"
+      }
+    ],
+    "besonderheiten": [
+      "Untot: Immun gegen Gift, Krankheit, Furcht, Schlaf, Betäubung, geistesbeeinflussende Effekte. Benötigt keine Luft, Nahrung oder Schlaf.",
+      "Magieresistenz: Erhält einen Bonus von +1 auf Rettungswürfe gegen Magie."
+    ],
+    "beute": [
+      {
+        "typ": "Ausrüstung",
+        "beschreibung": "Schriftrolle 'Todesstrahl' (WIS 2)",
+        "wurf": "(W6|1)",
+        "wert": 100
+      },
+      {
+        "typ": "Ausrüstung",
+        "beschreibung": "Fokusstab (Knochen)",
+        "wurf": "(W6|2)",
+        "wert": 50
+      }
+    ],
+    "beschreibung": "Ein klapperndes Skelett in zerfetzten Roben, das einen knorrigen Stab hält. Skelett-Magier sind die Überreste von Zauberern, die auch nach dem Tod ihre dunklen Künste praktizieren. Sie unterstützen untote Armeen mit ihren nekrotischen Zaubern und sind gefährliche Gegner, die aus der Distanz angreifen."
   }
 ]
