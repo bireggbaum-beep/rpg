@@ -1,238 +1,231 @@
-# Statblock Spezifikation – Spielcharakter (SC) v0.5.1
-=============================================
+Statblock Spezifikation – Spielcharakter (SC) v0.6
+Aufbauend auf v0.5 — vollständige, maschinen- und KI-generatorfreundliche Spezifikation
 
-## Zweck
-Einheitliche Regeln und eine feste Datenstruktur für die **Generierung** von Spielcharakteren (SCs). Dieses Dokument dient als maßgebliche Anleitung für einen Generator, um sicherzustellen, dass alle erstellten Charaktere konsistent, regelkonform und für digitale Tools lesbar sind.
+Hinweis: Währung ist ausschließlich Gold (GM). Referenzpreise und Gegenstandswerte stammen aus der Ausrüstungstabelle (z. B. Langschwert 80 GM, Kettenhemd 140 GM, Holzschild 15 GM) [[11]].
 
-## Grundprinzipien
-1.  **Algorithmische Generierung:** Die Charaktererstellung ist ein strikter, algorithmischer Prozess. Die Schritte in Sektion 1 MÜSSEN exakt in der angegebenen Reihenfolge ausgeführt werden.
-2.  **Datenintegrität:** Alle Werte im finalen JSON-Objekt MÜSSEN exakt nach den Formeln und Regeln dieses Dokuments berechnet werden. Es gibt keinen Raum für Interpretation.
-3.  **Quellen der Macht:** Die Boni und Fähigkeiten eines Charakters stammen aus drei klar getrennten Quellen: **Volk**, **Beruf** und **Klasse**. Diese MÜSSEN in den dafür vorgesehenen Datenstrukturen erfasst werden.
+==============================
+1. Zweck & Grundprinzipien
+==============================
+Zweck:
+- Einheitliche Regeln und Datenstruktur für algorithmische Erzeugung von Spielercharakteren (SC) durch eine KI/Generator.
+- Ziel: Startcharaktere Stufe 1 (später auch bis Stufe 3+) konsistent, nachvollziehbar und maschinenlesbar erstellen.
 
----
+Grundprinzipien (kurz):
+- Algorithmische Generierung: Schritte in Sektion 2 sind verbindlich.
+- Datenintegrität: Alle abgeleiteten Werte müssen exakt nach Formeln berechnet werden.
+- Quellen der Boni: Volk, Beruf, Klasse – getrennt erfassbar.
 
-### 1. Algorithmische Generierungshierarchie (Verbindlich)
-Ein Generator MUSS die folgenden Schritte in exakter Reihenfolge ausführen, um einen Stufe-1-Charakter zu erstellen.
+==============================
+2. Gesamtablauf / Generator‑Pipeline (verbindlich)
+==============================
+1. Initialisierung
+   - Erzeuge leeres Charakterobjekt.
+   - Setze alle sechs Kernattribute auf 0:
+     attribute = { str:0, ges:0, kon:0, int:0, wis:0, cha:0 }
 
-*   **Schritt 1: Initialisierung:** Erstelle ein leeres Charakter-Objekt. Setze alle sechs Kernattribute (`str`, `ges`, `kon`, `int`, `wis`, `cha`) auf `0`.
-*   **Schritt 2: Volk wählen:** Wähle ein Volk aus der Referenztabelle (Sektion 8).
-    *   **Für alle Völker außer Menschen:** Addiere die Attributsmodifikatoren des Volks zu den Kernattributen.
-    *   **Sonderregel für Menschen:** Führe die "Fokuswahl" (Sektion 8.1) aus, um die Attributsmodifikatoren zu bestimmen und zu addieren.
-    *   Trage die Volkseigenschaften in das `faehigkeiten.volk` Array ein.
-*   **Schritt 3: Beruf wählen:** Wähle einen Beruf aus der Referenztabelle (Sektion 9). Addiere die Attributsmodifikatoren des Berufs zu den Kernattributen. Trage die Berufs-Fähigkeiten in das `faehigkeiten.beruf` Array ein.
-*   **Schritt 4: Klasse wählen:** Wähle eine Klasse aus der Referenztabelle (Sektion 10). Addiere die Attributsmodifikatoren der Klasse zu den Kernattributen. Trage die Stufe-1-Fähigkeit der Klasse in das `faehigkeiten.klasse` Array ein.
-*   **Schritt 5: Attributs-Capping (Deckelung):** Überprüfe jedes der sechs Kernattribute.
-    *   Wenn ein Attribut größer als `+3` ist, setze es auf `+3`.
-    *   Wenn ein Attribut kleiner als `-1` ist, setze es auf `-1`.
-    *   Dies sind die finalen Attribute des Charakters.
-*   **Schritt 6: Abgeleitete Werte berechnen:** Berechne alle Werte in `abgeleitete_werte`, `abwehr` und `rettungswuerfe` unter Verwendung der finalen Attribute und der verbindlichen Formeln (Sektion 3, 4, 5, 6).
-*   **Schritt 7: Startausrüstung generieren:**
-      - Bestimme Startgeld basierend auf Klasse:
-        - Krieger/Waldläufer: 150 + 3W6 x 10 Gold
-        - Kleriker: 120 + 3W6 x 10 Gold  
-        - Magier: 2W6 x 10 Gold
-      - Füge berufsspezifische Gegenstände hinzu (siehe Sektion 9.1)
-      - Generator kauft automatisch sinnvolle Ausrüstung aus der Ausrüstungstabelle
-      - Restgeld wird in `waehrung.gold` eingetragen
+2. Volk wählen
+   - Wende Volksmodifikatoren an (Menschen: Fokuswahl Sektion 8.1).
+   - Trage Volkseigenschaften in faehigkeiten.volk ein.
 
-*   **Schritt 8: Finale Ausgabe:** Fülle das gesamte JSON-Objekt mit den finalen, berechneten Werten.
+3. Beruf wählen
+   - Wende Berufsmodifikatoren an.
+   - Trage Berufs-Fähigkeiten in faehigkeiten.beruf ein.
+   - Markiere 1–2 berufsrelevante Startgegenstände (werden beim Einkauf priorisiert).
 
-**Schritt 7: Startausrüstung generieren:**
-- Bestimme Startgeld basierend auf Klasse:
-  - Krieger: 150 + 3W6 x 10 Gold
-  - Waldläufer: 120 + 3W6 x 10 Gold  
-  - Kleriker: 100 + 2W6 x 10 Gold
-  - Magier: 80 + 2W6 x 10 Gold
+4. Klasse wählen
+   - Wende Klassenmodifikatoren an.
+   - Trage Stufe-1-Fähigkeit(en) in faehigkeiten.klasse (stufe_erhalten: 1).
 
+5. Attributs-Capping (nur beim Erstellen eines Stufe‑1-Charakters)
+   - Nach Anwendung aller Modifikatoren: clamp(each attribute, -1, +3).
+   - Hinweis: Dieses Capping gilt NUR bei Startcharakteren Stufe 1. Nicht mehr bei späteren Stufen.
 
----
+6. Abgeleitete Werte berechnen (siehe Sektion 4,5,6)
+   - Berechne abgeleitete_werte, abwehr, rettungswuerfe, angriffe nach verbindlichen Formeln.
 
-### 2. Top-Level-Felder (Datenstruktur)
-Das finale JSON-Objekt MUSS dieser Struktur folgen.
+7. Startausrüstung generieren / Einkauf (siehe Sektion 3.1 Startgold & Einkauf)
+   - Generiere Startgold nach Klasse.
+   - Ziehe berufsitems ab, kaufe Waffe + Rüstung/Schutz + Restausrüstung nach Konzept / Budget.
+   - Restgeld in waehrung.gold.
 
-- `name`: String
-- `spieler`: String
-- `konzept`: String
-- `stufe`: Integer
-- `ep`: Integer
-- `volk`: String
-- `beruf`: String
-- `klasse`: String
-- `attribute`: Objekt (Siehe Sektion 3)
-- `abgeleitete_werte`: Objekt (Siehe Sektion 4)
-- `abwehr`: Objekt (Siehe Sektion 5)
-- `rettungswuerfe`: Objekt (Siehe Sektion 6)
-- `angriffe`: Array von Objekten (Siehe Sektion 7)
-- `faehigkeiten`: Objekt
-- `ausruestung`: Array von Objekten
-- `inventar`: Array von Objekten
-- `waehrung`: Objekt
+8. Finale Validierung & Ausgabe
+   - Validierungs-Checks (siehe Sektion 9).
+   - Ausgabe des finalen JSON-Objekts.
 
----
+==============================
+3. Top-Level-JSON-Struktur (Schema)
+==============================
+{
+  "name": "String",
+  "spieler": "String",
+  "konzept": "String",
+  "stufe": Integer,
+  "ep": Integer,
+  "volk": "String",
+  "beruf": "String",
+  "klasse": "String",
+  "attribute": { "str": Integer, "ges": Integer, "kon": Integer, "int": Integer, "wis": Integer, "cha": Integer },
+  "abgeleitete_werte": { "lp_max": Integer, "lp_aktuell": Integer, "ini_bonus": Integer, "bew": Integer },
+  "abwehr": { "pa": Integer, "asw": Integer, "sr": { "total": Integer, "quellen":[ { "quelle": "String", "wert": Integer } ] } },
+  "rettungswuerfe": { "rz_bonus": Integer, "rr_bonus": Integer, "rw_bonus": Integer },
+  "angriffe": [ { "name":"String", "typ":"Nahkampf"|"Fernkampf", "to_hit_bonus": Integer, "schaden_basis": Integer, "bemerkung":"String" } ],
+  "faehigkeiten": { "volk": [], "beruf": [], "klasse": [] },
+  "ausruestung": [ { "name":"String", "typ":"Waffe"|"Rüstung"|"Schild"|"Anderes", "boni":[ { "typ":"PA"|"ASW"|"SR"|"NK_Angriff"|"FK_Angriff", "wert": Integer } ], "schaden_basis": Integer? } ],
+  "inventar": [],
+  "custom_items": [],      // neu: vom Generator erzeugte Items mit Metadaten
+  "waehrung": { "gold": Integer },
+  "validation_log": []    // optional: Änderung/Validierungsprotokoll
+}
 
-### 3. Attribute (`attribute`)
-Die finalen, gekappten Kernattribute des Charakters.
+==============================
+4. Attribute (Regeln)
+==============================
+- Struktur: attribute = { str, ges, kon, int, wis, cha } (Integer)
+- Stufe 1 Erstellung:
+  - Startwerte 0, addiere Modifikatoren (volk, beruf, klasse), dann Capping [-1, +3] (nur bei Stufe 1).
+- Stufenanstieg:
+  - Spielercharaktere: Spieler wählt frei +1 auf ein Attribut (kein Capping nach Stufe 1).
+  - KI/Generator/Batch: Generator wählt +1 auf das Attribut, das "konzept‑konform" passt (Heuristik: Klassen‑Priorität erlaubt, aber nicht zwingend).
+  - Dokumentiere jede Attributsänderung im validation_log.
 
-- **Struktur:**
-  "attribute": { "str": "Integer", "ges": "Integer", "kon": "Integer", "int": "Integer", "wis": "Integer", "cha": "Integer" }
+==============================
+5. Abgeleitete Werte (Formeln)
+==============================
+- ini_bonus = round((attribute.ges + attribute.wis) / 2)
+- bew = 4 + round(ini_bonus / 2)
+- lp_max (klassenabhängig):
+  - Krieger: lp_max = 14 + 2 * (attribute.kon + stufe)
+  - Waldläufer / Kleriker: lp_max = 12 + attribute.kon + 2 * stufe
+  - Magier: lp_max = 10 + attribute.kon + stufe
+- lp_aktuell:
+  - Beim Erstellen: Setze lp_aktuell := lp_max.
+  - Beim Level‑Up: Generator berechnet neues lp_max mit neuer Stufe; lp_aktuell bleibt unverändert (keine automatische Heilung durch Generator).
 
----
+==============================
+6. Abwehr (PA / ASW / SR)
+==============================
+- pa = 9 + attribute.str + sum(Boni_from_equipment_and_faehigkeiten)
+- asw = 9 + attribute.ges + round(attribute.wis / 2) + sum(Boni_from_equipment_and_faehigkeiten)
+- sr.total = sum( sr.quellen[].wert )
+- sr.quellen: listet jede Quelle separat, z. B. Rüstung, Fähigkeit, magischer Bonus.
 
-### 4. Abgeleitete Werte (`abgeleitete_werte`)
-- **Struktur:**
-  "abgeleitete_werte": { "lp_max": "Integer", "lp_aktuell": "Integer", "ini_bonus": "Integer", "bew": "Integer" }
-- **Berechnungsformeln (verbindlich):**
-  - `ini_bonus`: `round((attribute.ges + attribute.wis) / 2)`
-  - `bew`: `4 + round(ini_bonus / 2)`
-  - `lp_max`:
-    - **Krieger:** `14 + 2 * (attribute.kon + stufe)`
-    - **Waldläufer/Kleriker:** `12 + attribute.kon + 2 * stufe`
-    - **Magier:** `10 + attribute.kon + stufe`
+Bemerkung: "Boni" umfassen nur permanente/ausrüstungs-/fähigkeitsgebundene Effekte, keine temporären Zauber-/Trankeffekte in der Basisgenerierung.
 
----
+==============================
+7. Rettungswürfe
+==============================
+- rz_bonus (Zähigkeit) = round((attribute.kon + attribute.str) / 2)
+- rr_bonus (Reflexe) = round((attribute.ges + attribute.wis) / 2)
+- rw_bonus (Willenskraft) = round((attribute.wis + attribute.int) / 2)
 
-### 5. Abwehr (`abwehr`)
-- **Struktur:**
-  "abwehr": { "pa": "Integer", "asw": "Integer", "sr": { "total": "Integer", "quellen": [ { "quelle": "String", "wert": "Integer" } ] } }
-- **Berechnungsformeln (verbindlich):**
-  - `pa`: `9 + attribute.str + Boni`
-  - `asw`: `9 + attribute.ges + round(attribute.wis / 2) + Boni`
-  - `sr.total`: Summe aller `wert` aus `sr.quellen`.
+==============================
+8. Angriffe
+==============================
+- Angriff-Objekt:
+  { "name","typ","to_hit_bonus","schaden_basis","bemerkung" }
+- to_hit_bonus Berechnung:
+  - Nahkampf: attribute.str + sum(Boni from weapon/ability)
+  - Fernkampf: attribute.ges + sum(Boni from weapon/ability)
+- schaden_basis wird aus Ausrüstungstabelle gesetzt (z. B. Langschwert Schaden 6, Kurzbogen 3) [[11]].
+- Bemerkung: Schadens-Tags (Wucht/Hieb/Stich/Panzerbrechend) sollten in ausruestung.item.description vermerkt werden.
 
----
+==============================
+9. Startgold & Einkauf (Schritt 7 detailliert)
+==============================
+- Startgold (Formeln):
+  - Krieger: 150 + 3W6 × 10 GM  (Bereich 180 .. 330 GM)
+  - Waldläufer: 120 + 3W6 × 10 GM  (Bereich 150 .. 300 GM)
+  - Kleriker: 120 + 3W6 × 10 GM  (Bereich 150 .. 300 GM)
+  - Magier: 80 + 2W6 × 10 GM  (Bereich 100 .. 200 GM)
 
-### 6. Rettungswürfe (`rettungswuerfe`)
-- **Struktur:**
-  "rettungswuerfe": { "rz_bonus": "Integer", "rr_bonus": "Integer", "rw_bonus": "Integer" }
-- **Berechnungsformeln (verbindlich):**
-  - `rz_bonus`: `round((attribute.kon + attribute.str) / 2)`
-  - `rr_bonus`: `round((attribute.ges + attribute.wis) / 2)`
-  - `rw_bonus`: `round((attribute.wis + attribute.int) / 2)`
+- Berufsitems:
+  - Generator weist 1–2 berufsrelevante Gegenstände zu und reserviert/kauft diese zuerst.
 
----
+- Einkaufsvorgabe (Algorithmus-Hierarchie):
+  1. Pflicht: Waffe passend zur Klasse (z. B. Krieger: Schwert; Waldläufer: Bogen).
+  2. Schutz: Rüstung bzw. Schild falls für Klasse erlaubt.
+  3. Berufsitems (vorher markierte).
+  4. Komfort/Utility: Seil, Rationen, Fackeln, Werkzeug.
+  5. Variation: innerhalb Budget, aber Gesamtpreis ≤ Startgold.
+- Referenzpreise & Gegenstände sind der Ausrüstungstabelle zu entnehmen (siehe Datei) [[11]].
+  - Beispielreferenzen: Langschwert 80 GM, Kettenhemd 140 GM, Holzschild 15 GM, Kurzbogen 35 GM, Lederrüstung 45 GM [[11]].
+- Restgold: verbleibendes Budget → waehrung.gold.
 
-### 7. Angriffe (`angriffe`)
-- **Struktur eines Angriff-Objekts:**
-  { "name": "String", "typ": "Nahkampf" | "Fernkampf", "to_hit_bonus": "Integer", "schaden_basis": "Integer", "bemerkung": "String (Optional)" }
-- **Berechnungsformeln für `to_hit_bonus` (verbindlich):**
-  - **Nahkampf:** `attribute.str + Boni`
-  - **Fernkampf:** `attribute.ges + Boni`
+==============================
+10. Regeln für neu generierte (custom) Items
+==============================
+- Wenn der Generator ein neues Item erstellt, MUSS es enthalten:
+  - name, typ, preis (GM), gewicht, mechanische Werte (schaden / SR / PA-Bonus / ASW-Bonus etc.), beschreibung, availability.
+- Preisbildung (Vorschlag, verpflichtend): Preis_new = round( median(reference_items_of_same_category_or_power) × factor ), factor ∈ [0.8, 1.2] standardmäßig. Referenzitems werden aus Tabelle entnommen [[11]].
+- custom_items werden im Feld "custom_items" mit Metadaten gespeichert.
+- Generator protokolliert die Referenz(s), die zur Preisfindung benutzt wurden.
 
----
+==============================
+11. Level‑Up (Stufenanstiege) — Regeln
+==============================
+- EP-Tabellen verwenden die vorhandene Tabelle (Stufe2: 600 EP, Stufe3: 1400 EP, ... ) [[11]].
+- Attributssteigerung:
+  - Spielercharaktere: Spieler wählt frei +1 auf ein Attribut bei jedem Stufenanstieg.
+  - KI/Generator/Batch: Generator erhöht ein Attribut +1, das zum Konzept passt; Klassen-Prioritäten können heuristisch genutzt, sind aber nicht zwingend.
+- Capping: Nur bei Erstellung Stufe 1; danach kein Cap.
+- LP-Neuberechnung: lp_max neu berechnen nach Formeln (Sektion 5). lp_aktuell bleibt unverändert durch Generator.
 
-### 8. Völker (Referenz für Charaktererstellung)
-| Volk      | Attributsmodifikatoren         | Volkseigenschaften                                                                                                                              |
-|-----------|--------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------|
-| Menschen  | Siehe Regel "Fokuswahl" (8.1)  | Glück: 1x pro Spielsitzung einen beliebigen Würfelwurf wiederholen.                                                                               |
-| Zwerge    | STR+1, KON+2, WIS-1            | Dunkelsicht (18m); Resistenz gegen Gift (Vorteil bei Rettungswürfen gegen Gift).                                                                |
-| Elben     | GES+2, KON+1, INT+1, CHA+1     | Scharfe Sinne (+2 auf Bemerkenproben); Immunität gegen Schlafeffekte.                                                                             |
-| Halblinge | GES+1, WIS+1, CHA+2            | Resistenz gegen Furcht (Vorteil bei Rettungswürfen); Glück (1x pro Spielsitzung einen beliebigen Würfelwurf wiederholen).                          |
-| Drakonier | STR+3, KON+2, INT+1            | Schuppenhaut (SR +1); Drachenerbe (1x/Tag, 1W6 Feuer, 5m Kegel, RR ZW 11 für 1/2 Schaden).                                                        |
-| Khajit    | GES+3, CHA+2, KON+1            | Scharfe Sinne (+2 auf Bemerkenproben); Überlegenes Abfangen (kein Fallschaden bis 8m); Klettern +2; Balancieren +2.                               |
+- Klassenfähigkeiten freischalten automatisch beim Erreichen bestimmter Stufen: 1, 3, 6, 9.
+  - Der Generator trägt die Fähigkeit mit stufe_erhalten in faehigkeiten.klasse ein.
 
-#### 8.1 Spezialregel für Menschen: "Fokuswahl"
-Ein Generator, der einen Menschen erstellt, MUSS die folgenden Schritte ausführen:
-1.  Setze alle sechs Attribute auf `+1`.
-2.  Wähle zufällig eine der drei folgenden Optionen:
-    *   **Option A (Fokus Stärke):** Wende einen Malus von `-2` auf `INT` an. (Finaler Startwert für INT ist -1).
-    *   **Option B (Fokus Geschicklichkeit):** Wende einen Malus von `-2` auf `WIS` an. (Finaler Startwert für WIS ist -1).
-    *   **Option C (Fokus Konstitution):** Wende einen Malus von `-2` auf `CHA` an. (Finaler Startwert für CHA ist -1).
-3.  Die resultierenden sechs Werte sind die finalen Attributsmodifikatoren für das Volk "Mensch".
+==============================
+12. Klassenfähigkeiten — Addendum (Editierbares Modul)
+==============================
+Format jedes Eintrags: { "name": "String", "beschreibung": "String", "stufe_erhalten": Integer }
 
----
+Krieger:
+- { "name":"Kampf-Fokus", "beschreibung":"1x/Begegnung: Als freie Aktion kannst du deinen nächsten Nahkampfangriff mit Vorteil ausführen.", "stufe_erhalten":1 }
+- { "name":"Stoßschutz", "beschreibung":"1x/Kampf: Als Reaktion erhältst du für 1 Runde +2 auf PA.", "stufe_erhalten":3 }
+- { "name":"Zweiter Wind", "beschreibung":"1x/lange Rast: Als Aktion heilst du 1W8 + KON LP.", "stufe_erhalten":6 }
+- { "name":"Rundumschlag", "beschreibung":"1x/Begegnung: Aktion: Flächen-Nahkampfangriff: alle Gegner in 2m erleiden 1W6 + STR Schaden.", "stufe_erhalten":9 }
 
-### 9. Berufe (Referenz für Charaktererstellung)
-| Beruf         | Attributsmodifikatoren     | Erlernte Fähigkeiten                               |
-|---------------|----------------------------|---------------------------------------------------|
-| Söldner       | STR +2, KON +1, INT -1     | Umgang mit improvisierten Waffen                  |
-| Jäger         | GES +2, WIS +1, CHA -1     | Spuren lesen (+2)                                 |
-| Schmied       | STR +2, KON +1, GES -1     | Wartung                                           |
-| Stadtwache    | STR +1, KON +2, GES -1     | Beschützerinstinkt                                |
-| Seefahrer     | GES +1, KON +2, INT -1     | Resistenz gegen Gifte und Krankheiten             |
-| Geistlicher   | WIS +2, CHA +1, STR -1     | Untote vertreiben, Geistheilung                   |
-| Bibliothekar  | INT +2, KON -1, WIS +1     | Gegenstand identifizieren, Monsterkunde           |
-| Barde         | CHA +2, GES +1, STR -1     | Lied des Mutes                                    |
-| Händler       | CHA +2, INT +1, STR -1     | Auge des Wucherers                                |
-| Dorfheiler    | INT +1, WIS +2, STR -1     | Leichte Wunden versorgen, Krankheit heilen        |
-| Hexenjäger    | WIS +2, STR +1, INT -1     | Glaubensstärke, Hexenbann                         |
+Waldläufer:
+- { "name":"Zielen", "beschreibung":"Ziel-Aktion: +1 auf nächsten Fernkampfangriff; kumulativ bis +3; verfällt bei Bewegung/anderer Aktion.", "stufe_erhalten":1 }
+- { "name":"Taktischer Rückzug", "beschreibung":"Reaktion: Bei Nahkampfangriff kannst du dich bis halbe Bewegungsrate wegbewegen; provoziert keine Gelegenheitsangriffe.", "stufe_erhalten":3 }
+- { "name":"Meister der Deckung", "beschreibung":"+1 ASW in leichter Deckung; +1 auf Fernkampfangriffe gegen von dir entdeckte Ziele.", "stufe_erhalten":6 }
+- { "name":"Scharfschützenblick", "beschreibung":"+2 auf Fernkampfangriffe gegen Ziele außerhalb Nahkampfreichweite, wenn du nicht in Bewegung warst.", "stufe_erhalten":9 }
 
-#### 9.1 - Berufsspezifische Startgegenstände:
-Der Generator hat eine gewisse kreative Freiheit. Das heisst, es müssen nicht exakt diese Beispiel-Items verwendet werden. 
-Die Start-Items sollen zum Beruf passen.
+Kleriker:
+- { "name":"Untote vertreiben", "beschreibung":"1x/Tag: Aktion: Untote in Sicht müssen RW Willenskraft (ZW 12) bestehen oder für 1W6 Runden fliehen.", "stufe_erhalten":1 }
+- { "name":"Heiliger Segen", "beschreibung":"3x/Tag: Aktion: Heilt Verbündeten in Berührung 1W4 + WIS LP.", "stufe_erhalten":3 }
+- { "name":"Geistheilung (verbessert)", "beschreibung":"3x/Tag: Aktion (2 AP): WIS-Probe (ZW 11); bei Erfolg heilst du 1W6 + WIS LP.", "stufe_erhalten":6 }
+- { "name":"Göttlicher Bann", "beschreibung":"1x/Tag: Stärkere Form der Vertreibung/Unterdrückung (exakte Mechanik GM-definiert).", "stufe_erhalten":9 }
 
-Beispiele für Startausrüstung nach Beruf
-Söldner: Wetzstein, Schlafsack
-Jäger: 20 Pfeile, Jagdfalle
-Schmied: Hammer, Eisenbarren
-Stadtwache: Signalpfeife, Fesseln
-Seefahrer: 15m Seil, Kompass
-Geistlicher: Heiliges Symbol, Weihwasser
-Bibliothekar: Tinte & Feder, Pergament (3)
-Barde: Musikinstrument (Laute)
-Händler: Waage, Handelswaren (20 Silber Wert)
-Dorfheiler: Heilkräuter (3), Verbandszeug
-Hexenjäger: Silberdolch, Heiliges Symbol
+Magier:
+- { "name":"Zauberfokus (Basis)", "beschreibung":"Start mit 2 Cantrips und 2 vorbereiteten Stufe-1-Zaubern. (Zauber-Mechanik separat spezifizieren).", "stufe_erhalten":1 }
+- { "name":"Runenverstärker", "beschreibung":"1x/Begegnung: +1 auf einen Zauberangriff oder Wirke ein vorbereitetes Ritual (GM-Regel).", "stufe_erhalten":3 }
+- { "name":"Erweiterter Zauberfokus", "beschreibung":"1x/lange Rast: Einen vorbereiteten Zauber Stufe ≤2 temporär +1 Wirkungsstärke.", "stufe_erhalten":6 }
+- { "name":"Meisterhafte Formel", "beschreibung":"Zugang zu Stufe-3-Zauberplatz oder ähnliche Skalierung (Zauber-Spec ergänzen).", "stufe_erhalten":9 }
 
+Hinweis: Die Fähigkeiten im Addendum sind editierbar; bevor sie verbindlich angewendet werden, sollten exakte numerische Details (AP-Kosten, SG-Werte, Wirkungsdauer) finalisiert werden.
 
+==============================
+13. Ausrüstungs- & Preisreferenzen
+==============================
+- Alle Items, Preise, SR-/Schadenswerte etc. sind der Ausrüstungstabelle entnommen (Beispiel-Daten: Dolch 15 GM Schaden 2; Kurzschwert 40 GM Schaden 4; Langschwert 80 GM Schaden 6; Kurzbogen 35 GM Schaden 3; Lederrüstung 45 GM SR 1; Kettenhemd 140 GM SR 3) [[11]].
+- Der Generator benutzt diese Tabelle als Primärquelle für Preiskalkulation und Vergleich bei custom item pricing [[11]].
 
----
+==============================
+14. Validierung / Konsistenzchecks (Pflicht)
+==============================
+Vor Finaler Ausgabe MUSS der Generator prüfen:
+- waehrung.gold ≥ 0
+- Summe der Ausrüstungskosten ≤ Startgold (Startgold minus evtl. Berufspaket)
+- attribute sind Integer
+- lp_max konsistent mit Klasse und Stufe
+- Jedes Ausrüstungsobjekt hat: name, typ, preis, gewicht, mechanische Werte
+- custom_items enthalten Referenzbasis (Referenzitems), Preisbildungsmethode protokolliert
 
-### 10. Klassen (Referenz für Charaktererstellung)
-| Klasse     | Attributsmodifikatoren     | Fähigkeiten nach Stufe                                 |
-|------------|----------------------------|-------------------------------------------------------|
-| Krieger    | STR+1, KON+1, INT-1, WIS-1 | Stufe 1: Kampf-Fokus                                  |
-| Waldläufer | GES+1, WIS+1, INT-1, CHA-1 | Stufe 1: Zielen; Stufe 3: Taktischer Rückzug (Reaktion) |
-| Kleriker   | WIS+1, CHA+1, STR-1, GES-1 | Stufe 1: Untote vertreiben                            |
-| Magier     | INT+1, WIS+1, STR-1, KON-1 | (Fähigkeiten für Magier noch zu definieren)           |
+Optional: Generator kann ein "validation_log" anlegen mit Schritten und Änderungen zur Nachvollziehbarkeit.
 
----
-
-### 11. Erfahrungspunkte (EP) für Stufenanstiege
-Diese Tabelle definiert die Gesamt-EP, die zum Erreichen einer bestimmten Stufe benötigt werden.
-
-| Ziel-Stufe | Benötigte Gesamt-EP | EP-Kosten pro Stufe |
-|:-----------|:--------------------|:--------------------|
-| 1          | 0                   | -                   |
-| 2          | 600                 | 600                 |
-| 3          | 1.400               | 800                 |
-| 4          | 2.800               | 1.400               |
-| 5          | 5.000               | 2.200               |
-| 6          | 8.500               | 3.500               |
-| 7          | 14.000              | 5.500               |
-| 8          | 23.000              | 9.000               |
-| 9          | 36.000              | 13.000              |
-| 10         | 55.000              | 19.000              |
-| 11         | 80.000              | 25.000              |
-| 12         | 120.000             | 40.000              |
-
----
-
-### 12. Beschreibungen der Fähigkeiten (Referenz)
-Dies ist die maßgebliche Liste der Fähigkeitsbeschreibungen.
-
-- **Auge des Wucherers:** Der Charakter kann den Wert von Schätzen (Edelsteine, Kunstgegenstände) sofort und präzise einschätzen. Er findet zudem bei Schatztruhen oder besiegten Gegnern 10% mehr Gold.
-- **Beschützerinstinkt:** 1x pro Kampf: Wenn ein Gegner einen Angriff gegen einen Verbündeten direkt neben dir ausführt, kannst du deine Reaktion nutzen, um dem Angreifer einen Malus von -2 auf diesen Angriffswurf aufzuerlegen.
-- **Gegenstand identifizieren:** 1x pro Tag: Du kannst eine INT-Probe gegen den SG des Gegenstandes ablegen, um dessen Art, Nutzen und eventuelle Flüche zu erfahren.
-- **Geistheilung:** 3x pro Tag: Als Aktion (kostet 2 Aktionspunkte) kannst du eine WIS-Probe (ZW 11) ablegen. Bei Erfolg heilst du 1W4+WIS Lebenspunkte bei einer Kreatur in Berührungsreichweite.
-- **Glaubensstärke:** Du hast Vorteil bei allen Rettungswürfen gegen Flüche, Verhexungen und geistige Beeinflussung.
-- **Hexenbann:** 1x pro Tag: Du kannst versuchen, einen Zauber zu bannen. Lege dazu eine WIS-Probe gegen ZW 10 + Grad des Zaubers ab. Bei Erfolg wird der Zauber neutralisiert.
-- **Kampf-Fokus:** 1x pro Begegnung: Als freie Aktion kannst du deinen nächsten Nahkampfangriffswurf mit Vorteil ausführen.
-- **Krankheit heilen:** Während einer langen Rast kannst du eine WIS-Probe gegen den SG der Krankheit ablegen, um diese zu heilen.
-- **Leichte Wunden versorgen:** 3x pro Tag: Als Aktion (kostet 2 Aktionspunkte) kannst du 1W4+WIS Lebenspunkte bei einer Kreatur heilen. Benötigt Kräuter.
-- **Lied des Mutes:** 1x pro Kampf: Als Aktion kannst du allen Verbündeten in Hörweite einen Bonus auf alle Rettungswürfe für 10 Minuten geben.
-- **Monsterkunde:** 1x pro Begegnung: Als Aktion kannst du eine INT-Probe (SG 8 + HG der Kreatur) ablegen, um eine relevante Schwäche oder Resistenz zu erfahren.
-- **Resistenz gegen Gifte und Krankheiten:** Du erhältst einen Bonus von +2 auf Rettungswürfe gegen Gifte und Krankheiten.
-- **Spuren lesen:** Du erhältst einen Bonus von +2 auf Proben zum Spurenlesen.
-- **Taktischer Rückzug (Reaktion):** Wenn du im Nahkampf angegriffen wirst, kannst du deine Reaktion nutzen, um dich sofort bis zu deiner halben Bewegungsrate wegzubewegen. Provoziert keine Gelegenheitsangriffe.
-- **Umgang mit improvisierten Waffen:** Du erhältst einen Bonus von +1 auf Angriffswürfe mit improvisierten Waffen.
-- **Untote vertreiben:** 1x pro Tag: Als Aktion müssen alle untoten Kreaturen in Sichtweite einen Willenskraft-Rettungswurf (ZW 12) bestehen oder für 1W6 Runden fliehen.
-- **Wartung:** Du erhältst einen Bonus von +1 auf Würfe, die den Zustand deiner Rüstung betreffen.
-- **Zielen:** Wenn du deine Aktion zum Zielen mit einer Fernkampfwaffe nutzt, erhältst du +1 auf den Angriffswurf in deinem nächsten Zug. Kumulativ bis max. +3. Bonus verfällt bei Bewegung (>1 Feld) oder anderer Aktion.
-
----
-
-### Minimal-Template (zum Ausfüllen durch die KI)
-```json
+==============================
+15. Minimal-Template (aktualisiert)
+==============================
 {
   "name": "",
   "spieler": "KI",
@@ -244,19 +237,28 @@ Dies ist die maßgebliche Liste der Fähigkeitsbeschreibungen.
   "klasse": "",
   "attribute": { "str": 0, "ges": 0, "kon": 0, "int": 0, "wis": 0, "cha": 0 },
   "abgeleitete_werte": { "lp_max": 0, "lp_aktuell": 0, "ini_bonus": 0, "bew": 0 },
-  "abwehr": {
-    "pa": 0,
-    "asw": 0,
-    "sr": { "total": 0, "quellen": [] }
-  },
+  "abwehr": { "pa": 0, "asw": 0, "sr": { "total": 0, "quellen": [] } },
   "rettungswuerfe": { "rz_bonus": 0, "rr_bonus": 0, "rw_bonus": 0 },
   "angriffe": [],
-  "faehigkeiten": {
-    "volk": [],
-    "beruf": [],
-    "klasse": []
-  },
+  "faehigkeiten": { "volk": [], "beruf": [], "klasse": [] },
   "ausruestung": [],
   "inventar": [],
-  "waehrung": { "gold": 0}
+  "custom_items": [],
+  "waehrung": { "gold": 0 },
+  "validation_log": []
 }
+
+==============================
+16. Implementierungs-Hinweise für Entwickler (kurz)
+==============================
+- Halte Modifikatoren getrennt: store volk_modifiers, beruf_modifiers, klasse_modifiers, damit provenance tracebar ist.
+- Beim Anwenden modifizierer: apply in order Volk → Beruf → Klasse.
+- Nach Erstellung und Capping: alle abgeleiteten Werte neu berechnen.
+- Beim Generator-gekauften Items: verknüpfe item mit referenz (z. B. aus Tabelle) oder markiere als custom_items mit Preisbildungsmetadaten.
+- Für Batch-Generierung: Nutze "konzept" Feld zur heuristischen Auswahl (z. B. "Ranged hunter" → favorisiere Kurzbogen & Ges).
+
+------------------------------
+Ende Spec v0.6
+------------------------------
+
+Quellenhinweis: Primäre Item-/Preis-/Rüstungs- und Waffenwerte entstammen der hochgeladenen Ausrüstungstabelle (sag_doch_dass_du_keinen_zugriff_und.txt) [[11]].
