@@ -77,32 +77,36 @@ function renderStatblock(creature) {
 
   const res = parseRes(creature.besonderheiten || []);
   const paNote = formatPaNote(creature.paBemerkung);
+  
+  // Bild-URL Helper (vereinfacht für Module)
+  const getImageSrc = (imagePath) => {
+    if (!imagePath) return '';
+    if (imagePath.startsWith('http')) return imagePath;
+    return `https://raw.githubusercontent.com/bireggbaum-beep/rpg/main/${imagePath}`;
+  };
 
   let html = `
     <div class="statblock">
       <div class="head">
+        <!-- Bild-Container (nur visueller Platzhalter) -->
+        <div class="creature-image-container ${creature.image ? 'has-image' : ''}">
+          ${creature.image ? `<img class="creature-image" src="${getImageSrc(creature.image)}" alt="${creature.name || 'Kreatur'}">` : ''}
+          <div class="image-placeholder">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zm-5-7l-3 3.72L9 13l-3 4h12l-4-5z"/>
+            </svg>
+            <div class="image-placeholder-text">Kein Bild</div>
+          </div>
+        </div>
+        
+        <button class="edit-btn" onclick="toggleEditor()">Bearbeiten</button>
         <h1 class="name">${txt(creature.name)}</h1>
-        <!-- Bild-Container -->
-        <!-- Bild-Container (Platzhalter) -->
-         <div class="creature-image-container ${creature.image ? 'has-image' : ''}">
-          ${creature.image ? `<img class="creature-image" src="${creature.image}" alt="${creature.name || 'Kreatur'}">` : ''}
-         <div class="image-placeholder">
-         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-         <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zm-5-7l-3 3.72L9 13l-3 4h12l-4-5z"/>
-         </svg>
-       <div class="image-placeholder-text">Bild-Platzhalter</div>
-    </div>
-  </div>
-
-<input type="file" id="image-upload-${currentIndex}" style="display:none" accept="image/*" onchange="handleImageUpload(event, ${currentIndex})">
-
         <div class="line">
           ${creature.hg ? `<span class="hg-badge">HG ${txt(creature.hg)}</span>` : ''}
           ${creature.typ ? `<span class="chip">${txt(creature.typ)}</span>` : ''}
           ${(creature.traits || []).map(t => `<span class="chip">${txt(t)}</span>`).join('')}
         </div>
         ${creature.beschreibung ? `<div class="desc">${txt(creature.beschreibung)}</div>` : ''}
-        <button class="edit-btn" onclick="toggleEditor()">Bearbeiten</button>
       </div>
 
       <div class="sec">
@@ -156,6 +160,15 @@ function renderStatblock(creature) {
   `;
 
   out.innerHTML = html;
+  
+  // Event-Handler für Bildplatzhalter (optional, zeigt nur eine Meldung)
+  const imageContainer = out.querySelector('.creature-image-container');
+  if (imageContainer && !creature.image) {
+    imageContainer.style.cursor = 'pointer';
+    imageContainer.addEventListener('click', () => {
+      alert('Bild-Upload ist nur in der vollständigen HTML-Version verfügbar.');
+    });
+  }
 }
 
 // ===== FILTER FUNKTIONEN =====
@@ -193,12 +206,12 @@ function populateTypeFilter() {
 
 // ===== LISTEN-SETUP =====
 function setupNewList() {
-  const elList     = document.querySelector('#creature-list');
+  const elList = document.querySelector('#creature-list');
   const elSearchNm = document.querySelector('#search-name');
   const elTypeDrop = document.querySelector('#search-type');
-  const elHg       = document.querySelector('#search-hg');
-  const btnAlpha   = document.querySelector('#sort-alpha');
-  const btnSortHg  = document.querySelector('#sort-hg');
+  const elHg = document.querySelector('#search-hg');
+  const btnAlpha = document.querySelector('#sort-alpha');
+  const btnSortHg = document.querySelector('#sort-hg');
 
   function refreshList() {
     const items = filterAndSort(creatureData, {
@@ -292,119 +305,9 @@ function exportAllCreatures() {
   URL.revokeObjectURL(url);
 }
 
-// ===== EDITOR FUNKTIONEN =====
+// ===== EDITOR FUNKTIONEN (Basis-Stubs) =====
 window.toggleEditor = function() {
-  let editor = document.querySelector('.inline-editor');
-  if (!editor) {
-    const out = document.querySelector('#out');
-    const editorHTML = `
-      <div class="inline-editor visible">
-        <div class="editor-header">
-          <h3>Kreatur bearbeiten</h3>
-          <button onclick="closeEditor()" style="background:transparent;color:var(--ink);border:none;font-size:20px;cursor:pointer;">✕</button>
-        </div>
-        <div class="editor-body">
-          <form id="creature-form">
-            <div class="form-section">
-              <h4>Grunddaten</h4>
-              <div class="form-row">
-                <div class="form-group large">
-                  <label>Name</label>
-                  <input type="text" name="name">
-                </div>
-                <div class="form-group medium">
-                  <label>Typ</label>
-                  <input type="text" name="typ">
-                </div>
-                <div class="form-group small">
-                  <label>HG</label>
-                  <input type="text" name="hg">
-                </div>
-              </div>
-              <div class="form-row">
-                <div class="form-group full">
-                  <label>Beschreibung</label>
-                  <textarea name="beschreibung" rows="2"></textarea>
-                </div>
-              </div>
-            </div>
-            
-            <div class="form-section">
-              <h4>Kampfwerte</h4>
-              <div class="form-row">
-                <div class="form-group small">
-                  <label>LP</label>
-                  <input type="number" name="lp">
-                </div>
-                <div class="form-group small">
-                  <label>PA</label>
-                  <input type="number" name="abwehrNahkampf">
-                </div>
-                <div class="form-group small">
-                  <label>ASW</label>
-                  <input type="number" name="abwehrFernkampf">
-                </div>
-                <div class="form-group small">
-                  <label>INI</label>
-                  <input type="text" name="ini">
-                </div>
-              </div>
-              <div class="form-row">
-                <div class="form-group small">
-                  <label>Zähigkeit</label>
-                  <input type="number" name="zaehigkeit">
-                </div>
-                <div class="form-group small">
-                  <label>Reflexe</label>
-                  <input type="number" name="reflexe">
-                </div>
-                <div class="form-group small">
-                  <label>Willenskraft</label>
-                  <input type="number" name="willenskriaft">
-                </div>
-              </div>
-              <div class="form-row">
-                <div class="form-group medium">
-                  <label>Bewegung</label>
-                  <input type="text" name="bewegung">
-                </div>
-                <div class="form-group medium">
-                  <label>Sinne</label>
-                  <input type="text" name="sinne">
-                </div>
-              </div>
-            </div>
-          </form>
-        </div>
-        <div class="editor-footer">
-          <button onclick="saveCreature()">Speichern</button>
-          <button onclick="closeEditor()">Abbrechen</button>
-        </div>
-      </div>
-    `;
-    out.insertAdjacentHTML('beforeend', editorHTML);
-    
-    // Formular mit aktuellen Daten füllen
-    if (currentIndex >= 0 && creatureData[currentIndex]) {
-      const creature = creatureData[currentIndex];
-      const form = document.querySelector('#creature-form');
-      form.name.value = creature.name || '';
-      form.typ.value = creature.typ || '';
-      form.hg.value = creature.hg || '';
-      form.lp.value = creature.lp || '';
-      form.abwehrNahkampf.value = creature.abwehrNahkampf || '';
-      form.abwehrFernkampf.value = creature.abwehrFernkampf || '';
-      form.zaehigkeit.value = creature.zaehigkeit || '';
-      form.reflexe.value = creature.reflexe || '';
-      form.willenskriaft.value = creature.willenskriaft || '';
-      form.ini.value = creature.ini || '';
-      form.bewegung.value = creature.bewegung || '';
-      form.sinne.value = creature.sinne || '';
-      form.beschreibung.value = creature.beschreibung || '';
-    }
-  } else {
-    editor.classList.toggle('visible');
-  }
+  alert('Editor ist nur in der vollständigen HTML-Version verfügbar.');
 };
 
 window.closeEditor = function() {
@@ -413,36 +316,8 @@ window.closeEditor = function() {
 };
 
 window.saveCreature = function() {
-  if (currentIndex < 0) return;
-  
-  const form = document.querySelector('#creature-form');
-  const creature = creatureData[currentIndex];
-  
-  // Daten aus Formular übernehmen
-  creature.name = form.name.value;
-  creature.typ = form.typ.value;
-  creature.hg = form.hg.value;
-  creature.lp = parseInt(form.lp.value) || 0;
-  creature.abwehrNahkampf = parseInt(form.abwehrNahkampf.value) || 0;
-  creature.abwehrFernkampf = parseInt(form.abwehrFernkampf.value) || 0;
-  creature.zaehigkeit = parseInt(form.zaehigkeit.value) || 0;
-  creature.reflexe = parseInt(form.reflexe.value) || 0;
-  creature.willenskriaft = parseInt(form.willenskriaft.value) || 0;
-  creature.ini = form.ini.value;
-  creature.bewegung = form.bewegung.value;
-  creature.sinne = form.sinne.value;
-  creature.beschreibung = form.beschreibung.value;
-  
-  // Neu rendern
-  renderStatblock(creature);
-  populateHgFilter();
-  populateTypeFilter();
-  setupNewList();
-  
-  // Editor schließen
-  closeEditor();
+  alert('Speichern ist nur in der vollständigen HTML-Version verfügbar.');
 };
-
 
 // ===== INITIALISIERUNG =====
 function init() {
@@ -458,10 +333,6 @@ function init() {
   
   // Initial-Sortierung aktiv
   document.querySelector('#sort-alpha')?.classList.add('active');
-
-  // GitHub Event Listener
-  document.querySelector('#github-pull-btn')?.addEventListener('click', pullFromGitHub);
-  document.querySelector('#github-push-btn')?.addEventListener('click', pushToGitHub);
 }
 
 // Starten
