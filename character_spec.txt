@@ -1,7 +1,8 @@
-Statblock Spezifikation – Spielcharakter (SC) v0.8
-Aufbauend auf v0.5 → v0.6 → v0.7 — vollständige, maschinen- und KI-generatorfreundliche Spezifikation
+Statblock Spezifikation – Spielcharakter (SC) v0.9
+Aufbauend auf v0.8 — vollständige, maschinen- und KI-generatorfreundliche Spezifikation
+(Ergänzung: Aktions-/Bewegungsmodell mit Slot‑System & Sprint)
 
-Hinweis: Währung ist ausschließlich Gold (GM). Referenzpreise und Gegenstandswerte stammen aus der Ausrüstungstabelle (z. B. Langschwert 80 GM, Kettenhemd 140 GM, Holzschild 15 GM) [[11]].
+Hinweis: Währung ist ausschließlich Gold (GM). Referenzpreise und Gegenstandswerte stammen aus der Ausrüstungstabelle (siehe Datei) .
 
 ==============================
 1. Zweck & Grundprinzipien
@@ -12,45 +13,20 @@ Zweck:
 
 Grundprinzipien:
 - Algorithmische Generierung: Schritte in Sektion 2 sind verbindlich für den Generator.
-- Datenintegrität: Alle abgeleiteten Werte müssen exakt nach Formeln berechnet werden (Abrundung: floor).
+- Datenintegrität: Alle abgeleiteten Werte müssen exakt nach Formeln berechnet werden (Abrunden: floor).
 - Quellen der Boni: Volk, Beruf, Klasse — getrennt nach Herkunft dokumentiert.
 
 ==============================
 2. Gesamtablauf / Generator‑Pipeline (verbindlich)
 ==============================
-1. Initialisierung
-   - Erzeuge leeres Charakterobjekt.
-   - Setze alle sechs Kernattribute auf 0:
-     attribute = { str:0, ges:0, kon:0, int:0, wis:0, cha:0 }
-
-2. Volk wählen
-   - Wende Volksmodifikatoren an (Menschen: Fokuswahl Sektion 8.1).
-   - Trage Volkseigenschaften in faehigkeiten.volk ein.
-
-3. Beruf wählen
-   - Wende Berufsmodifikatoren an.
-   - Trage Berufs-Fähigkeiten in faehigkeiten.beruf ein.
-   - Markiere 1–2 berufsrelevante Startgegenstände (werden beim Einkauf priorisiert).
-
-4. Klasse wählen
-   - Wende Klassenmodifikatoren an.
-   - Trage Stufe‑1‑Fähigkeit(en) in faehigkeiten.klasse (stufe_erhalten: 1).
-
-5. Attributs‑Capping (nur beim Erstellen Stufe 1)
-   - Nach Anwendung aller Modifikatoren: clamp(each attribute, -1, +3).
-   - Capping gilt ausschließlich bei initialer Erstellung von Stufe‑1‑Charakteren.
-
-6. Abgeleitete Werte berechnen (siehe Sektion 5,6,7)
-   - Berechne abgeleitete_werte, abwehr, rettungswuerfe, angriffe nach verbindlichen Formeln (Abrunden: floor).
-
-7. Startausrüstung generieren / Einkauf (siehe Sektion 9)
-   - Generiere Startgold nach Klasse.
-   - Ziehe berufsitems ab, kaufe Waffe + Rüstung/Schutz + Restausrüstung nach Konzept / Budget.
-   - Restgeld in waehrung.gold.
-
-8. Finale Validierung & Ausgabe
-   - Validierungs-Checks (siehe Sektion 14).
-   - Ausgabe des finalen JSON‑Objekts.
+1. Initialisierung: Attribute = 0.
+2. Volk wählen (Menschen: Fokuswahl Sektion 8.1). faehigkeiten.volk eintragen.
+3. Beruf wählen. faehigkeiten.beruf eintragen. 1–2 berufsrelevante Startgegenstände markieren.
+4. Klasse wählen. faehigkeiten.klasse (Stufe‑1) eintragen.
+5. Attributs‑Capping (nur bei Erstellung Stufe 1): clamp(attribute, -1, +3).
+6. Abgeleitete Werte berechnen (siehe Sektion 5–7, Rundung: floor).
+7. Startausrüstung generieren / Einkauf (siehe Sektion 9).
+8. Finale Validierung & Ausgabe (siehe Sektion 14).
 
 ==============================
 3. Top-Level-JSON-Struktur (Schema)
@@ -72,29 +48,28 @@ Grundprinzipien:
   "faehigkeiten": { "volk": [], "beruf": [], "klasse": [] },
   "ausruestung": [ { "name":"String", "typ":"Waffe"|"Rüstung"|"Schild"|"Anderes", "preis": Integer, "gewicht": Number, "boni":[ { "typ":"PA"|"ASW"|"SR"|"NK_Angriff"|"FK_Angriff"|"RZ"|"RR"|"RW", "wert": Integer, "quelle": "String" } ], "schaden_basis": Integer?, "beschreibung":"String" } ],
   "inventar": [],
-  "custom_items": [],      // neu: vom Generator erzeugte Items mit Metadaten
+  "custom_items": [],
   "waehrung": { "gold": Integer },
-  "validation_log": []    // optional: Änderung/Validierungsprotokoll
+  "validation_log": []
 }
 
-Bemerkung: "boni" ist optional, wird aber empfohlen für Auditierbarkeit. "preis" und "gewicht" müssen bei Ausrüstungsobjekten vorhanden sein.
+Bemerkung: "boni" ist optional, wird aber empfohlen. "preis" und "gewicht" müssen bei Ausrüstungsobjekten vorhanden sein.
 
 ==============================
 4. Attribute (Regeln)
 ==============================
 - Struktur: attribute = { str, ges, kon, int, wis, cha } (Integer).
-- Stufe‑1 Erstellung:
-  - Startwerte 0 → addiere Modifikatoren (volk, beruf, klasse) → Capping auf [-1, +3].
-- Stufenanstieg (ab Stufe 2):
-  - Spielercharaktere: Spieler wählt bei Level‑Up frei ein Attribut +1 (keine Capping-Anwendung nach Stufe 1).
-  - KI/Generator/Batch: Generator wählt +1 auf ein Attribut, das konzept‑konform ist; Klassenprioritäten können heuristisch dienen, sind aber nicht zwingend.
-- Jede Änderung dokumentieren (validation_log).
+- Stufe‑1 Erstellung: Startwerte 0 → Addiere Modifikatoren (Volk/Beruf/Klasse) → Capping [-1, +3].
+- Stufenanstieg:
+  - Spielercharaktere: Spieler wählt frei +1 auf eines der Attribute.
+  - KI/Generator: +1 auf ein Attribut, das zum Konzept passt (heuristisch: Klassenpriorität, aber nicht zwingend).
+- Alle Änderungen dokumentieren (validation_log).
 
 ==============================
 5. Abgeleitete Werte (Formeln und Rundung)
 ==============================
 Rundungsregel (bindend):
-- Alle Mittelwerte/Divisionen verwenden floor (Abrunden). Beispiel: floor((ges + wis) / 2).
+- Alle Mittelwerte/Divisionen verwenden floor (Abrunden).
 
 Formeln:
 - ini_bonus = floor((attribute.ges + attribute.wis) / 2)
@@ -106,188 +81,157 @@ Formeln:
 
 lp_aktuell:
 - Bei Erstellung: lp_aktuell := lp_max.
-- Beim Level‑Up: Generator berechnet neues lp_max (mit neuer stufe) und speichert es. Generator ändert lp_aktuell nicht automatisch (keine Auf-/Abrechnung).
+- Beim Level‑Up: lp_max neu berechnen; lp_aktuell bleibt unverändert (Generator ändert nicht automatisch).
 
 ==============================
 6. Abwehr (PA / ASW / SR) — Berechnung & Stacking
 ==============================
-Definition zulässiger Bonustypen (case-sensitive):
-- "PA"         — Parade/Paradewert (zusätzlicher Bonus auf PA)
-- "ASW"        — Ausweichwert
-- "SR"         — Schadenreduktion / Rüstungswert
-- "NK_Angriff" — Nahkampf-Angriffbonus
-- "FK_Angriff" — Fernkampf-Angriffbonus
-- "RZ"         — Zähigkeit‑Rettungswurf (rz_bonus)
-- "RR"         — Reflexe‑Rettungswurf (rr_bonus)
-- "RW"         — Willenskraft‑Rettungswurf (rw_bonus)
+Bonustypen:
+- "PA", "ASW", "SR", "NK_Angriff", "FK_Angriff", "RZ", "RR", "RW"
 
-Boni‑Quellen (Definition):
-- Ausrüstung (Rüstung, Schilde, Waffen-Boni)
-- Fähigkeiten (volk / beruf / klasse), falls numerisch spezifiziert
-- Permanente Rassenboni
-- Magische / benannte Items
-- Temporäre Effekte (Zauber/Tränke) werden NICHT in der Basis‑Generierung berücksichtigt
+Quellen: Ausrüstung, Fähigkeiten (wenn numerisch), Rassenboni, magische Items. Temporäre Effekte nicht in Basis‑Statblock.
 
-Stacking‑Regel (bindend):
-- Alle Boni gleichen Typs summieren sich additiv (inkl. negativer Werte). Beispiel: mehrere SR‑Quellen → sr.total = Summe aller SR‑Werte.
+Stacking: Additiv — Summe aller gleichartigen Boni (inkl. negativer Werte).
 
-Berechnungsvorgehen (bindend):
+Berechnungsablauf:
 1. pa_basis = 9 + attribute.str
 2. asw_basis = 9 + attribute.ges + floor(attribute.wis / 2)
-3. Sammle alle boni (aus ausruestung[].boni und faehigkeiten.*[].boni)
-4. Summiere per typ:
-   - pa = pa_basis + sum(PA‑Boni)
-   - asw = asw_basis + sum(ASW‑Boni)
-   - sr.total = sum(SR‑Boni)
-5. Negative Boni (z. B. ASW‑Malus einer Rüstung oder eines Schildes) wirken als negative Werte in der Summe.
-6. Notiere addierte Quellen im validation_log.
+3. Summiere boni aus ausruestung[].boni und faehigkeiten.*[].boni
+4. pa = pa_basis + sum(PA-Boni)
+5. asw = asw_basis + sum(ASW-Boni)
+6. sr.total = sum(SR-Boni)
+7. Notiere Quellen im validation_log.
 
-Beispiel:
-- Kettenhemd (SR 3, ASW‑Malus −1) und Holzschild (PA +1):
-  - pa = 9 + attribute.str + 1
-  - asw = 9 + attribute.ges + floor(attribute.wis/2) − 1
-  - sr.total = 3
+Beispiel: Kettenhemd (SR 3, ASW −1) + Holzschild (PA +1):
+- pa = 9 + str + 1
+- asw = 9 + ges + floor(wis/2) − 1
+- sr.total = 3
 
 ==============================
 7. Rettungswürfe (Formeln) & Verteidigung gegen Magie
 ==============================
-Formeln (Abrunden / floor):
-- rz_bonus (Zähigkeit) = floor((attribute.kon + attribute.str) / 2)
-- rr_bonus (Reflexe) = floor((attribute.ges + attribute.wis) / 2)
-- rw_bonus (Willenskraft) = floor((attribute.wis + attribute.int) / 2)
+Formeln (floor):
+- rz_bonus = floor((attribute.kon + attribute.str) / 2)
+- rr_bonus = floor((attribute.ges + attribute.wis) / 2)
+- rw_bonus = floor((attribute.wis + attribute.int) / 2)
 
-Verteidigung gegen magische Angriffe (Mechanik):
-- Verteidiger würfelt W20 und addiert passenden Rettungsbonus (rz/rr/rw).
-- Trefferbedingung: W20 + rettungsbonus ≥ Zielwert_total.
+Verteidigung gegen magische Angriffe:
+- Verteidiger würfelt W20 + passender rettungsbonus.
+- Erfolg wenn: W20 + rettungsbonus ≥ Zielwert_total.
 - Zielwert_total = Zielwert_basis_des_Effekts + Stufe_des_wirkenden_Magiers.
-  - Zielwert_basis_des_Effekts ist im Zauber/Effekt angegeben (z. B. "ZW 10 + Grad des Zaubers"); wenn nicht angegeben, gilt standardmäßig ZW_basis = 10 (Empfehlung: explizit in Zauber‑Spec definieren).
-- Beispiel: Effekt-Basis ZW 12, Wirkender Magier Stufe 4 → Zielwert_total = 16.
+- Standard ZW_basis (falls nicht spezifiziert): 10 (Empfehlung: Zauber‑Spec definieren).
 
-Hinweis: Boni auf Rettungswürfe (typ "RZ"/"RR"/"RW") werden additiv angewandt.
+Bonustypen RZ/RR/RW additiv zu den Basiswerten.
 
 ==============================
 8. Angriffe (To-Hit & Schaden)
 ==============================
-- Angriff-Objekt:
-  { "name":"String", "typ":"Nahkampf"|"Fernkampf", "to_hit_bonus": Integer, "schaden_basis": Integer, "bemerkung":"String" }
-
 - to_hit_bonus:
   - Nahkampf: attribute.str + sum(NK_Angriff‑Boni)
   - Fernkampf: attribute.ges + sum(FK_Angriff‑Boni)
-  - Zusätzliche Boni aus Fähigkeiten/Rüstung/Waffen (z. B. Waffe mit NK_Angriff) werden additiv berücksichtigt.
-
-- schaden_basis:
-  - Wird aus Ausrüstungstabelle oder custom_item gesetzt (z. B. Langschwert Schaden 6, Kurzbogen 3) [[11]].
-  - Schadenstypen/Tage/Tags ggf. in ausruestung.beschreibung dokumentieren.
+- schaden_basis aus Ausrüstungstabelle oder custom_item (z. B. Langschwert Schaden 6).
 
 ==============================
 9. Startgold & Einkauf (Schritt 7 detailliert)
 ==============================
-Startgold (Formeln):
-- Krieger: 150 + 3W6 × 10 GM  (Bereich 180 .. 330 GM)
-- Waldläufer: 120 + 3W6 × 10 GM  (Bereich 150 .. 300 GM)
-- Kleriker: 120 + 3W6 × 10 GM  (Bereich 150 .. 300 GM)
-- Magier: 80 + 2W6 × 10 GM  (Bereich 100 .. 200 GM)
+Startgold:
+- Krieger: 150 + 3W6 × 10 GM  (180 .. 330 GM)
+- Waldläufer: 120 + 3W6 × 10 GM (150 .. 300 GM)
+- Kleriker: 120 + 3W6 × 10 GM (150 .. 300 GM)
+- Magier: 80 + 2W6 × 10 GM (100 .. 200 GM)
 
-Berufsitems:
-- Generator weist jedem Charakter 1–2 berufsrelevante Gegenstände zu (vor dem Kauf vorrangig).
-
-Einkaufspriorität (Algorithmus):
-1. Pflicht: Waffe passend zur Klasse.
-2. Schutz: Rüstung und/oder Schild (sofern für die Klasse erlaubt).
-3. Berufsgegenstände (vorgemerkte).
-4. Komfort/Utility: Seil, Rationen, Laterne, Werkzeug.
-5. Variation: Generator darf Alternativen wählen (z. B. Dolch vs. Kurzschwert), Gesamtpreis ≤ Startgold.
-- Referenzpreise entstammen der Ausrüstungstabelle (z. B. Langschwert 80 GM, Kettenhemd 140 GM, Holzschild 15 GM) [[11]].
-- Verbleibendes Gold → waehrung.gold.
+Einkaufspriorität: Berufsitems → Waffe → Rüstung/ Schild → Utility → Restgold → waehrung.gold.
 
 ==============================
 10. Regeln für neu generierte (custom) Items
 ==============================
-Wenn Generator neue Items erzeugt, MUSS jedes custom_item enthalten:
-- name, typ, preis (GM), gewicht, mechanische Werte (Schaden / SR / PA / ASW / RZ/RR/RW‑Boni), beschreibung, availability.
-- Preisbildung (bindend): Finde Referenzitem(s) aus Tabelle; setze Preis_new = round(median(Referenzpreise) × factor) mit factor ∈ [0.8, 1.2] standardmäßig (±20%).
-- Speichere custom_items im Feld "custom_items" mit Referenz‑IDs/Begründung.
-- Dokumentiere Referenzen/Algorithmus im validation_log.
+- custom_item MUSS: name, typ, preis, gewicht, mechanische Werte, beschreibung, availability.
+- Preisbildung: Preis_new = round(median(Referenzpreise) × factor), factor ∈ [0.8, 1.2].
+- custom_items protokollieren Referenzen & Preisbildungsmetadaten.
 
 ==============================
 11. Level‑Up (Stufenanstiege) — Regeln
 ==============================
-EP‑Schwellen: Verwende bestehende Tabelle (Stufe 2 = 600 EP, Stufe 3 = 1400 EP, ... ) [[11]].
-
-Attributssteigerung:
-- Spielercharaktere: Spieler wählt frei +1 auf ein Attribut bei jeder Stufensteigerung.
-- KI/Generator/Batch: Generator wählt +1 auf ein Attribut, das dem Konzept der Figur entspricht. Klassen‑Prioritäten dürfen als Heuristik verwendet werden, sind jedoch kein striktes Muss.
-- Capping gilt nur bei initialer Erstellung Stufe 1; danach keine Cap.
-
-LP beim Level‑Up:
-- Beim Level‑Aufstieg berechne lp_max neu mit der Klassenformel (unter Verwendung der aktuellen attribute.kon und neuen stufe). Speichere lp_max. lp_aktuell bleibt unverändert durch Generator.
-
-Klassenfähigkeiten:
-- Automatisch freischalten bei Stufen: 1, 3, 6, 9.
-- Generator trägt Fähigkeit in faehigkeiten.klasse ein: { "name": "...", "beschreibung": "...", "stufe_erhalten": N }.
+- EP‑Schwellen gem. Tabelle (z. B. Stufe2 = 600 EP, Stufe3 = 1400 EP).
+- Attributssteigerung: Spielerwahl +1; KI/Generator konzept‑konform.
+- Capping nur bei Start Stufe 1.
+- LP‑Neuberechnung mit Klassenformel; lp_aktuell unverändert.
+- Klassenfähigkeiten automatisch bei Stufen 1, 3, 6, 9 freischalten.
 
 ==============================
 12. Klassenfähigkeiten — Addendum (Editierbares Modul)
 ==============================
-Format: { "name": "String", "beschreibung": "String", "stufe_erhalten": Integer }
+Format: { "name": "String", "beschreibung": "String", "stufe_erhalten": Integer, "action_type": String?, "uses_reaction": Boolean?, "usage_limit": String? }
 
-Krieger:
-- { "name":"Kampf-Fokus", "beschreibung":"1x/Begegnung: Freie Aktion → nächsten Nahkampfangriff mit Vorteil.", "stufe_erhalten":1 }
-- { "name":"Stoßschutz", "beschreibung":"1x/Kampf: Reaktion → +2 PA für 1 Runde.", "stufe_erhalten":3 }
-- { "name":"Zweiter Wind", "beschreibung":"1x/lange Rast: Aktion → Heile 1W8 + KON LP.", "stufe_erhalten":6 }
-- { "name":"Rundumschlag", "beschreibung":"1x/Begegnung: Aktion → Flächen-Nahkampfangriff: Gegner in 2m erleiden 1W6 + STR Schaden.", "stufe_erhalten":9 }
-
-Waldläufer:
-- { "name":"Zielen", "beschreibung":"Ziel-Aktion: +1 auf nächsten Fernkampfangriff; kumulativ bis +3; verfällt bei Bewegung/anderer Aktion.", "stufe_erhalten":1 }
-- { "name":"Taktischer Rückzug", "beschreibung":"Reaktion: Bei Nahkampfangriff → bis halbe Bewegungsrate wegbewegen; keine Gelegenheitsangriffe.", "stufe_erhalten":3 }
-- { "name":"Meister der Deckung", "beschreibung":"+1 ASW in leichter Deckung; +1 auf Fernkampfangriffe gegen von dir entdeckte Ziele.", "stufe_erhalten":6 }
-- { "name":"Scharfschützenblick", "beschreibung":"+2 auf Fernkampfangriffe gegen Ziele außerhalb Nahkampfreichweite, wenn du nicht in Bewegung warst.", "stufe_erhalten":9 }
-
-Kleriker:
-- { "name":"Untote vertreiben", "beschreibung":"1x/Tag: Aktion → Untote in Sicht: RW Willenskraft (ZW 12) oder fliehen 1W6 Runden.", "stufe_erhalten":1 }
-- { "name":"Heiliger Segen", "beschreibung":"3x/Tag: Aktion → Heilt Verbündeten in Berührung 1W4 + WIS LP.", "stufe_erhalten":3 }
-- { "name":"Geistheilung (verbessert)", "beschreibung":"3x/Tag: Aktion (2 AP): WIS-Probe (ZW 11); Erfolg → Heile 1W6 + WIS LP.", "stufe_erhalten":6 }
-- { "name":"Göttlicher Bann", "beschreibung":"1x/Tag: Stärkere Vertreibung/Unterdrückung (exakte Mechanik GM‑definiert).", "stufe_erhalten":9 }
-
-Magier:
-- { "name":"Zauberfokus (Basis)", "beschreibung":"Start mit 2 Cantrips und 2 vorbereiteten Stufe‑1-Zaubern. (Zauber‑Mechanik separat spezifizieren).", "stufe_erhalten":1 }
-- { "name":"Runenverstärker", "beschreibung":"1x/Begegnung: +1 auf einen Zauberangriff oder Wirke ein vorbereitetes Ritual (GM‑Regel).", "stufe_erhalten":3 }
-- { "name":"Erweiterter Zauberfokus", "beschreibung":"1x/lange Rast: Einen vorbereiteten Zauber Stufe ≤2 temporär +1 Wirkungsstärke.", "stufe_erhalten":6 }
-- { "name":"Meisterhafte Formel", "beschreibung":"Zugang zu Stufe‑3‑Zauberplatz oder vergleichbare Skalierung (Zauber‑Spec ergänzen).", "stufe_erhalten":9 }
-
-Hinweis: Addendum ist editierbar; exakte numerische Details (AP‑Kosten, SG‑Werte, Wirkungsdauern) sollten vor verbindlicher Anwendung ggf. finalisiert werden.
+(Die bisherigen Fähigkeiten aus v0.8 werden beibehalten — siehe Addendum in v0.8. Weiter unten findet sich die Aktionstyp‑Zuordnung als Beispiel.)
 
 ==============================
-13. Schilde / Waffen mit Malussen (Spezifikation)
+13. Aktions‑ & Bewegungsmodell (NEU in v0.9) — Slot‑System (verbindlich)
 ==============================
-- Keine zusätzlichen Top‑Level Felder notwendig; negative Effekte/Malusse sind als negative Einträge im ausruestung[].boni Array zu führen (z. B. ASW −2).
-- Beispiel Turmschild (aus Ausrüstungstabelle: PA +3, Preis 85 GM):
-{
-  "name": "Turmschild",
-  "typ": "Schild",
-  "preis": 85,
-  "gewicht": 10,
-  "boni": [
-    { "typ": "PA", "wert": 3, "quelle": "Turmschild" },
-    { "typ": "ASW", "wert": -2, "quelle": "Turmschild ASW Malus" },
-    { "typ": "RR", "wert": -1, "quelle": "Turmschild Reflexe Malus" }
-  ],
-  "beschreibung": "Großer Schild: +3 PA, ASW −2, RR −1."
-}
-- Waffeneigenschaften, die PA/Andere beeinflussen, ebenfalls über boni abbilden (z. B. Parierklinge -> PA +1).
+Kernprinzip:
+- Jede Runde stehen pro Charakter folgende Aktions‑Slots zur Verfügung:
+  - 1 Bewegungsaktion (Movement Action)
+  - 1 Standardaktion (Action; z. B. Angriff, Zauberwirken)
+  - 1 Freie Aktion (Free Action; kleine Handlungen, manche Fähigkeiten)
+  - 1 Reaktion (Reaction; außerhalb des eigenen Zuges einsetzbar; reset zur eigenen Runde)
+
+Action‑Swap (Sprint / 2 Bewegungsaktionen):
+- Ein Charakter darf seine Standardaktion in eine zweite Bewegungsaktion tauschen (Action → Movement Swap). Dadurch hat der Charakter in dieser Runde:
+  - 2 Bewegungsaktionen, 0 Standardaktion, 1 Freie Aktion, 1 Reaktion.
+- Verwendung: Ermöglicht "Rennen/Sprinten" (siehe Sprint‑Effekt).
+
+Sprint‑Effekt:
+- Sprint = Nutzung von zwei Bewegungsaktionen in derselben Runde.
+- Effekt: Sprint verdoppelt die normale Bewegungsdistanz in der Runde (Doppelte Distanz).
+  - (Genauere Zahlen zur Grundbewegung / Einheiten/Tile‑Größe sind Spielleiter/Map‑Konventionen; Spec stellt die Regel: Sprint → 2× Movement.)
+
+Action‑Kategorien (zuweisen in faehigkeiten.*):
+- action_type ∈ { "Freie Aktion", "Aktion", "Große Aktion" }
+  - "Freie Aktion" verbraucht die Freie Aktion.
+  - "Aktion" verbraucht die Standardaktion.
+  - "Große Aktion" verbraucht die Standardaktion und verhindert den Action→Movement Swap (oder alternativ: benötigt zusätzlich Movement, siehe Semantik weiter unten). Standardsemantik (empfohlen): Große Aktion beansprucht den Standardaktion‑Slot und ist vergleichbar mit früher 2 AP; sie verhindert Action→Movement Swap (d.h. du kannst nicht zusätzlich zu dieser großen Aktion eine zweite Movement nehmen).
+- uses_reaction: Boolean — wenn true, Fähigkeit verbraucht die Reaktion statt eines Action‑Slots.
+
+Semantik "Große Aktion" (empfohlen):
+- Große Aktion beansprucht die Standardaktion. Sie gilt als mächtiger und verhindert, dass der Standardaktion‑Slot in eine Movement‑Slot getauscht wird. (Dies entspricht der Idee: vorherige 2 AP‑Effekte sind mächtiger und verbrauchen/limitieren Bewegungsoptionen.)
+
+Mapping früherer 2‑AP‑Fähigkeiten → "Große Aktion":
+- Fähigkeiten, die in früheren Specs 2 AP benötigten (z. B. Geistheilung, Leichte Wunden versorgen), werden action_type = "Große Aktion".
+
+Reaktionen:
+- Jede Figur hat 1 Reaktion pro Runde; uses_reaction = true markiert Fähigkeiten, die diese Reaktion verbrauchen (z. B. Stoßschutz, Taktischer Rückzug).
+- Reaktionen verbrauchen keine Action‑Slots und werden separat zurückgesetzt.
+
+Bewegung & Reihenfolge:
+- Bewegung kann vor/nach/zwischen Aktionen ausgeführt werden, sofern nicht von einer Fähigkeit explizit verboten.
+- Falls eine Fähigkeit "verfällt bei Bewegung" (z. B. Zielen), bleibt diese Regel unangetastet.
+
+JSON‑Schema‑Erweiterungen für faehigkeiten.*:
+- Optional:
+  - "action_type": "Freie Aktion" | "Aktion" | "Große Aktion",
+  - "uses_reaction": Boolean,
+  - "usage_limit": String (z. B. "3x/Tag", "1x/Begegnung")
+
+Beispiel:
+{ "name":"Geistheilung", "beschreibung":"...", "stufe_erhalten":1, "action_type":"Große Aktion", "uses_reaction":false, "usage_limit":"3x/Tag" }
+{ "name":"Stoßschutz", "beschreibung":"...", "stufe_erhalten":3, "action_type":null, "uses_reaction":true, "usage_limit":"1x/Kampf" }
+{ "name":"Kampf‑Fokus", "beschreibung":"...", "stufe_erhalten":1, "action_type":"Freie Aktion", "uses_reaction":false, "usage_limit":"1x/Begegnung" }
+
+Validation / Logging:
+- Wenn Generator setzt action_type, muss dieser Wert gültig sein.
+- validation_log protokolliert Action‑Swaps (z. B. "action_swap": "Standard->Movement") und welche Slots Fähigkeiten beanspruchen.
 
 ==============================
 14. Validierung / Konsistenzchecks (Pflicht)
 ==============================
 Vor Finaler Ausgabe MUSS der Generator prüfen:
 - waehrung.gold ≥ 0
-- Summe Ausrüstungskosten ≤ Startbudget (Startgold minus evtl. Berufsitems)
+- Summe Ausrüstungskosten ≤ Startbudget (Startgold minus Berufsitems)
 - attribute sind Integer
 - lp_max konsistent mit Klasse und Stufe
 - Jedes Ausrüstungsobjekt hat: name, typ, preis, gewicht, mechanische Werte
 - Wenn ausruestung[].boni vorhanden: jedes boni-Element hat gültigen "typ" und Integer "wert" (kann negativ sein) und "quelle" string
-- validation_log enthält Aufschlüsselung der addierten Boni (Quelle, typ, wert)
+- validation_log enthält Aufschlüsselung der addierten Boni (Quelle, typ, wert) und bei Bedarf Action‑Swap‑Logs
 
 Optional/Empfohlen:
 - Generator legt Änderungsprotokoll an: ["step":"...", "changes":{...}] zur Nachvollziehbarkeit.
@@ -321,18 +265,30 @@ Optional/Empfohlen:
 ==============================
 16. Implementierungs-Hinweise / Pseudocode-Hints
 ==============================
-- Trennung der Modifikatoren: store volk_modifiers, beruf_modifiers, klasse_modifiers separately for provenance.
+- Trennung der Modifikatoren: store volk_modifiers, beruf_modifiers, klasse_modifiers separately.
 - Reihenfolge: apply Volk → Beruf → Klasse to attributes.
 - Nach Capping (nur wenn stufe == 1) recompute derived values.
 - Einkaufsalgorithmus: reserve Berufsitems, then buy Weapon → Armor/Shield → Utility until budget exhausted.
-- Bei custom_items: store "reference_basis": [ ids ] and "pricing_factor" used.
+- Bei custom_items: store "reference_basis": [ ids ] and "pricing_factor".
+- Runtime: Action‑Slots nicht zwingend persistieren im finalen Statblock, können aber optional in validation_log/runtime_state dokumentiert werden:
+  { "runtime_state": { "movement_slots": 1, "action_slots": 1, "free_slots": 1, "reaction_available": 1 } }
 
 ==============================
-17. Referenzdaten / Beispiele
+17. Beispiele (Action‑Mapping & Sprint)
 ==============================
-- Item- & Preisreferenzen stammen aus der Ausrüstungsdatei (Beispiele: Langschwert 80 GM, Kettenhemd 140 GM, Holzschild 15 GM, Kurzbogen 35 GM) [[11]].
-- Rüstungs‑ und Schildeinträge incl. ASW‑Malus und PA‑Werte sind in der Tabelle definiert und müssen vom Generator verwendet werden (z. B. Plattenrüstung ASW‑Malus −2, Preis 290 GM) [[11]].
+- Geistheilung (Kleriker, aus Addendum): action_type = "Große Aktion", usage_limit = "3x/Tag".
+- Leichte Wunden versorgen: action_type = "Große Aktion", usage_limit = "3x/Tag".
+- Kampf‑Fokus: action_type = "Freie Aktion", usage_limit = "1x/Begegnung".
+- Stoßschutz: uses_reaction = true, usage_limit = "1x/Kampf".
+- Zielen (Waldläufer): action_type = "Aktion".
+- Sprint: Aktion → Movement Swap → 2 Movement Actions → Movement distance ×2.
+
+==============================
+18. Referenzdaten / Beispiele
+==============================
+- Item‑ & Preisreferenzen sind der Ausrüstungsdatei entnommen (z. B. Langschwert 80 GM, Kettenhemd 140 GM, Holzschild 15 GM).
+- Rüstungs‑ASW‑Malusse und Schild‑PA‑Werte müssen vom Generator verwendet werden.
 
 ------------------------------
-Ende Spec v0.8
+Ende Spec v0.9
 ------------------------------
