@@ -1,294 +1,459 @@
-Statblock Spezifikation – Spielcharakter (SC) v0.9
-Aufbauend auf v0.8 — vollständige, maschinen- und KI-generatorfreundliche Spezifikation
-(Ergänzung: Aktions-/Bewegungsmodell mit Slot‑System & Sprint)
+Statblock Spezifikation – Spielcharakter (SC) v0.10
+Aufbauend auf v0.9 — vollständige Spec inkl. Magiesystem (Mana, Stäbe, Zauber)
 
-Hinweis: Währung ist ausschließlich Gold (GM). Referenzpreise und Gegenstandswerte stammen aus der Ausrüstungstabelle (siehe Datei) .
+Wichtiger Hinweis:
+- Währung: Gold (GM).
+- Item‑/Stab‑Referenzen entstammen der Ausrüstungsdatei (siehe Einträge Stäbe / Preise) [[11]].
 
-==============================
-1. Zweck & Grundprinzipien
-==============================
-Zweck:
-- Einheitliche Regeln und eine feste, maschinenlesbare Datenstruktur für die algorithmische Erzeugung von Spielercharakteren (SC) durch eine KI/Generator.
-- Primärer Fokus: Erstellung konsistenter Stufe‑1‑Charaktere; Regeln enthalten Support für Level‑Ups (bis mind. Stufe 3+, skalierbar).
+====================================
+1. Überblick der Ergänzungen in v0.10
+====================================
+Neu ergänzt:
+- Mana‑System (max_mana, mana_aktuell) in den abgeleiteten Werten.
+- Stab/Fokus als Ausrüstungsobjekte mit Mana/INT‑Bonussen und Minimalstufe (Daten aus [[11]]).
+- Einheitliches Spell‑Schema (maschinenlesbar).
+- Casting‑Workflow (Prüfungen, Mana‑Kosten, Saves, kritische Regeln).
+- Default Lernregeln / Start‑Zauber für Magier.
+- Beispiel‑Zauber (Grad 1..3) übernommen und als JSON‑Beispiele eingefügt.
 
-Grundprinzipien:
-- Algorithmische Generierung: Schritte in Sektion 2 sind verbindlich für den Generator.
-- Datenintegrität: Alle abgeleiteten Werte müssen exakt nach Formeln berechnet werden (Abrunden: floor).
-- Quellen der Boni: Volk, Beruf, Klasse — getrennt nach Herkunft dokumentiert.
+====================================
+2. Top‑Level‑Änderungen (Schema Ergänzungen)
+====================================
+Ergänze in Top‑Level JSON (siehe v0.9):
+- In "abgeleitete_werte" ergänzen:
+  "max_mana": Integer,
+  "mana_aktuell": Integer
 
-==============================
-2. Gesamtablauf / Generator‑Pipeline (verbindlich)
-==============================
-1. Initialisierung: Attribute = 0.
-2. Volk wählen (Menschen: Fokuswahl Sektion 8.1). faehigkeiten.volk eintragen.
-3. Beruf wählen. faehigkeiten.beruf eintragen. 1–2 berufsrelevante Startgegenstände markieren.
-4. Klasse wählen. faehigkeiten.klasse (Stufe‑1) eintragen.
-5. Attributs‑Capping (nur bei Erstellung Stufe 1): clamp(attribute, -1, +3).
-6. Abgeleitete Werte berechnen (siehe Sektion 5–7, Rundung: floor).
-7. Startausrüstung generieren / Einkauf (siehe Sektion 9).
-8. Finale Validierung & Ausgabe (siehe Sektion 14).
+- Neues Top‑Level Feld:
+  "zauber": {
+    "cantrips": [ { spell_object } ],
+    "known": [ { spell_object } ],
+    "prepared": [ { spell_object } ]   // falls System Prepared Spells verwendet
+  }
 
-==============================
-3. Top-Level-JSON-Struktur (Schema)
-==============================
+Aktualisiertes Minimal‑Template (Auszug):
+  "abgeleitete_werte": { "lp_max":0,"lp_aktuell":0,"ini_bonus":0,"bew":0,"max_mana":0,"mana_aktuell":0 },
+  "zauber": { "cantrips": [], "known": [], "prepared": [] }
+
+====================================
+3. Mana‑System (Regeln)
+====================================
+- max_mana Berechnung (bindend für Magier):
+  max_mana = 10 + attribute.int + sum( ausruestung.boni where typ == "MANA" )
+  (Stab‑Mana‑Bonusse werden als boni.typ = "MANA" geführt; siehe Stab‑Darstellung weiter unten.)
+  (Referenz: Stäbe in Ausrüstungstabelle: z. B. "Stab der Quelle" +10 Mana [[11]].)
+- mana_aktuell beim Erstellen:
+  - Setze mana_aktuell := max_mana beim Erstellen (wenn Klasse == "Magier").
+- Regeneration:
+  - Volle Regeneration von mana_aktuell (→ max_mana) nach einer langen Rast (8 Stunden).
+- Level‑Up:
+  - Bei Attributsänderung oder Ausrüstungsänderung wird max_mana neu berechnet; Generator aktualisiert max_mana; mana_aktuell bleibt unverändert (wie bei LP).
+- Mana‑Verfügbarkeit:
+  - Ein Zauber kann nur gewirkt werden, wenn caster.mana_aktuell ≥ spell.mana_cost. Bei unzureichendem Mana ist Zauber nicht ausführbar.
+
+(Citation: Stäbe & Mana-Boni siehe Item‑Liste Stäbe in deiner Datei [[11]].)
+
+====================================
+4. Stäbe / Arkane Foci (Darstellung & Regeln)
+====================================
+- Stäbe sind gewöhnliche Ausrüstungsobjekte (ausruestung[]), mit:
+  - name, typ: "Stab" (oder "Anderes" mit tag), preis, gewicht, boni: [ ... ],
+  - optional: "min_stufe": Integer (falls der Stab eine Mindeststufe verlangt)
+- Bonitypen für Stäbe:
+  - { "typ": "MANA", "wert": Integer, "quelle": "Stab XY" } — erhöht max_mana
+  - { "typ": "INT", "wert": Integer, "quelle": "Stab XY" } — temporärer Attributsmodifier für Zauber‑Würfe (wir werten INT‑Bonusse in casting_roll ein)
+- Regel: Ohne Stab erleidet der Magier −2 Malus auf alle Spellcasting‑Würfe (numerischer Malus).
+- Regel: Stäbe mit min_stufe dürfen nur verwendet werden, wenn charakter.stufe ≥ min_stufe.
+- Beispiel (aus [[11]]): "Stab der Quelle": boni: [ { typ: "MANA", wert: 10 } ], Preis 100 GM [[11]].
+
+====================================
+5. Spell‑Schema (JSON) — verbindlich
+====================================
+Jeder Zauber ist ein JSON‑Objekt mit mindestens diesen Feldern:
 {
+  "id": "String",            // unique identifier
   "name": "String",
-  "spieler": "String",
-  "konzept": "String",
-  "stufe": Integer,
-  "ep": Integer,
-  "volk": "String",
-  "beruf": "String",
-  "klasse": "String",
-  "attribute": { "str": Integer, "ges": Integer, "kon": Integer, "int": Integer, "wis": Integer, "cha": Integer },
-  "abgeleitete_werte": { "lp_max": Integer, "lp_aktuell": Integer, "ini_bonus": Integer, "bew": Integer },
-  "abwehr": { "pa": Integer, "asw": Integer, "sr": { "total": Integer, "quellen":[ { "quelle": "String", "wert": Integer } ] } },
-  "rettungswuerfe": { "rz_bonus": Integer, "rr_bonus": Integer, "rw_bonus": Integer },
-  "angriffe": [ { "name":"String", "typ":"Nahkampf"|"Fernkampf", "to_hit_bonus": Integer, "schaden_basis": Integer, "bemerkung":"String" } ],
-  "faehigkeiten": { "volk": [], "beruf": [], "klasse": [] },
-  "ausruestung": [ { "name":"String", "typ":"Waffe"|"Rüstung"|"Schild"|"Anderes", "preis": Integer, "gewicht": Number, "boni":[ { "typ":"PA"|"ASW"|"SR"|"NK_Angriff"|"FK_Angriff"|"RZ"|"RR"|"RW", "wert": Integer, "quelle": "String" } ], "schaden_basis": Integer?, "beschreibung":"String" } ],
-  "inventar": [],
-  "custom_items": [],
-  "waehrung": { "gold": Integer },
-  "validation_log": []
+  "grade": Integer,          // 1..n
+  "zielwert_basis": Integer, // z. B. 8, 9, 10
+  "mana_cost": Integer,
+  "range": { "base_m": Number, "per_level_m": Number }, // Reichweite
+  "duration": "instant" | "runden" | "minuten" | "stunden" | "permanent" | "custom",
+  "duration_value": Number | null, // wenn duration != instant
+  "action_type": "Freie Aktion" | "Aktion" | "Große Aktion" | "Reaktion",
+  "target": "single" | "area" | "self" | "cone" | "line" | "touch",
+  "area": { "shape":"cube"|"sphere"|"cone", "size_m": Number } | null, // für area spells
+  "save": null | { "typ":"RZ"|"RR"|"RW", "on_success":"half"|"negate"|"other", "note":"String" },
+  "flags": [ "ignores_armor","ignores_cover","auto_hit","projectiles_by_level", ... ], // optional
+  "projectiles_by_level": { "1":1, "3":2, "6":3, "8":4 } // optional
+  "description": "String"
 }
 
-Bemerkung: "boni" ist optional, wird aber empfohlen. "preis" und "gewicht" müssen bei Ausrüstungsobjekten vorhanden sein.
+Hinweis: spell.zielwert_total für Casting/Saves wird in Workflow bestimmt (siehe unten).
 
-==============================
-4. Attribute (Regeln)
-==============================
-- Struktur: attribute = { str, ges, kon, int, wis, cha } (Integer).
-- Stufe‑1 Erstellung: Startwerte 0 → Addiere Modifikatoren (Volk/Beruf/Klasse) → Capping [-1, +3].
-- Stufenanstieg:
-  - Spielercharaktere: Spieler wählt frei +1 auf eines der Attribute.
-  - KI/Generator: +1 auf ein Attribut, das zum Konzept passt (heuristisch: Klassenpriorität, aber nicht zwingend).
-- Alle Änderungen dokumentieren (validation_log).
+====================================
+6. Casting‑Workflow (Engine‑Pseudocode)
+====================================
+Algorithmus (bindend / maschinenlesbar):
 
-==============================
-5. Abgeleitete Werte (Formeln und Rundung)
-==============================
-Rundungsregel (bindend):
-- Alle Mittelwerte/Divisionen verwenden floor (Abrunden).
+Function cast_spell(caster, spell, targets):
+  // 0. Preconditions
+  if caster.klasse != "Magier": reject unless spell allowed for class.
+  if caster.mana_aktuell < spell.mana_cost: reject ("insufficient mana")
 
-Formeln:
-- ini_bonus = floor((attribute.ges + attribute.wis) / 2)
-- bew = 4 + floor(ini_bonus / 2)
-- lp_max (klassenabhängig):
-  - Krieger: lp_max = 14 + 2 * (attribute.kon + stufe)
-  - Waldläufer / Kleriker: lp_max = 12 + attribute.kon + 2 * stufe
-  - Magier: lp_max = 10 + attribute.kon + stufe
+  if spell.min_stufe exists and caster.stufe < spell.min_stufe: reject ("too low level for item/spell")
 
-lp_aktuell:
-- Bei Erstellung: lp_aktuell := lp_max.
-- Beim Level‑Up: lp_max neu berechnen; lp_aktuell bleibt unverändert (Generator ändert nicht automatisch).
+  // 1. Spend Mana (immediately)
+  caster.mana_aktuell -= spell.mana_cost
+  Log(action="spend_mana",caster,spell,mana_before,mana_after)
 
-==============================
-6. Abwehr (PA / ASW / SR) — Berechnung & Stacking
-==============================
-Bonustypen:
-- "PA", "ASW", "SR", "NK_Angriff", "FK_Angriff", "RZ", "RR", "RW"
+  // 2. Compute effective casting stat
+  effective_int = caster.attribute.int + sum( ausruestung.boni where typ == "INT" )
+  if caster has no equipped Stab (ausruestung with typ "Stab" or boni.typ== "MANA" etc):
+    effective_int -= 2   // staff penalty
 
-Quellen: Ausrüstung, Fähigkeiten (wenn numerisch), Rassenboni, magische Items. Temporäre Effekte nicht in Basis‑Statblock.
+  // 3. Compute casting roll target
+  // spell_zielwert_total = spell.zielwert_basis + caster.stufe
+  target_value_total = spell.zielwert_basis + caster.stufe
 
-Stacking: Additiv — Summe aller gleichartigen Boni (inkl. negativer Werte).
+  // 4. Roll for casting
+  d = roll_d20()
+  casting_roll = d + effective_int
+  Log(action="casting_roll", caster, d, effective_int, casting_roll, target_value_total)
+  // Criticals
+  if d == 20: success = true (automatic success)
+  else if d == 1: success = false (automatic failure)
+  else success = (casting_roll >= target_value_total)
 
-Berechnungsablauf:
-1. pa_basis = 9 + attribute.str
-2. asw_basis = 9 + attribute.ges + floor(attribute.wis / 2)
-3. Summiere boni aus ausruestung[].boni und faehigkeiten.*[].boni
-4. pa = pa_basis + sum(PA-Boni)
-5. asw = asw_basis + sum(ASW-Boni)
-6. sr.total = sum(SR-Boni)
-7. Notiere Quellen im validation_log.
+  if not success:
+    Log(action="spell_failed", caster, spell)
+    return { success:false, reason:"casting_failed" } // mana already spent
 
-Beispiel: Kettenhemd (SR 3, ASW −1) + Holzschild (PA +1):
-- pa = 9 + str + 1
-- asw = 9 + ges + floor(wis/2) − 1
-- sr.total = 3
+  // 5. If success: apply spell effect per definition
+  for each target in targets:
+    if spell.save != null:
+      // target rolls saving throw
+      save_roll_d = roll_d20()
+      save_bonus = target.get_save_bonus(spell.save.typ) // uses rz/rr/rw formulas + boni
+      save_total = save_roll_d + save_bonus
+      success_save = (save_total >= target_value_total)
+      Log(action="save_roll", target, save_roll_d, save_bonus, save_total, target_value_total, success_save)
+      // Apply effect based on save and spell.save.on_success (e.g. half damage)
+    else:
+      // apply spell effect directly (e.g. auto_hit projectiles)
+  // 6. Log effect outcomes
+  return { success:true, details: ... }
 
-==============================
-7. Rettungswürfe (Formeln) & Verteidigung gegen Magie
-==============================
-Formeln (floor):
-- rz_bonus = floor((attribute.kon + attribute.str) / 2)
-- rr_bonus = floor((attribute.ges + attribute.wis) / 2)
-- rw_bonus = floor((attribute.wis + attribute.int) / 2)
+Notes:
+- target_value_total uses caster.stufe scaling (consistent with earlier rule: "Stufe des wirkenden Magiers wird zum Rettungswurf-Zielwert addiert").
+- Saves use defender W20 + appropriate save bonus (rz/rr/rw per Spec v0.9).
+- Mana is consumed even if casting fails.
+- Critical natural 20 → auto success; natural 1 → auto fail (mana still spent).
 
-Verteidigung gegen magische Angriffe:
-- Verteidiger würfelt W20 + passender rettungsbonus.
-- Erfolg wenn: W20 + rettungsbonus ≥ Zielwert_total.
-- Zielwert_total = Zielwert_basis_des_Effekts + Stufe_des_wirkenden_Magiers.
-- Standard ZW_basis (falls nicht spezifiziert): 10 (Empfehlung: Zauber‑Spec definieren).
+====================================
+7. Kritische Erfolge / Patzer
+====================================
+- Natural 20 auf Casting d20: Automatical success (spell effect applies regardless of target_value_total).
+- Natural 1 on casting d20: Automatic failure (spell has no effect). Mana still consumed.
+- Implementationshinweis: Systems may add critical enhancement effects (e.g. doubled damage) — optional house rule, not default.
 
-Bonustypen RZ/RR/RW additiv zu den Basiswerten.
+====================================
+8. Spell‑Zielwert / Saves (Konsistenz)
+====================================
+- Casting target: spell_zielwert_total = spell.zielwert_basis + caster.stufe
+- Defender Save: W20 + defender.save_bonus ≥ spell_zielwert_total to resist (consistent with previous "Verteidigung gegen magische Angriffe" Regeln).
+- Save bonuses use the v0.9 formulas (floor(...)) for rz/rr/rw.
 
-==============================
-8. Angriffe (To-Hit & Schaden)
-==============================
-- to_hit_bonus:
-  - Nahkampf: attribute.str + sum(NK_Angriff‑Boni)
-  - Fernkampf: attribute.ges + sum(FK_Angriff‑Boni)
-- schaden_basis aus Ausrüstungstabelle oder custom_item (z. B. Langschwert Schaden 6).
+====================================
+9. Zauberzugänglichkeit & Lernregeln (Defaults)
+====================================
+- Grade Unlocks:
+  - Grade 1 available from Stufe 1
+  - Grade 2 available from Stufe 3
+  - Grade 3 available from Stufe 5
+  (Matches your drafts.)
+- Start‑Zauber (Creation rule):
+  - Magier starten mit:
+    - 2 Cantrips (grade 0) — "cantrips" list
+    - 2 Grade‑1 Zauber (in "known" oder "prepared")
+  - Generator: Wenn kein Spieler‑Auswahl, wähle typische defaults (Magisches Geschoss, Schild).
+- Lernregel (Default):
+  - Bei jedem Level‑Aufstieg erhält Magier +1 neues "known" Spell (beliebiger Grad ≤ erlaubtem Grad durch Stufe). Prepared‑Mechanik optional: Generator prepares subset per session if system uses prepared spells.
+  - Cantrips: +1 Cantrip bei Stufen 3, 6, 9 (optional rule).
+- Diese Regeln sind defaults und können später angepasst.
 
-==============================
-9. Startgold & Einkauf (Schritt 7 detailliert)
-==============================
-Startgold:
-- Krieger: 150 + 3W6 × 10 GM  (180 .. 330 GM)
-- Waldläufer: 120 + 3W6 × 10 GM (150 .. 300 GM)
-- Kleriker: 120 + 3W6 × 10 GM (150 .. 300 GM)
-- Magier: 80 + 2W6 × 10 GM (100 .. 200 GM)
-
-Einkaufspriorität: Berufsitems → Waffe → Rüstung/ Schild → Utility → Restgold → waehrung.gold.
-
-==============================
-10. Regeln für neu generierte (custom) Items
-==============================
-- custom_item MUSS: name, typ, preis, gewicht, mechanische Werte, beschreibung, availability.
-- Preisbildung: Preis_new = round(median(Referenzpreise) × factor), factor ∈ [0.8, 1.2].
-- custom_items protokollieren Referenzen & Preisbildungsmetadaten.
-
-==============================
-11. Level‑Up (Stufenanstiege) — Regeln
-==============================
-- EP‑Schwellen gem. Tabelle (z. B. Stufe2 = 600 EP, Stufe3 = 1400 EP).
-- Attributssteigerung: Spielerwahl +1; KI/Generator konzept‑konform.
-- Capping nur bei Start Stufe 1.
-- LP‑Neuberechnung mit Klassenformel; lp_aktuell unverändert.
-- Klassenfähigkeiten automatisch bei Stufen 1, 3, 6, 9 freischalten.
-
-==============================
-12. Klassenfähigkeiten — Addendum (Editierbares Modul)
-==============================
-Format: { "name": "String", "beschreibung": "String", "stufe_erhalten": Integer, "action_type": String?, "uses_reaction": Boolean?, "usage_limit": String? }
-
-(Die bisherigen Fähigkeiten aus v0.8 werden beibehalten — siehe Addendum in v0.8. Weiter unten findet sich die Aktionstyp‑Zuordnung als Beispiel.)
-
-==============================
-13. Aktions‑ & Bewegungsmodell (NEU in v0.9) — Slot‑System (verbindlich)
-==============================
-Kernprinzip:
-- Jede Runde stehen pro Charakter folgende Aktions‑Slots zur Verfügung:
-  - 1 Bewegungsaktion (Movement Action)
-  - 1 Standardaktion (Action; z. B. Angriff, Zauberwirken)
-  - 1 Freie Aktion (Free Action; kleine Handlungen, manche Fähigkeiten)
-  - 1 Reaktion (Reaction; außerhalb des eigenen Zuges einsetzbar; reset zur eigenen Runde)
-
-Action‑Swap (Sprint / 2 Bewegungsaktionen):
-- Ein Charakter darf seine Standardaktion in eine zweite Bewegungsaktion tauschen (Action → Movement Swap). Dadurch hat der Charakter in dieser Runde:
-  - 2 Bewegungsaktionen, 0 Standardaktion, 1 Freie Aktion, 1 Reaktion.
-- Verwendung: Ermöglicht "Rennen/Sprinten" (siehe Sprint‑Effekt).
-
-Sprint‑Effekt:
-- Sprint = Nutzung von zwei Bewegungsaktionen in derselben Runde.
-- Effekt: Sprint verdoppelt die normale Bewegungsdistanz in der Runde (Doppelte Distanz).
-  - (Genauere Zahlen zur Grundbewegung / Einheiten/Tile‑Größe sind Spielleiter/Map‑Konventionen; Spec stellt die Regel: Sprint → 2× Movement.)
-
-Action‑Kategorien (zuweisen in faehigkeiten.*):
-- action_type ∈ { "Freie Aktion", "Aktion", "Große Aktion" }
-  - "Freie Aktion" verbraucht die Freie Aktion.
-  - "Aktion" verbraucht die Standardaktion.
-  - "Große Aktion" verbraucht die Standardaktion und verhindert den Action→Movement Swap (oder alternativ: benötigt zusätzlich Movement, siehe Semantik weiter unten). Standardsemantik (empfohlen): Große Aktion beansprucht den Standardaktion‑Slot und ist vergleichbar mit früher 2 AP; sie verhindert Action→Movement Swap (d.h. du kannst nicht zusätzlich zu dieser großen Aktion eine zweite Movement nehmen).
-- uses_reaction: Boolean — wenn true, Fähigkeit verbraucht die Reaktion statt eines Action‑Slots.
-
-Semantik "Große Aktion" (empfohlen):
-- Große Aktion beansprucht die Standardaktion. Sie gilt als mächtiger und verhindert, dass der Standardaktion‑Slot in eine Movement‑Slot getauscht wird. (Dies entspricht der Idee: vorherige 2 AP‑Effekte sind mächtiger und verbrauchen/limitieren Bewegungsoptionen.)
-
-Mapping früherer 2‑AP‑Fähigkeiten → "Große Aktion":
-- Fähigkeiten, die in früheren Specs 2 AP benötigten (z. B. Geistheilung, Leichte Wunden versorgen), werden action_type = "Große Aktion".
-
-Reaktionen:
-- Jede Figur hat 1 Reaktion pro Runde; uses_reaction = true markiert Fähigkeiten, die diese Reaktion verbrauchen (z. B. Stoßschutz, Taktischer Rückzug).
-- Reaktionen verbrauchen keine Action‑Slots und werden separat zurückgesetzt.
-
-Bewegung & Reihenfolge:
-- Bewegung kann vor/nach/zwischen Aktionen ausgeführt werden, sofern nicht von einer Fähigkeit explizit verboten.
-- Falls eine Fähigkeit "verfällt bei Bewegung" (z. B. Zielen), bleibt diese Regel unangetastet.
-
-JSON‑Schema‑Erweiterungen für faehigkeiten.*:
-- Optional:
-  - "action_type": "Freie Aktion" | "Aktion" | "Große Aktion",
-  - "uses_reaction": Boolean,
-  - "usage_limit": String (z. B. "3x/Tag", "1x/Begegnung")
-
-Beispiel:
-{ "name":"Geistheilung", "beschreibung":"...", "stufe_erhalten":1, "action_type":"Große Aktion", "uses_reaction":false, "usage_limit":"3x/Tag" }
-{ "name":"Stoßschutz", "beschreibung":"...", "stufe_erhalten":3, "action_type":null, "uses_reaction":true, "usage_limit":"1x/Kampf" }
-{ "name":"Kampf‑Fokus", "beschreibung":"...", "stufe_erhalten":1, "action_type":"Freie Aktion", "uses_reaction":false, "usage_limit":"1x/Begegnung" }
-
-Validation / Logging:
-- Wenn Generator setzt action_type, muss dieser Wert gültig sein.
-- validation_log protokolliert Action‑Swaps (z. B. "action_swap": "Standard->Movement") und welche Slots Fähigkeiten beanspruchen.
-
-==============================
-14. Validierung / Konsistenzchecks (Pflicht)
-==============================
-Vor Finaler Ausgabe MUSS der Generator prüfen:
-- waehrung.gold ≥ 0
-- Summe Ausrüstungskosten ≤ Startbudget (Startgold minus Berufsitems)
-- attribute sind Integer
-- lp_max konsistent mit Klasse und Stufe
-- Jedes Ausrüstungsobjekt hat: name, typ, preis, gewicht, mechanische Werte
-- Wenn ausruestung[].boni vorhanden: jedes boni-Element hat gültigen "typ" und Integer "wert" (kann negativ sein) und "quelle" string
-- validation_log enthält Aufschlüsselung der addierten Boni (Quelle, typ, wert) und bei Bedarf Action‑Swap‑Logs
-
-Optional/Empfohlen:
-- Generator legt Änderungsprotokoll an: ["step":"...", "changes":{...}] zur Nachvollziehbarkeit.
-- custom_items dokumentieren Referenzen und Preisbildungsformel.
-
-==============================
-15. Minimal-Template (aktualisiert JSON)
-==============================
+====================================
+10. Staf/Item‑Repräsentation / Beispiele
+====================================
+- Stäbe in ausruestung[] sollten boni enthalten z. B.:
 {
-  "name": "",
-  "spieler": "KI",
-  "konzept": "",
-  "stufe": 1,
-  "ep": 0,
-  "volk": "",
-  "beruf": "",
-  "klasse": "",
-  "attribute": { "str": 0, "ges": 0, "kon": 0, "int": 0, "wis": 0, "cha": 0 },
-  "abgeleitete_werte": { "lp_max": 0, "lp_aktuell": 0, "ini_bonus": 0, "bew": 0 },
-  "abwehr": { "pa": 0, "asw": 0, "sr": { "total": 0, "quellen": [] } },
-  "rettungswuerfe": { "rz_bonus": 0, "rr_bonus": 0, "rw_bonus": 0 },
-  "angriffe": [],
-  "faehigkeiten": { "volk": [], "beruf": [], "klasse": [] },
-  "ausruestung": [],
-  "inventar": [],
-  "custom_items": [],
-  "waehrung": { "gold": 0 },
-  "validation_log": []
+  "name":"Stab der Quelle",
+  "typ":"Stab",
+  "preis":100,
+  "gewicht": 2,
+  "boni":[ { "typ":"MANA", "wert":10, "quelle":"Stab der Quelle" } ],
+  "min_stufe": 1,
+  "beschreibung":"Vergrößert den Mana-Pool des Trägers um 10."
+}
+(Referenzdaten aus deiner Tabelle: "Stab der Quelle" +10 Mana, Preis 100 GM) [[11]].
+
+- Stäbe, die INT‑Bonusse geben, verwenden boni { "typ":"INT", "wert": +N } oder attribute_modifiers (Generator implementiert INT‑boni beim Casting‑Roll) [[11]].
+
+====================================
+11. Spell‑Beispiele (JSON) — aus deinen Drafts
+====================================
+(Die folgenden Spell‑Objekte sind direkt aus deinen Drafts übertragen. Felder wie range/duration wurden interpretiert.)  
+Hinweis: Texte gekürzt/normalisiert für maschinenlesbare Felder.
+
+1) MAGISCHES GESCHOSS (Grad 1)
+{
+  "id":"MAG_GESCHOSS",
+  "name":"Magisches Geschoss",
+  "grade":1,
+  "zielwert_basis":8,
+  "mana_cost":3,
+  "range": { "base_m": 55, "per_level_m": 9 },
+  "duration":"instant",
+  "action_type":"Aktion",
+  "target":"single",
+  "projectiles_by_level": { "1":1, "3":2, "6":3, "8":4 },
+  "flags":[ "auto_hit", "ignores_armor","ignores_cover" ],
+  "description":"Erzeugt 1 projectile (mehr auf höheren Stufen). Jedes projectile verursacht 1W4 Schaden und trifft automatisch, ignoriert Rüstung/Deckung."
 }
 
-==============================
-16. Implementierungs-Hinweise / Pseudocode-Hints
-==============================
-- Trennung der Modifikatoren: store volk_modifiers, beruf_modifiers, klasse_modifiers separately.
-- Reihenfolge: apply Volk → Beruf → Klasse to attributes.
-- Nach Capping (nur wenn stufe == 1) recompute derived values.
-- Einkaufsalgorithmus: reserve Berufsitems, then buy Weapon → Armor/Shield → Utility until budget exhausted.
-- Bei custom_items: store "reference_basis": [ ids ] and "pricing_factor".
-- Runtime: Action‑Slots nicht zwingend persistieren im finalen Statblock, können aber optional in validation_log/runtime_state dokumentiert werden:
-  { "runtime_state": { "movement_slots": 1, "action_slots": 1, "free_slots": 1, "reaction_available": 1 } }
+2) SCHILD (Grad 1)
+{
+  "id":"SCHILD",
+  "name":"Schild",
+  "grade":1,
+  "zielwert_basis":8,
+  "mana_cost":4,
+  "range": { "base_m":0, "per_level_m":0 },
+  "duration":"runden",
+  "duration_value": 2, // pro Stufe; interpretierung note: engine: duration_value * caster.stufe
+  "action_type":"Aktion",
+  "target":"self",
+  "save": null,
+  "flags": [],
+  "description": "Gewährt +3 ASW gegen Fernkampfangriffe und +1 PA gegen andere Angriffe. Dauer: 2 Runden pro Stufe."
+}
 
-==============================
-17. Beispiele (Action‑Mapping & Sprint)
-==============================
-- Geistheilung (Kleriker, aus Addendum): action_type = "Große Aktion", usage_limit = "3x/Tag".
-- Leichte Wunden versorgen: action_type = "Große Aktion", usage_limit = "3x/Tag".
-- Kampf‑Fokus: action_type = "Freie Aktion", usage_limit = "1x/Begegnung".
-- Stoßschutz: uses_reaction = true, usage_limit = "1x/Kampf".
-- Zielen (Waldläufer): action_type = "Aktion".
-- Sprint: Aktion → Movement Swap → 2 Movement Actions → Movement distance ×2.
+3) LICHT (Grad 1)
+{
+  "id":"LICHT",
+  "name":"Licht",
+  "grade":1,
+  "zielwert_basis":8,
+  "mana_cost":3,
+  "range": { "base_m":55, "per_level_m":0 },
+  "duration":"minuten",
+  "duration_value":10, // pro Stufe
+  "action_type":"Aktion",
+  "target":"area",
+  "area":{ "shape":"sphere", "size_m":6 },
+  "save": { "typ":"RW", "on_success":"negate", "note":"Wenn direkt auf Augen gewirkt: RW-Wurf sonst geblendet" },
+  "flags": [],
+  "description":"Erzeugt eine Lichtquelle Radius 6m; bei direkt gewirkt: RW halb/Blindheits-Effect."
+}
 
-==============================
-18. Referenzdaten / Beispiele
-==============================
-- Item‑ & Preisreferenzen sind der Ausrüstungsdatei entnommen (z. B. Langschwert 80 GM, Kettenhemd 140 GM, Holzschild 15 GM).
-- Rüstungs‑ASW‑Malusse und Schild‑PA‑Werte müssen vom Generator verwendet werden.
+4) SCHLAF (Grad 1)
+{
+  "id":"SCHLAF",
+  "name":"Schlaf",
+  "grade":1,
+  "zielwert_basis":8,
+  "mana_cost":5,
+  "range": { "base_m":27, "per_level_m":0 },
+  "duration":"special",
+  "action_type":"Aktion",
+  "target":"area",
+  "area":{ "shape":"cube", "size_m":3 },
+  "save": { "typ":"RW", "on_success":"negate", "note":"Betroffene müssen Willenswurf schaffen, Anzahl Betroffener = 1W6 + caster.attribute.int; Kreaturen mit höherer Stufe als caster immun" },
+  "flags": [],
+  "description":"Versetzt Kreaturen in 3x3m Gebiet in Schlaf. Betroffene: 1W6 + INT des Magiers; höhere Stufe = immun."
+}
 
-------------------------------
-Ende Spec v0.9
-------------------------------
+5) FEDERFALL (Grad 1)
+{
+  "id":"FEDERFALL",
+  "name":"Federfall",
+  "grade":1,
+  "zielwert_basis":8,
+  "mana_cost":3,
+  "range": { "base_m": 9, "per_level_m": 9 }, // 9m/Stufe interpreted as per_level_flex. For engine: max_range = base_m * caster.stufe or similar
+  "duration":"runden",
+  "duration_value":1, // per stufe
+  "action_type":"Reaktion",
+  "target":"single",
+  "save": null,
+  "flags": [],
+  "description":"Verlangsamt Fallgeschwindigkeit; verhindert Fallschaden; kann als Reaktion gewirkt werden."
+}
+
+6) NETZ (Grad 2)
+{
+  "id":"NETZ",
+  "name":"Netz",
+  "grade":2,
+  "zielwert_basis":9,
+  "mana_cost":6,
+  "range": { "base_m":9, "per_level_m":0 },
+  "duration":"minuten",
+  "duration_value":20, // per stufe
+  "action_type":"Aktion",
+  "target":"area",
+  "area": { "shape":"cube", "size_m":5 },
+  "save": { "typ":"RZ", "on_success":"negate", "note":"Befreiung via Stärke-Wurf (Zielwert 10)" },
+  "flags": [],
+  "description":"Erschafft klebriges Netz 5x5m; betroffene bewegungsunfähig; Stärke-Wurf Zielwert 10 zum Befreien."
+}
+
+7) UNSICHTBARKEIT (Grad 2)
+{
+  "id":"UNSICHTBARKEIT",
+  "name":"Unsichtbarkeit",
+  "grade":2,
+  "zielwert_basis":9,
+  "mana_cost":7,
+  "range": { "base_m":0, "per_level_m":0 },
+  "duration":"permanent",
+  "duration_value":null,
+  "action_type":"Aktion",
+  "target":"single",
+  "save": null,
+  "flags": [],
+  "description":"Ziel wird unsichtbar; endet bei offensiver Aktion des Ziels."
+}
+
+8) SPIEGELBILD (Grad 2)
+{
+  "id":"SPIEGELBILD",
+  "name":"Spiegelbild",
+  "grade":2,
+  "zielwert_basis":9,
+  "mana_cost":7,
+  "range": { "base_m":0, "per_level_m":0 },
+  "duration":"runden",
+  "duration_value":1, // per stufe
+  "action_type":"Aktion",
+  "target":"self",
+  "save": null,
+  "flags": [],
+  "description":"Erzeugt 1W4 Doppelgänger + 1 pro 3 Stufen; Angriffe treffen ggf. Bilder zuerst."
+}
+
+9) FURCHT (Grad 2)
+{
+  "id":"FURCHT",
+  "name":"Furcht",
+  "grade":2,
+  "zielwert_basis":9,
+  "mana_cost":6,
+  "range": { "base_m":27, "per_level_m":0 },
+  "duration":"runden",
+  "duration_value": { "min":1, "max_formula": "1W4" },
+  "action_type":"Aktion",
+  "target":"area",
+  "area": { "shape":"sphere", "size_m":3 }, // interpret length per draft
+  "save": { "typ":"RW", "on_success":"negate" },
+  "flags": [],
+  "description":"Erzeugt Furcht in Kreaturen mit weniger als 6 LP im Wirkungsbereich; RW Willenskraft um zu resistieren."
+}
+
+10) KLOPFEN (Grad 2)
+{
+  "id":"KLOPFEN",
+  "name":"Klopfen",
+  "grade":2,
+  "zielwert_basis":9,
+  "mana_cost":4,
+  "range": { "base_m":55, "per_level_m":0 },
+  "duration":"instant",
+  "action_type":"Aktion",
+  "target":"single",
+  "save": null,
+  "flags": [],
+  "description":"Öffnet verschlossene Türen/Kisten; erzeugt lautes Klopfen (Wahrnehmungs-Risiko)."
+}
+
+11) FEUERBALL (Grad 3)
+{
+  "id":"FEUERBALL",
+  "name":"Feuerball",
+  "grade":3,
+  "zielwert_basis":10,
+  "mana_cost":9,
+  "range": { "base_m":9, "per_level_m":1 },
+  "duration":"instant",
+  "action_type":"Aktion",
+  "target":"area",
+  "area": { "shape":"sphere", "size_m":6 },
+  "save": { "typ":"RR", "on_success":"half" },
+  "flags": [],
+  "description":"6m Radius Explosion; 1W6 Feuerschaden pro Stufe des Magiers; erfolgreicher Reflex RW halbiert Schaden."
+}
+
+12) BLITZSCHLAG (Grad 3)
+{
+  "id":"BLITZSCHLAG",
+  "name":"Blitzschlag",
+  "grade":3,
+  "zielwert_basis":10,
+  "mana_cost":10,
+  "range": { "base_m":18, "per_level_m":9 },
+  "duration":"instant",
+  "action_type":"Aktion",
+  "target":"line",
+  "area": { "shape":"line", "size_m":18 }, // length 18m by default
+  "save": { "typ":"RR", "on_success":"half" },
+  "flags": [],
+  "description":"18m lange Linie, 1W6 Blitzschaden pro Stufe; Reflex RW halbiert."
+}
+
+13) HAST (Grad 3)
+{
+  "id":"HAST",
+  "name":"Hast",
+  "grade":3,
+  "zielwert_basis":10,
+  "mana_cost":8,
+  "range": { "base_m":55, "per_level_m":0 },
+  "duration":"runden",
+  "duration_value":3,
+  "action_type":"Große Aktion",
+  "target":"area",
+  "area": { "shape":"cube", "size_m":12 },
+  "save": null,
+  "flags": [],
+  "description":"Betroffene (bis 1 pro Stufe) agieren mit doppelter Bewegungsrate und erhalten eine zusätzliche Angriffsaktion pro Runde; Dauer 3 Runden."
+}
+
+====================================
+12. Sonstige Engine / Daten‑Regeln
+====================================
+- Spell IDs sollten eindeutig und versioniert werden.
+- Logging: Jeder Cast mit pre/post mana, cast roll, d20, targets, saves protokollieren.
+- Balancing: Mana‑Kosten sind so gesetzt wie in Drafts; Anpassungen über Time/Playtests empfohlen.
+
+====================================
+13. Validierung & Konsistenzchecks (Magie‑bezogen)
+====================================
+Generator/Engine prüft:
+- Für magische Items (Stäbe): min_stufe ≤ char.stufe bevor equipping allowed.
+- caster.mana_aktuell ≥ spell.mana_cost vor Cast.
+- spell.grade ≤ caster.allowed_grade_by_level (z. B. grade2 only if stufe ≥ 3).
+- casting_roll/Targets logged.
+
+====================================
+14. Fragen & offene Optionen (kurz)
+====================================
+Ich habe die Default‑Lernregel gesetzt: +1 known spell pro Level, Start: 2 Cantrips + 2 Grade‑1. Wenn du andere Learning‑Rules willst (z. B. Spell‑slots statt known/prepared), sage kurz Bescheid.
+
+====================================
+15. Quellenhinweise (nur wenn Itemdaten verwendet wurden)
+====================================
+- Stab-/Item‑Daten (Beispiele, Preise und Boni) wurden der Ausrüstungsdatei entnommen (Stab‑Liste, Rüstungs/Preis‑Tabellen) [[11]].
+
+====================================
+Ende Spec v0.10
+====================================
+
