@@ -237,11 +237,11 @@
     border-top: 1px solid var(--rule); 
     padding-top: 8px; 
 }
-/* ===== BILD-UPLOAD STYLES ===== */
+/* BILD-PLATZHALTER STYLES */
 .creature-image-container {
   position: relative;
-  width: 150px;
-  height: 150px;
+  width: 120px;
+  height: 120px;
   float: right;
   margin: 0 0 10px 15px;
   border-radius: 8px;
@@ -250,14 +250,6 @@
   background-size: 20px 20px;
   background-color: #fafafa;
   border: 2px dashed var(--rule);
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.creature-image-container:hover {
-  border-color: var(--pf-red);
-  background-color: #fff;
-  box-shadow: 0 2px 8px rgba(126, 31, 31, 0.1);
 }
 
 .creature-image-container.has-image {
@@ -284,7 +276,6 @@
   text-align: center;
   color: var(--muted);
   pointer-events: none;
-  padding: 10px;
 }
 
 .creature-image-container.has-image .image-placeholder {
@@ -304,63 +295,8 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  color: var(--muted);
 }
 
-.image-remove-btn {
-  position: absolute;
-  top: 5px;
-  right: 5px;
-  background: rgba(0,0,0,0.7);
-  color: white;
-  border: none;
-  border-radius: 50%;
-  width: 24px;
-  height: 24px;
-  cursor: pointer;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
-  line-height: 1;
-  z-index: 10;
-}
-
-.creature-image-container.has-image:hover .image-remove-btn {
-  display: flex;
-}
-
-.image-upload-status {
-  position: absolute;
-  bottom: 5px;
-  left: 5px;
-  right: 5px;
-  background: rgba(0,0,0,0.8);
-  color: white;
-  padding: 4px 8px;
-  border-radius: 4px;
-  font-size: 10px;
-  text-align: center;
-  display: none;
-}
-
-.image-upload-status.visible {
-  display: block;
-}
-
-/* Editor Bild-Upload */
-.editor-image-section {
-  margin-top: 15px;
-  padding-top: 15px;
-  border-top: 1px solid var(--rule);
-}
-
-.editor-image-preview {
-  width: 100px;
-  height: 100px;
-  object-fit: cover;
-  border-radius: 4px;
-  margin-top: 8px;
-  border: 1px solid var(--rule);
-}
 
 
