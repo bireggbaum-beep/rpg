@@ -19,3 +19,8 @@ Kategorie         Kosten                  Beispiele
 Standard          50% des Kaufpreises     z.B. Dolche, Langschwert, Bogen, Axt
 Hochwertig        75%% des Kaufpreises    z.B. Mithril-Waffen, Silberwaffen, Elben-Waffen
 Magisch/Exotisch  Verhandlungssache       Alle magischen und exotischen Gegenstände. Selten bis sehr selten verfügbar bei normalen Händlern.
+
+
+INFO ZU BESCHÄDIGUNG VON WAFFEN UND RÜSTUNGEN
+=============================================
+Es gibt nur diese Regel für die Beschädigung von Ausrüstung: Wenn eine Waffe/Rüstung beschädigt wird, besteht eine 30% Chance (6 auf W20) bei jedem Einsatz (Angriff, Treffer bei Rüstung, Schild) dass sie zerstört wird und unbrauchbar wird. Sie kann gegen Kosten repariert werden oder ein Charakter mit Schmied-Berufshintergrund kann sie während einer langen Rast reparieren (nur Standardwaffen). 
