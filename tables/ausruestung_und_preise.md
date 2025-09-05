@@ -81,7 +81,7 @@
 | Lederharnisch             | 1  | Mittel    | -         | 45 GM  | Alle außer Magier      |
 | Beschlagene Leder-rüstung | 2  | Mittel    | -         | 60 GM  | Alle außer Magier      |
 | Verzauberte Robe          | 2  | Leicht    | -         | 80 GM  | Nur Magier             |
-| Kettenhemd                | 3  | Schwer    | -1        | 140 GM | Kleriker/Krieger       |
+| Kettenhemd                | 3  | Schwer    | -         | 140 GM | Kleriker/Krieger       |
 | Ringpanzer                | 3  | Schwer    | -1        | 170 GM | Kleriker/Krieger       |
 | Schuppenpanzer            | 4  | Schwer    | -1        | 190 GM | Nur Krieger            |
 | Robe des Erzmagiers       | 3  | Leicht    | -         | 180 GM | Nur Magier             |
