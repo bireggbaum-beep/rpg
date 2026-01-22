@@ -1,0 +1,427 @@
+[
+  {
+    "id": "tunnel_rat",
+    "title": "The Tunnel Rat",
+    "type": "Bestiary",
+    "world": "dungeon",
+    "cr": 0.25,
+    "xp": 20,
+    "text": "The tunnel rat is not a true rat. It walks on two legs and carries a rusty knife. Its eyes glow yellow in the dark. Tunnel rats live in old mines and forgotten cellars. They eat mushrooms, dead things, and sometimes each other. A single tunnel rat is not dangerous. But they never travel alone. Where you find one, twenty more are watching from the shadows.",
+    "vocab": [
+      ["rusty", "covered in rust, old and damaged"],
+      ["cellars", "underground rooms"],
+      ["mushrooms", "fungus that grows in dark places"]
+    ],
+    "questions": [
+      "How many legs does a tunnel rat walk on?",
+      "What color are its eyes?",
+      "Why is one tunnel rat not dangerous?"
+    ]
+  },
+  {
+    "id": "broken_lantern",
+    "title": "The Broken Lantern",
+    "type": "Item",
+    "world": "dungeon",
+    "cr": 0.25,
+    "xp": 25,
+    "text": "This old lantern has a crack in its glass. It still works, but the flame inside is green instead of orange. When you hold it up, you can see things that aren't really there — or are they? Old bloodstains glow bright. Footprints appear on dusty floors. Sometimes you see a face in the corner of your eye. The lantern shows what happened here before. Not everyone wants to know.",
+    "vocab": [
+      ["crack", "a thin line where something is broken"],
+      ["flame", "the bright part of a fire"],
+      ["bloodstains", "marks left by blood"]
+    ],
+    "questions": [
+      "What color is the flame in the lantern?",
+      "What can you see when you hold it up?",
+      "What does the lantern show?"
+    ]
+  },
+  {
+    "id": "dungeon_graffiti",
+    "title": "Dungeon Graffiti",
+    "type": "Found Writing",
+    "world": "dungeon",
+    "cr": 0.25,
+    "xp": 30,
+    "text": "Someone scratched words into the wall with a knife or a fingernail. The writing is hard to read in the torchlight. \"TURN BACK\" says the first line. Below it: \"The door with the red mark is safe. The blue door lies.\" And at the bottom, in smaller letters: \"I was wrong. Neither door is safe. I'm sorry, Elena.\" There are scratch marks leading away from the wall, deeper into the darkness.",
+    "vocab": [
+      ["scratched", "cut with something sharp"],
+      ["graffiti", "writing on walls"],
+      ["torchlight", "light from a burning stick"]
+    ],
+    "questions": [
+      "What did someone use to write on the wall?",
+      "What does the writer say about the doors?",
+      "Who is Elena?"
+    ]
+  },
+  {
+    "id": "spartan_checkpoint",
+    "title": "Spartan Checkpoint",
+    "type": "Travel Encounter",
+    "world": "greece",
+    "cr": 0.25,
+    "xp": 25,
+    "text": "Two Spartan soldiers block the road. Their red cloaks are dusty from travel, but their spears are sharp and ready. \"Halt, stranger,\" the older one commands. \"The road to Sparta is closed to outsiders. Athens and Sparta are at war.\" He looks at your weapons, your armor, your face. \"You don't look like a spy. But looks can lie. State your business, and maybe we let you pass. Lie to us...\" He doesn't finish the sentence. He doesn't need to.",
+    "vocab": [
+      ["soldiers", "people who fight in an army"],
+      ["cloaks", "long pieces of cloth worn over shoulders"],
+      ["halt", "stop"],
+      ["outsiders", "people who don't belong"],
+      ["spy", "person who secretly collects information"]
+    ],
+    "questions": [
+      "What color are the Spartans' cloaks?",
+      "Why is the road to Sparta closed?",
+      "What do they want to know from you?"
+    ]
+  },
+  {
+    "id": "brainrot_morning",
+    "title": "Monday Morning",
+    "type": "Real Life Horror",
+    "world": "real",
+    "cr": 0.25,
+    "xp": 20,
+    "text": "The alarm screams at 6:30 AM. Your hand finds the phone. Snooze. Nine more minutes of peace. But peace doesn't come. Your brain is already listing things: math test today, forgot to do the English homework, PE means running, running means dying inside. The second alarm. You negotiate with yourself: \"If I skip breakfast, I can sleep five more minutes.\" Your mom's voice from downstairs: \"You'll be late!\" You won't be late. You're never late. But you're also never on time. You exist in that cursed space between, running through the door exactly as the bell starts ringing, every single day. How? Nobody knows.",
+    "vocab": [
+      ["alarm", "device that makes noise to wake you"],
+      ["snooze", "button that gives you more sleep time"],
+      ["negotiate", "try to make a deal"],
+      ["cursed", "affected by bad luck"]
+    ],
+    "questions": [
+      "What time does the alarm ring?",
+      "What did the person forget to do?",
+      "What does the person always do with the school bell?"
+    ]
+  },
+  {
+    "id": "whispering_moss",
+    "title": "Whispering Moss",
+    "type": "Flora Entry",
+    "world": "dungeon",
+    "cr": 0.5,
+    "xp": 45,
+    "text": "This pale green moss grows on dungeon walls where people have died. It feeds on the last breath of dying creatures. When you walk past it, you can hear whispers — fragments of final words, prayers, and screams frozen in time. Alchemists pay good gold for whispering moss. They use it in potions that let you speak with the dead. But harvesting it is dangerous. If you listen too long, the whispers start to make sense. And they always ask you to stay.",
+    "vocab": [
+      ["moss", "small soft green plant on stones"],
+      ["fragments", "small broken pieces"],
+      ["harvesting", "collecting, gathering"],
+      ["alchemists", "people who make magical potions"]
+    ],
+    "questions": [
+      "What does the moss feed on?",
+      "Why do alchemists want this moss?",
+      "What is dangerous about listening to the whispers?"
+    ]
+  },
+  {
+    "id": "fallen_knight_ring",
+    "title": "Ring of the Fallen Knight",
+    "type": "Wondrous Item",
+    "world": "dungeon",
+    "cr": 0.5,
+    "xp": 55,
+    "text": "This silver ring shows a tiny sword crossed with a rose. It belonged to Sir Aldric, a knight who broke his oath and fled from battle. He died alone in this dungeon, full of shame. The ring gives its wearer courage — you feel no fear when you wear it. But there is a price. Every night, you dream of Sir Aldric's last moments. You feel his shame, his regret, his desperate wish to go back and fight. After a week, most people throw the ring away. Some don't. They need to know how his story ends.",
+    "vocab": [
+      ["oath", "a serious promise"],
+      ["shame", "feeling bad about something you did"],
+      ["courage", "being brave"],
+      ["regret", "wishing you did something different"]
+    ],
+    "questions": [
+      "What does the ring look like?",
+      "What happened to Sir Aldric?",
+      "Why do most people throw the ring away?"
+    ]
+  },
+  {
+    "id": "mimic_warning",
+    "title": "A Warning About Mimics",
+    "type": "Adventurer's Note",
+    "world": "dungeon",
+    "cr": 0.5,
+    "xp": 50,
+    "text": "If you're reading this, you survived the entrance. Good. Now listen carefully: not everything in this dungeon is what it looks like. That treasure chest? It might be hungry. That wooden door? It might have teeth. We call them Mimics. They copy objects and wait for someone to touch them. Then they attack. My advice: throw a rock at anything before you touch it. If it screams, don't open it. If it runs away, definitely don't chase it. And if you see two identical doors next to each other, leave. Just leave. Trust me.",
+    "vocab": [
+      ["mimic", "creature that copies other things"],
+      ["identical", "exactly the same"],
+      ["treasure chest", "box for storing valuable things"],
+      ["survived", "stayed alive"]
+    ],
+    "questions": [
+      "What do Mimics do?",
+      "What advice does the writer give?",
+      "What should you do if you see two identical doors?"
+    ]
+  },
+  {
+    "id": "spear_leonidas",
+    "title": "Spear of Leonidas",
+    "type": "Legendary Item",
+    "world": "greece",
+    "cr": 0.5,
+    "xp": 60,
+    "text": "This broken spear was once whole. It was held by King Leonidas himself at the Hot Gates, where three hundred Spartans held back a Persian army of thousands. The spear broke on the third day, when Leonidas finally fell. But a broken weapon carried by a legend is worth more than a perfect weapon carried by no one. The spear still hums with power. Those who carry it feel braver, stronger, more certain. Some say the spirit of Leonidas lives inside the blade. Some say it's just old metal and older stories. But when you hold it, you understand why three hundred men stood against an empire. And you wonder: would you?",
+    "vocab": [
+      ["whole", "complete, not broken"],
+      ["legend", "a famous person from stories"],
+      ["hums", "makes a low continuous sound"],
+      ["spirit", "the soul or ghost of someone"],
+      ["empire", "a very large kingdom"]
+    ],
+    "questions": [
+      "Where did Leonidas use this spear?",
+      "When did the spear break?",
+      "What do people feel when they carry the spear?"
+    ]
+  },
+  {
+    "id": "wifi_down",
+    "title": "The WiFi is Down",
+    "type": "Modern Tragedy",
+    "world": "real",
+    "cr": 0.5,
+    "xp": 55,
+    "text": "The little icon shows no bars. No connection. The router blinks red instead of green. You restart it. Nothing. You unplug it, count to thirty, plug it back in. Still nothing. The homework is due in one hour. It's on Google Docs. You can't reach Google Docs. You check your phone: also no internet. How is this possible? How can both break at once? Your neighbor's WiFi appears in the list. It's locked. Of course it's locked. You know their dog's name. You try \"Biscuit123\" — wrong password. \"Biscuit2023\" — wrong. \"IloveBiscuit\" — wrong. The clock keeps moving. The homework stays unfinished. This is how villains are born, you think. Not through tragedy. Through lost WiFi on homework night.",
+    "vocab": [
+      ["router", "device that gives WiFi"],
+      ["connection", "link to the internet"],
+      ["unplug", "remove the power cable"],
+      ["locked", "protected by password"]
+    ],
+    "questions": [
+      "What color does the router blink when broken?",
+      "Where is the homework stored?",
+      "What is the neighbor's dog's name?"
+    ]
+  },
+  {
+    "id": "bone_collector",
+    "title": "The Bone Collector",
+    "type": "Bestiary",
+    "world": "dungeon",
+    "cr": 1,
+    "xp": 90,
+    "text": "Nobody knows what the Bone Collector was before it died. Now it is seven feet of wrapped cloth and clicking bones. It walks through dungeons at night, collecting bones from the dead. It sorts them carefully: skulls in one bag, ribs in another, finger bones in a third. If you hide and stay quiet, it will walk past you. But if you have bones that don't belong to you — a lucky rabbit's foot, a necklace of teeth, a skull you took as a trophy — it will know. And it will want them back. It always gets what it wants.",
+    "vocab": [
+      ["wrapped", "covered with something"],
+      ["clicking", "making short sharp sounds"],
+      ["trophy", "something you keep to remember a victory"],
+      ["sorts", "puts things in groups"]
+    ],
+    "questions": [
+      "How tall is the Bone Collector?",
+      "What does it do with the bones it finds?",
+      "When will it attack you?"
+    ]
+  },
+  {
+    "id": "ambush_ruins",
+    "title": "Ambush in the Ruins",
+    "type": "Combat Scene",
+    "world": "dungeon",
+    "cr": 1,
+    "xp": 110,
+    "text": "The arrow came from nowhere. It hit the stone wall behind your head with a sharp crack. Two goblins dropped from the broken ceiling — small, green, and fast. A third stood in the doorway, already pulling another arrow from its quiver. The ruins were supposed to be empty. The map said so. But goblins cannot read maps. They don't care what humans write on paper. They only care that you walked into their home. Now you have three seconds to decide: fight, run, or try to talk. The goblin with the bow is already aiming at your heart.",
+    "vocab": [
+      ["arrow", "pointed stick shot from a bow"],
+      ["quiver", "bag for holding arrows"],
+      ["ruins", "old broken buildings"],
+      ["aiming", "pointing at a target"]
+    ],
+    "questions": [
+      "How many goblins attacked?",
+      "Why were the goblins in the ruins?",
+      "What are the three choices you have?"
+    ]
+  },
+  {
+    "id": "gelatinous_cube",
+    "title": "The Clean Hallway",
+    "type": "Trap Description",
+    "world": "dungeon",
+    "cr": 1,
+    "xp": 100,
+    "text": "The hallway ahead is perfectly clean. No dust. No cobwebs. No bones. In a dungeon where everything else is dirty and old, this should worry you. It worried Finn, our scout. He threw a copper coin into the hallway. The coin stopped in mid-air. Then it started dissolving, bubbling away to nothing in seconds. \"Gelatinous Cube,\" Finn whispered. The creature is almost invisible — a giant cube of living acid that fills the entire corridor. It moves slowly, eating everything in its path. That's why the hallway is so clean. We went the other way.",
+    "vocab": [
+      ["dissolving", "melting away"],
+      ["gelatinous", "like jelly"],
+      ["acid", "liquid that can melt things"],
+      ["corridor", "hallway, passage"]
+    ],
+    "questions": [
+      "Why is the hallway so clean?",
+      "What happened to the copper coin?",
+      "Why is the Gelatinous Cube dangerous?"
+    ]
+  },
+  {
+    "id": "therons_wolf",
+    "title": "Contract: The White Wolf",
+    "type": "Mercenary Contract",
+    "world": "greece",
+    "cr": 1,
+    "xp": 120,
+    "text": "The farmer Theron meets you at the village edge. His hands shake as he speaks. \"It comes every full moon. A wolf, but not a wolf. White as bone, big as a horse, with eyes like a man's. It takes my sheep. It takes my goats. Last month...\" He stops. Swallows. \"Last month it took my dog. Keras was brave. He tried to protect the flock. I found him in the morning. What was left of him.\" Theron presses a bag of coins into your hands. \"Two hundred drachmae. It's everything I have. Please. The next full moon is in three days. Kill it, or I lose everything. My family will starve.\" In the distance, on the hill above the village, something white moves between the olive trees. Watching.",
+    "vocab": [
+      ["contract", "an agreement to do a job"],
+      ["mercenary", "a soldier who works for money"],
+      ["flock", "a group of sheep"],
+      ["drachmae", "ancient Greek money"],
+      ["starve", "die from hunger"]
+    ],
+    "questions": [
+      "When does the wolf come?",
+      "What happened to Theron's dog Keras?",
+      "How many days until the next full moon?"
+    ]
+  },
+  {
+    "id": "group_project",
+    "title": "The Group Project",
+    "type": "Social Combat",
+    "world": "real",
+    "cr": 1,
+    "xp": 85,
+    "text": "The teacher says the worst words in any language: \"Get into groups of four.\" You look around. Your friends are already looking at each other, forming a group without speaking. There's three of them. You make four. But wait — Lisa is walking over to them too. Now there's five. Someone has to leave. They all look at each other. They look at you. No one says it, but you see it: You're the extra one. \"We could do five,\" Max suggests weakly. \"The rules say four,\" someone answers. Your chair feels very heavy as you push it back. The walk to find another group takes three seconds. It feels like three hours. You end up with the two kids who were absent when groups formed and one kid you've never seen before.",
+    "vocab": [
+      ["weakly", "without strength or confidence"],
+      ["absent", "not there, missing"],
+      ["extra", "more than needed"],
+      ["due", "when something must be finished"]
+    ],
+    "questions": [
+      "How many people are supposed to be in a group?",
+      "Why does the person have to leave their friends' group?",
+      "Who ends up in their new group?"
+    ]
+  },
+  {
+    "id": "drowned_temple",
+    "title": "The Drowned Temple",
+    "type": "Dungeon Log",
+    "world": "dungeon",
+    "cr": 2,
+    "xp": 180,
+    "text": "Day 3 in the temple. The water rises every night and goes down every morning. We found air pockets in the ceiling where we can breathe and sleep. The carvings on the walls tell the story of a sea god who was forgotten. His priests drowned themselves when the last believer died. Now their ghosts swim through these halls, still performing rituals that nobody watches. They ignore us mostly. But yesterday, Mira said she heard singing under the water. Beautiful singing. She wanted to dive down and find it. We had to tie her to a pillar. The singing hasn't stopped. I'm starting to understand the words.",
+    "vocab": [
+      ["air pockets", "spaces with air trapped inside"],
+      ["carvings", "pictures cut into stone"],
+      ["priests", "religious leaders"],
+      ["rituals", "religious ceremonies"],
+      ["pillar", "tall stone column"]
+    ],
+    "questions": [
+      "What happens to the water every day?",
+      "Why did the priests drown themselves?",
+      "Why did they have to tie Mira to a pillar?"
+    ]
+  },
+  {
+    "id": "mad_wizard_note",
+    "title": "Note from the Mad Wizard",
+    "type": "Found Document",
+    "world": "dungeon",
+    "cr": 2,
+    "xp": 220,
+    "text": "Day 47 — The experiment continues. I have successfully merged the soul of a cat with the body of an owl. The result screams constantly. I consider this progress. Day 52 — The screaming has stopped. The cat-owl watches me now. It knows things it should not know. When I sleep, I dream of mice dying in moonlight. Day 61 — I understand now. I was wrong. The owl did not receive the cat's soul. The cat received mine. I am the experiment. I have always been the experiment. I am writing this with paws that used to be hands. The thing wearing my body is reading over my shoulder. It is smiling. Day 62 — mrrrowww the wizard is fine the wizard is happy you should visit the wizard bring mice",
+    "vocab": [
+      ["experiment", "a scientific test"],
+      ["merged", "joined together"],
+      ["soul", "the spirit inside a living thing"],
+      ["constantly", "all the time, without stopping"],
+      ["paws", "animal feet"]
+    ],
+    "questions": [
+      "What two animals did the wizard try to combine?",
+      "What did the wizard realize on Day 61?",
+      "Who is writing on Day 62?"
+    ]
+  },
+  {
+    "id": "rust_monster",
+    "title": "The Thing That Ate My Sword",
+    "type": "Bestiary",
+    "world": "dungeon",
+    "cr": 2,
+    "xp": 200,
+    "text": "It looked almost cute at first. Like a big insect with feathery antennae and a long tail. It didn't attack us. It just walked toward Marcus, making happy clicking sounds. Then it touched his shield. The metal turned orange, then brown, then crumbled to dust in seconds. Marcus swung his sword at it. The creature ate his sword. Not bit it — ate it. The metal dissolved where its antennae touched. We ran. I still have my leather armor. Marcus has his underclothes and his dignity. Actually, he lost the dignity too when he screamed. We don't talk about that. Lesson learned: Rust Monsters don't want to kill you. They just want to eat everything you own.",
+    "vocab": [
+      ["antennae", "long thin parts on an insect's head"],
+      ["crumbled", "broke into small pieces"],
+      ["dissolved", "melted away"],
+      ["dignity", "self-respect, pride"]
+    ],
+    "questions": [
+      "What happened to Marcus's shield?",
+      "How does the Rust Monster eat metal?",
+      "What lesson did they learn?"
+    ]
+  },
+  {
+    "id": "oracle_delphi",
+    "title": "The Oracle's Warning",
+    "type": "Prophecy",
+    "world": "greece",
+    "cr": 2,
+    "xp": 200,
+    "text": "The Pythia sits on her three-legged stool, breathing the strange smoke that rises from the crack in the earth. Her eyes roll back. Her voice changes — deeper, older, not quite human. \"Child of two worlds,\" she speaks, \"blood of gods and mortals mixed. You seek the one who killed your family. You will find them. Oh yes. You will find them before the summer ends.\" She laughs, and the sound echoes wrong in the temple. \"But know this, seeker: the truth you find will poison every victory. The enemy you hunt wears a face you love. To have your revenge, you must become what you hate.\" The smoke clears. The Pythia blinks, confused. \"Did I speak? What did I say?\" She never remembers.",
+    "vocab": [
+      ["oracle", "person who tells the future"],
+      ["prophecy", "a message about the future"],
+      ["mortals", "humans who can die"],
+      ["revenge", "hurting someone who hurt you"],
+      ["curse", "magic that causes suffering"]
+    ],
+    "questions": [
+      "What is the Pythia breathing?",
+      "What warning does the Oracle give about the enemy?",
+      "Why doesn't the Pythia remember what she said?"
+    ]
+  },
+  {
+    "id": "margrath",
+    "title": "Margrath, the Hollow King",
+    "type": "Boss Encounter",
+    "world": "dungeon",
+    "cr": 3,
+    "xp": 280,
+    "text": "The throne room doors opened by themselves. On the ancient throne sat what was left of King Margrath the Fourth. His crown still sat on his skull. His royal robes hung on bones that had forgotten flesh three hundred years ago. But his eyes — two points of cold blue fire — those remembered everything. \"Another adventurer,\" his voice echoed from nowhere and everywhere. \"They always come for the crown. They never leave with it.\" The skeletal king stood. He was tall in life. In death, he was taller. His sword scraped against the stone floor as he descended the steps — a blade so old that rust had become part of its edge, yet sharp enough to split shadows. \"I have killed nine hundred and seventy-three heroes in this room,\" Margrath said. \"You will be nine hundred and seventy-four. Unless...\" He paused. \"Unless you can answer my riddle.\"",
+    "vocab": [
+      ["throne", "special chair for a king"],
+      ["royal robes", "special clothes for kings"],
+      ["skeletal", "made of bones, like a skeleton"],
+      ["descended", "walked down"],
+      ["riddle", "a puzzle with words"]
+    ],
+    "questions": [
+      "How long has Margrath been dead?",
+      "How many heroes has he killed?",
+      "What chance does he offer you?"
+    ]
+  },
+  {
+    "id": "beholder",
+    "title": "The Eye Tyrant",
+    "type": "Boss Encounter",
+    "world": "dungeon",
+    "cr": 3,
+    "xp": 320,
+    "text": "It floated in the center of the chamber, a nightmare made flesh. A sphere of mottled flesh, three feet wide, dominated by one massive central eye. Around it, ten smaller eyes on stalks moved independently, each watching a different direction. Each eye held a different death. \"You are either very brave or very stupid,\" it said. Its voice was cultured, almost pleasant. \"I am Xanathar. Well, I call myself Xanathar. The original died centuries ago. But names have power, and his had enough power to keep me alive through seven assassins, three adventuring parties, and one very persistent paladin.\" Two of its eye stalks focused on you. \"I wonder which death you'll earn. The disintegration ray is quick. The petrification beam lets me add you to my collection. Decisions, decisions.\"",
+    "vocab": [
+      ["tyrant", "cruel ruler"],
+      ["mottled", "covered in spots of different colors"],
+      ["stalks", "thin stems"],
+      ["disintegration", "being destroyed completely"],
+      ["petrification", "being turned to stone"]
+    ],
+    "questions": [
+      "What does Xanathar look like?",
+      "Why does the creature use the name Xanathar?",
+      "What can the different eyes do?"
+    ]
+  }
+]
